@@ -42,8 +42,10 @@
             android:hint="Enter your email"/>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:hint="Enter your password"
             app:passwordToggleTint="@color/black"
             app:passwordToggleEnabled="true">
@@ -53,7 +55,6 @@
                 android:background="@drawable/edit_text_border"
                 android:textColor="@color/black"
                 android:inputType="textPassword"
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
@@ -75,10 +76,8 @@
             android:id="@+id/tv_forgot_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="10dp"
             android:text="Forgot password ?"
             android:clickable="true"
             android:textColor="@color/black"/>
