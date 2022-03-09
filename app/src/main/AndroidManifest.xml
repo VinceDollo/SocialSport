@@ -20,7 +20,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".loginActivity">
+            android:name=".LoginActivity">
+        </activity>
+        <activity
+            android:name=".PrincipalPage">
+        </activity>
+        <activity
+            android:name=".SignupActivity">
         </activity>
     </application>
 
