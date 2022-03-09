@@ -65,6 +65,18 @@
             android:textColor="@color/white"
             android:background="@drawable/btn_black"/>
 
+        <TextView
+            android:id="@+id/tv_forgot_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="10dp"
+            android:text="Forgot password ?"
+            android:clickable="true"
+            android:textColor="@color/black"/>
+
     </LinearLayout>
 
 
