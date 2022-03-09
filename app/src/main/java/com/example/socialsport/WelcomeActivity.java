@@ -23,7 +23,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btn_go_login_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent IntentLoginActivity = new Intent(getApplicationContext(), loginActivity.class);
+                Intent IntentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(IntentLoginActivity);
             }
         });
