@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,13 +66,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.log_in_activity);
+
         mAuth = FirebaseAuth.getInstance();
+
         et_email = findViewById(R.id.et_email);
         et_password = findViewById(R.id.et_password);
         btn_log_in = findViewById(R.id.btn_log_in);
         btn_back = findViewById(R.id.btn_back);
         btn_log_in.setOnClickListener(onClickListener);
-
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +93,25 @@ public class LoginActivity extends AppCompatActivity {
                     // Perform action on key press
                     btn_log_in.performClick();
                     return true;
+                }
+                return false;
+            }
+        });
+
+        et_password.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (editComment.getRight() - editComment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+
+                        return true;
+                    }
                 }
                 return false;
             }

@@ -50,6 +50,7 @@
             android:paddingHorizontal="10dp"
             android:background="@drawable/edit_text_border"
             android:textColor="@color/black"
+            android:drawableRight="@drawable/img_eye"
             android:hint="Enter your password"/>
 
         <EditText
@@ -61,6 +62,7 @@
             android:paddingHorizontal="10dp"
             android:background="@drawable/edit_text_border"
             android:textColor="@color/black"
+            android:drawableRight="@drawable/img_eye"
             android:hint="Verify your password"/>
 
         <EditText
