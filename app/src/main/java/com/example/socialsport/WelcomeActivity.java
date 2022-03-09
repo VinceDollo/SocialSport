@@ -31,8 +31,8 @@ public class WelcomeActivity extends AppCompatActivity {
         btn_go_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
-                Toast.makeText(getApplicationContext(),"TODO", Toast.LENGTH_SHORT);
+                Intent IntentSignUpActivity = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivity(IntentSignUpActivity);
             }
         }
         );

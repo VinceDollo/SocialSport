@@ -10,23 +10,50 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.socialsport.entities.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import com.google.gson.Gson;
 
 public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private EditText et_email, et_password;
+    private EditText et_email, et_password, et_checkpassword, et_name, et_age;
     private Button btn_log_in;
     private ImageButton btn_back;
+
+    private void writeUserToDatabase(FirebaseDatabase database,String email, String name, String age, String uid){
+        DatabaseReference myRef = database.getReference();
+        User currentUser = new User(email, name, age);
+        myRef.child("users").child(uid).setValue(currentUser);
+    }
+
+    private void getUserFromDatabase(FirebaseDatabase database, String uid){
+        DatabaseReference myRef = database.getReference();
+        myRef.child("users").child(uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                }
+            }
+        });
+
+    }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -34,6 +61,10 @@ public class SignupActivity extends AppCompatActivity {
             //TODO with better way
             String email = et_email.getText().toString();
             String password = et_password.getText().toString();
+            String checkPassword = et_checkpassword.getText().toString();
+            String name = et_name.getText().toString();
+            String age = et_age.getText().toString();
+
 
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
@@ -46,8 +77,8 @@ public class SignupActivity extends AppCompatActivity {
                                 Toast.makeText(SignupActivity.this, "Authentication success.",
                                         Toast.LENGTH_SHORT).show();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference myRef = database.getReference("message");
-                                myRef.setValue("Hello, World!");
+                                writeUserToDatabase(database,user.getEmail(),name,age,user.getUid());
+                                getUserFromDatabase(database,user.getUid());
 
                                 //TODO on complete sign up treatment
                             } else {
@@ -65,10 +96,14 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.log_in_activity);
+        setContentView(R.layout.register_activity);
         mAuth = FirebaseAuth.getInstance();
         et_email = findViewById(R.id.et_email);
         et_password = findViewById(R.id.et_password);
+        et_checkpassword = findViewById(R.id.et_check_password);
+        et_name = findViewById(R.id.et_name);
+        et_age = findViewById(R.id.et_age);
+
         btn_log_in = findViewById(R.id.btn_log_in);
         btn_back = findViewById(R.id.btn_back);
         btn_log_in.setOnClickListener(onClickListener);
