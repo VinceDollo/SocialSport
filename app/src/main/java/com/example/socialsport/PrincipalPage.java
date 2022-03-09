@@ -9,6 +9,6 @@ public class PrincipalPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.principal_page);
+        setContentView(R.layout.principal_page_activity);
     }
 }

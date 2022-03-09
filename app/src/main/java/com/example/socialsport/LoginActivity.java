@@ -82,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //When you push enter button
         et_password.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
