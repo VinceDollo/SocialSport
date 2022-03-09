@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "35142064004",
+    "project_id": "socialsport-c6160",
+    "storage_bucket": "socialsport-c6160.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35142064004:android:73b043d2fdc6d34caeafd1",
+        "android_client_info": {
+          "package_name": "com.example.socialsport"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35142064004-hoql01jbi12oem6sbijha8das6nl0fbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3xuHwH6J6NOp-yKjT9NIHX32NbbXN00A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35142064004-hoql01jbi12oem6sbijha8das6nl0fbv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
