@@ -14,15 +14,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:src="@drawable/img_back"/>
+        android:src="@drawable/img_back"
+        android:contentDescription="@string/back_vector" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:textSize="40dp"
+        android:textSize="40sp"
         android:textColor="@color/black"
-        android:text="Register"/>
+        android:text="@string/register"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="Enter your email">
+            android:hint="@string/enter_your_email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_email"
@@ -49,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="Enter your password"
+            android:hint="@string/enter_your_password"
             app:passwordToggleTint="@color/black"
             app:passwordToggleEnabled="true">
 
@@ -67,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="Verify your password"
+            android:hint="@string/verify_your_password"
             app:passwordToggleTint="@color/black"
             app:passwordToggleEnabled="true">
 
@@ -85,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="Enter your name">
+            android:hint="@string/enter_your_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_name"
@@ -105,7 +106,7 @@
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:hint="Age">
+                android:hint="@string/age">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_age"
@@ -123,9 +124,9 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:layout_weight="5"
-                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
                 android:textColor="@color/black"
-                android:text="Years old"/>
+                android:text="@string/years_old"/>
 
         </LinearLayout>
 
@@ -137,7 +138,7 @@
             android:layout_marginTop="20dp"
             android:paddingVertical="15dp"
             android:paddingHorizontal="10dp"
-            android:text="Validate"
+            android:text="@string/validate"
             android:textColor="@color/white"
             android:background="@drawable/btn_black"/>
 

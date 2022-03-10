@@ -23,7 +23,7 @@
             android:name=".LoginActivity">
         </activity>
         <activity
-            android:name=".PrincipalPage">
+            android:name=".PrincipalPageActivity">
         </activity>
         <activity
             android:name=".RegisterActivity">
