@@ -47,7 +47,7 @@
             android:gravity="center"
             android:paddingHorizontal="10dp"
             android:paddingVertical="5dp"
-            android:text="Type a city"
+            android:hint="Type a city"
             android:textColor="@color/dark_grey" />
 
     </LinearLayout>
