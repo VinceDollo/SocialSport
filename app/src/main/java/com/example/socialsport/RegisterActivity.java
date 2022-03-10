@@ -52,28 +52,32 @@ public class RegisterActivity extends AppCompatActivity {
             String name = et_name.getText().toString();
             String age = et_age.getText().toString();
 
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(RegisterActivity.this, task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Sign up page", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(RegisterActivity.this, "Authentication success.",
-                                    Toast.LENGTH_SHORT).show();
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            assert user != null;
-                            writeUserToDatabase(database, user.getEmail(), name, age, user.getUid());
-                            getUserFromDatabase(database, user.getUid());
+            if (checkPassword.compareTo(password) == 0) {
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(RegisterActivity.this, task -> {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d("Sign up page", "createUserWithEmail:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                Toast.makeText(RegisterActivity.this, "Authentication success.",
+                                        Toast.LENGTH_SHORT).show();
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                assert user != null;
+                                writeUserToDatabase(database, user.getEmail(), name, age, user.getUid());
+                                getUserFromDatabase(database, user.getUid());
 
-                            //TODO on complete sign up treatment
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("Sign up page", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //TODO on failed sign up treatment
-                        }
-                    });
+                                //TODO on complete sign up treatment
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w("Sign up page", "createUserWithEmail:failure", task.getException());
+                                Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                                //TODO on failed sign up treatment
+                            }
+                        });
+            } else {
+                Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
+            }
         }
     };
 
@@ -120,5 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (currentUser != null) {
             System.out.println(currentUser);
         }
+
+
     }
 }
