@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
@@ -24,30 +26,29 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import com.google.gson.Gson;
+import java.util.stream.IntStream;
 
-public class SignupActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText et_email, et_password, et_checkpassword, et_name, et_age;
     private Button btn_log_in;
     private ImageButton btn_back;
 
-    private void writeUserToDatabase(FirebaseDatabase database,String email, String name, String age, String uid){
+    private void writeUserToDatabase(FirebaseDatabase database, String email, String name, String age, String uid) {
         DatabaseReference myRef = database.getReference();
         User currentUser = new User(email, name, age);
         myRef.child("users").child(uid).setValue(currentUser);
     }
 
-    private void getUserFromDatabase(FirebaseDatabase database, String uid){
+    private void getUserFromDatabase(FirebaseDatabase database, String uid) {
         DatabaseReference myRef = database.getReference();
         myRef.child("users").child(uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
+                } else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
                 }
             }
@@ -65,26 +66,25 @@ public class SignupActivity extends AppCompatActivity {
             String name = et_name.getText().toString();
             String age = et_age.getText().toString();
 
-
             mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("Sign up page", "createUserWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                Toast.makeText(SignupActivity.this, "Authentication success.",
+                                Toast.makeText(RegisterActivity.this, "Authentication success.",
                                         Toast.LENGTH_SHORT).show();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                writeUserToDatabase(database,user.getEmail(),name,age,user.getUid());
-                                getUserFromDatabase(database,user.getUid());
+                                writeUserToDatabase(database, user.getEmail(), name, age, user.getUid());
+                                getUserFromDatabase(database, user.getUid());
 
                                 //TODO on complete sign up treatment
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("Sign up page", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
                                 //TODO on failed sign up treatment
                             }

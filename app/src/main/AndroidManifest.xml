@@ -26,7 +26,7 @@
             android:name=".PrincipalPage">
         </activity>
         <activity
-            android:name=".SignupActivity">
+            android:name=".RegisterActivity">
         </activity>
     </application>
 
