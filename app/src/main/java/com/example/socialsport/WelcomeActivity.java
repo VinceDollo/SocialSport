@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,7 +30,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btn_go_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent IntentSignUpActivity = new Intent(getApplicationContext(), SignupActivity.class);
+                Intent IntentSignUpActivity = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(IntentSignUpActivity);
             }
         }
