@@ -4,6 +4,8 @@
     package="com.example.socialsport">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -26,10 +28,10 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="AIzaSyDGVKD7PXJ_oXTIP6hs1tCdb654VG6e02Y" />
 
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".PrincipalPageActivity"
             android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>
@@ -39,7 +41,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".PrincipalPageActivity"></activity>
         <activity android:name=".RegisterActivity"></activity>
     </application>
 
