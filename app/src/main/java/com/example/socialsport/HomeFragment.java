@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 //Save the answer
                 String localisation = et_localisation.getText().toString();
-                //Delete text from edit text
                 Geocoder gc = new Geocoder(getContext());
                 double locationName;
                 try {
@@ -58,12 +58,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     double longitude = addresses.get(0).getLongitude();
                     Toast.makeText(getActivity(), Double.toString(lattitude) + " " + Double.toString(longitude), Toast.LENGTH_SHORT).show();
                     LatLng placeToFind = new LatLng(lattitude, longitude);
-                    //googleMap.addMarker(new MarkerOptions().position(placeToFind).title(localisation));
-                    //googleMap.moveCamera(CameraUpdateFactory.newLatLng(placeToFind));
+                    mMap.addMarker(new MarkerOptions().position(placeToFind).title("What you searched"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(placeToFind));
+
                 } catch (IOException e) {
+                    Log.d("TAG", e.toString());
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Error place doesn't exist", Toast.LENGTH_SHORT).show();
                 }
+                //Delete text from edit text
                 et_localisation.setText("");
 
                 return true;

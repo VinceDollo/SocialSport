@@ -11,5 +11,6 @@
     <color name="yellow_pastel">#FFF6A7</color>
     <color name="blue_pastel">#9FF1FB</color>
     <color name="pink_pastel">#FFB0CB</color>
+    <color name="grey">#D2D2D2</color>
 
 </resources>
