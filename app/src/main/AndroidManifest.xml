@@ -14,6 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SocialSport">
+        <uses-library android:required="true" android:name="com.google.android.maps" />
+
 
         <!--
         android:theme="@style/AppTheme" >
