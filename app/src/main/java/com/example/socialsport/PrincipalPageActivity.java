@@ -4,29 +4,45 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
+import com.example.socialsport.databinding.PrincipalPageActivityBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 
 import java.io.IOException;
 import java.util.List;
 
-public class PrincipalPageActivity extends AppCompatActivity {
-    EditText et_localisation;
+public class PrincipalPageActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private EditText et_localisation;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+      //  requestWindowFeature(Window.FEATURE_NO_TITLE);
+      //  this.getSupportActionBar().hide();
+
         setContentView(R.layout.principal_page_activity);
 
-        Fragment fragment = new MapsFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_map,fragment).commit();
+
+        // Get the SupportMapFragment and request notification when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.f_maps);
+        mapFragment.getMapAsync(this);
+
         et_localisation = (EditText) findViewById(R.id.et_search_city);
 
         et_localisation.setOnKeyListener((v, keyCode, event) -> {
@@ -54,5 +70,15 @@ public class PrincipalPageActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }

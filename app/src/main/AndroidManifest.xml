@@ -16,6 +16,10 @@
         android:theme="@style/Theme.SocialSport">
 
         <!--
+        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.AppCompat.NoActionBar"-->
+
+        <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
              To get one, follow the directions here:

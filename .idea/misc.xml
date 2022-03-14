@@ -16,8 +16,8 @@
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout/log_in_activity.xml" value="0.22485058599933908" />
         <entry key="app/src/main/res/layout/principal_page.xml" value="0.29981884057971014" />
-        <entry key="app/src/main/res/layout/principal_page_activity.xml" value="0.2878590078328982" />
-        <entry key="app/src/main/res/layout/register_activity.xml" value="0.126385498046875" />
+        <entry key="app/src/main/res/layout/principal_page_activity.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/register_activity.xml" value="0.25163269042968756" />
         <entry key="app/src/main/res/layout/welcome_activity.xml" value="0.23645833333333333" />
       </map>
     </option>
