@@ -1,55 +1,61 @@
 package com.example.socialsport;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
+import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.example.socialsport.Fragments.HomeFragment;
+import com.example.socialsport.Fragments.MessageFragment;
+import com.example.socialsport.Fragments.PersonFragment;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 
 public class PrincipalPageActivity extends FragmentActivity {
 
-    private BottomNavigationView bottomNavigationView;
+    private MeowBottomNavigation meowBottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_page_activity);
-        bottomNavigationView = findViewById(R.id.bottom_app_bar);
-        getSupportFragmentManager().beginTransaction().replace(R.id.principal_page,new HomeFragment()).commit();
 
+        meowBottomNavigation = findViewById(R.id.bottom_app_bar);
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.img_home));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.img_message));
+        meowBottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.img_person));
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit();
+
+        meowBottomNavigation.show(1,true);
+        meowBottomNavigation.setOnClickMenuListener(new Function1<MeowBottomNavigation.Model, Unit>() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment fragment =  null;
-                switch (item.getItemId()){
-                    case R.id.appBar_personn:
-                        fragment = new PersonFragment();
+            public Unit invoke(MeowBottomNavigation.Model model) {
+                switch (model.getId()) {
+                    case 1:
+                        replace(new HomeFragment());
                         break;
-                    case R.id.appBar_home:
-                        fragment = new HomeFragment();
+                    case 2:
+                        replace(new MessageFragment());
                         break;
-                    case R.id.appBar_message:
-                        fragment = new MessageFragment();
+                    case 3:
+                        replace(new PersonFragment());
                         break;
-
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.principal_page, fragment).commit();
-                return true;
+                return null;
             }
         });
+
     }
+
+    private void replace(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).commit();
+    }
+
 
 }

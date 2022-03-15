@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:map="http://schemas.android.com/tools"
-    tools:context=".HomeFragment">
+    tools:context=".Fragments.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -69,7 +69,8 @@
 
             <fragment
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="400dp"
+                android:layout_marginHorizontal="15dp"
                 android:id="@+id/f_maps"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 map:liteMode="true" />

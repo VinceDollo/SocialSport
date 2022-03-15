@@ -1,4 +1,4 @@
-package com.example.socialsport;
+package com.example.socialsport.Fragments;
 
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,9 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.example.socialsport.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -44,6 +44,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mMapFragment.getMapAsync(this);
 
 
+
         EditText et_localisation = (EditText) view.findViewById(R.id.et_search_city);
         et_localisation.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
@@ -51,12 +52,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 //Save the answer
                 String localisation = et_localisation.getText().toString();
                 Geocoder gc = new Geocoder(getContext());
-                double locationName;
                 try {
                     List<Address> addresses = gc.getFromLocationName(localisation, 1);
                     double lattitude = addresses.get(0).getLatitude();
                     double longitude = addresses.get(0).getLongitude();
-                    Toast.makeText(getActivity(), Double.toString(lattitude) + " " + Double.toString(longitude), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), lattitude + " " + longitude, Toast.LENGTH_SHORT).show();
                     LatLng placeToFind = new LatLng(lattitude, longitude);
                     mMap.addMarker(new MarkerOptions().position(placeToFind).title("What you searched"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(placeToFind));
