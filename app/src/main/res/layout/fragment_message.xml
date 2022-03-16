@@ -3,8 +3,134 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.MessageFragment"
-    android:background="@color/blue_pastel">
+    tools:context=".Fragments.MessageFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:orientation="vertical"
+        android:fadeScrollbars="false"
+        android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:text="Chats"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/black" />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TableRow>
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Name"
+                            android:paddingVertical="10dp"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:src="@drawable/img_user_message"
+                            android:gravity="center"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Name 1"
+                                android:textColor="@color/black"
+                                android:layout_marginTop="10dp"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:layout_marginTop="5dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Bonjour, blablabli-blablabla ! \nLalalalalallalal" />
+
+                        </LinearLayout>
+
+
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/black" />
+
+
+                    <TableRow>
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Name"
+                            android:paddingVertical="10dp"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:src="@drawable/img_user_message"
+                            android:gravity="center"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Name 2"
+                                android:textColor="@color/black"
+                                android:layout_marginTop="10dp"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:layout_marginTop="5dp"
+                                android:layout_marginEnd="20dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Bonjour, blablabli-blablabla ! \nLalalalalallalal" />
+
+                        </LinearLayout>
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/black" />
+
+
+                </TableLayout>
+
+            </LinearLayout>
+    </ScrollView>
+
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
