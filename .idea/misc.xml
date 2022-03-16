@@ -10,24 +10,35 @@
         <entry key="..\:/Users/mezkh/StudioProjects/SocialSport/app/src/main/res/layout/welcome_activity.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/img_user_message.xml" value="0.151" />
         <entry key="app/src/main/res/drawable/bottom_app_bar.xml" value="0.20334320068359377" />
+        <entry key="app/src/main/res/drawable/btn_activity.xml" value="0.151" />
         <entry key="app/src/main/res/drawable/btn_add_activity.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/btn_black.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/btn_white.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/edit_text_border.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/edit_text_border_search_bar.xml" value="0.1805" />
+        <entry key="app/src/main/res/drawable/img_baseball.xml" value="0.151" />
+        <entry key="app/src/main/res/drawable/img_basket.xml" value="0.151" />
         <entry key="app/src/main/res/drawable/img_eye.xml" value="0.1645" />
+        <entry key="app/src/main/res/drawable/img_football.xml" value="0.151" />
+        <entry key="app/src/main/res/drawable/img_handball.xml" value="0.151" />
+        <entry key="app/src/main/res/drawable/img_run.xml" value="0.151" />
         <entry key="app/src/main/res/drawable/img_search.xml" value="0.1805" />
+        <entry key="app/src/main/res/drawable/img_sport.xml" value="0.151" />
+        <entry key="app/src/main/res/drawable/img_tennis.xml" value="0.151" />
         <entry key="app/src/main/res/drawable/img_user.xml" value="0.1805" />
+        <entry key="app/src/main/res/drawable/img_volley.xml" value="0.151" />
         <entry key="app/src/main/res/drawable/item_selected_bottom_app_bar.xml" value="0.1665" />
+        <entry key="app/src/main/res/layout/fragment_add_activity.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.11842105263157894" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout/fragment_message.xml" value="0.20450526646205358" />
         <entry key="app/src/main/res/layout/fragment_person.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_place_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/fragment_principal.xml" value="0.19572368421052633" />
         <entry key="app/src/main/res/layout/log_in_activity.xml" value="0.22485058599933908" />
         <entry key="app/src/main/res/layout/principal_page.xml" value="0.29981884057971014" />
         <entry key="app/src/main/res/layout/principal_page_activity.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/register_activity.xml" value="0.25163269042968756" />
+        <entry key="app/src/main/res/layout/register_activity.xml" value="0.20774078369140625" />
         <entry key="app/src/main/res/layout/welcome_activity.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/menu/item_menu.xml" value="0.11842105263157894" />
       </map>

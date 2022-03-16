@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.AddActivityFragment"
+    android:paddingTop="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/img_back"
+                android:contentDescription="@string/back_vector"
+                app:tint="@color/black"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/btn_profil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/img_user"
+                app:tint="@color/black" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40sp"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:text="Add an activity"
+            />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView"
+            android:orientation="vertical"
+            android:fillViewport="true">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp">
+
+                <TableRow
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="7dp"
+                    android:tag="Soccer"
+                    android:id="@+id/add_activity_soccer">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/img_soccer"
+                            android:backgroundTint="@color/black"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="7"
+                            android:gravity="center"
+                            android:layout_height="match_parent"
+                            android:text="SOCCER"
+                            android:textSize="17dp"
+                            android:textColor="@color/black"/>
+
+                </TableRow>
+
+
+                <TableRow
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="7dp"
+                    android:tag="Basketball"
+                    android:id="@+id/add_activity_basketball">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_basket"
+                        android:backgroundTint="@color/black"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:text="BASKETBALL"
+                        android:textSize="17dp"
+                        android:textColor="@color/black"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="7dp"
+                    android:tag="Volleyball"
+                    android:id="@+id/add_activity_volleyball">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_volley"
+                        android:backgroundTint="@color/black"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:text="VOLLEYBALL"
+                        android:textSize="17dp"
+                        android:textColor="@color/black"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="7dp"
+                    android:tag="Handball"
+                    android:id="@+id/add_activity_handball">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_handball"
+                        android:backgroundTint="@color/black"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:text="HANDBALL"
+                        android:textSize="17dp"
+                        android:textColor="@color/black"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="7dp"
+                    android:tag="Running"
+                    android:id="@+id/add_activity_running">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_run"
+                        android:backgroundTint="@color/black"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:text="RUNNING"
+                        android:textSize="17dp"
+                        android:textColor="@color/black"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="7dp"
+                    android:id="@+id/add_activity_football">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_football"
+                        android:backgroundTint="@color/black"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:gravity="center"
+                        android:text="FOOTBALL"
+                        android:textColor="@color/black"
+                        android:textSize="17dp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="7dp"
+                    android:tag="Tennis"
+                    android:id="@+id/add_activity_tennis">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_tennis"
+                        android:backgroundTint="@color/black"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
+                        android:gravity="center"
+                        android:layout_height="match_parent"
+                        android:text="TENNIS"
+                        android:textSize="17dp"
+                        android:textColor="@color/black"/>
+
+                </TableRow>
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="10dp"
+                    android:text="OTHER ACTIVITIES"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:background="@drawable/btn_add_activity"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"/>
+
+            </TableLayout>
+
+
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

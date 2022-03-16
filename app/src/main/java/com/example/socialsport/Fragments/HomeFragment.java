@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mMapFragment.getMapAsync(this);
 
 
+        Button btn_add_activity = view.findViewById(R.id.btn_add_activity);
+        btn_add_activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).commit();
+            }
+        });
 
         EditText et_localisation = (EditText) view.findViewById(R.id.et_search_city);
         et_localisation.setOnKeyListener((v, keyCode, event) -> {
