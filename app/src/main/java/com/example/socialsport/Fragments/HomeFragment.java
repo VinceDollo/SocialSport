@@ -168,7 +168,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationClient.getLastLocation();
-                locationResult.addOnCompleteListener((Executor) this, (OnCompleteListener<Location>) task -> {
+                locationResult.addOnCompleteListener(getActivity(), (OnCompleteListener<Location>) task -> {
                     if (task.isSuccessful()) {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.getResult();
