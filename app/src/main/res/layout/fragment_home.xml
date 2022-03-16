@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:map="http://schemas.android.com/tools"
     tools:context=".Fragments.HomeFragment">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView"
-        android:orientation="vertical"
         android:fadeScrollbars="false"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
-                        android:text="Discover"
+                        android:text="@string/discover"
                         android:textColor="@color/black"
                         android:textSize="40sp" />
 
@@ -47,58 +47,75 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
+                        android:contentDescription="@string/profil_picture"
                         android:src="@drawable/img_user"
                         app:tint="@color/black" />
 
                 </LinearLayout>
 
                 <EditText
-                    android:imeOptions="actionDone"
-                    android:maxLines="1"
-                    android:inputType="text"
                     android:id="@+id/et_search_city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="20dp"
+                    android:autofillHints=""
                     android:background="@drawable/edit_text_border_search_bar"
-                    android:drawableLeft="@drawable/img_search"
+                    android:drawableStart="@drawable/img_search"
                     android:gravity="center"
+                    android:hint="@string/type_a_location"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="5dp"
-                    android:hint="Type a city"
                     android:textColor="@color/dark_grey" />
 
             </LinearLayout>
 
-            <fragment
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:layout_marginHorizontal="15dp"
-                android:id="@+id/f_maps"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                map:liteMode="true" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/f_maps"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginHorizontal="15dp"
+                    map:liteMode="true" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imagetrans"
+                    android:layout_alignTop="@+id/f_maps"
+                    android:layout_alignBottom="@+id/f_maps"
+                    android:layout_alignEnd="@+id/f_maps"
+                    android:layout_alignStart="@+id/f_maps"
+                    android:src="@android:color/transparent"
+                    android:contentDescription="@string/fragment_container" />
+
+            </RelativeLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_add_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/btn_add_activity"
-                android:text="Add an activity"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:text="@string/add_an_activity"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Browse all activities"
                 android:layout_marginTop="20dp"
-                android:textStyle="bold"
+                android:gravity="center"
+                android:text="@string/browse_all_activities"
                 android:textColor="@color/black"
-                android:gravity="center" />
-
-
+                android:textStyle="bold" />
 
 
             <TableLayout
@@ -225,6 +242,8 @@
                     android:layout_height="100dp"/>
 
             </TableLayout>
+
+
 
         </LinearLayout>
 

@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -39,7 +41,6 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.d("firebase", String.valueOf(task.getResult().getValue()));
             }
         });
-
     }
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -70,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("Sign up page", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(RegisterActivity.this, task.getException().getLocalizedMessage(),
+                                Toast.makeText(RegisterActivity.this, Objects.requireNonNull(task.getException()).getLocalizedMessage(),
                                         Toast.LENGTH_SHORT).show();
                                 //TODO on failed sign up treatment
                             }
