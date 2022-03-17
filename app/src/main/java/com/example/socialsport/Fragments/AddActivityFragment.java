@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.Toast;
 
@@ -15,7 +17,7 @@ import com.example.socialsport.R;
 public class AddActivityFragment extends Fragment implements View.OnClickListener {
 
     private TableRow activity_soccer,activity_football,activity_volleyball, activity_basketball, activity_handball, activity_tennis, activity_running;
-
+    private ImageButton btn_back;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,13 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
         activity_running = view.findViewById(R.id.add_activity_running);
         activity_running.setOnClickListener(this); // calling onClick() method
 
+        btn_back = view.findViewById(R.id.btn_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit();
+            }
+        });
         return view;
     }
 

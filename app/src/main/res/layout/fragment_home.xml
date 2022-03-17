@@ -85,15 +85,15 @@
                     map:liteMode="true" />
 
                 <ImageView
+                    android:id="@+id/imagetrans"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imagetrans"
-                    android:layout_alignTop="@+id/f_maps"
-                    android:layout_alignBottom="@+id/f_maps"
-                    android:layout_alignEnd="@+id/f_maps"
                     android:layout_alignStart="@+id/f_maps"
-                    android:src="@android:color/transparent"
-                    android:contentDescription="@string/fragment_container" />
+                    android:layout_alignTop="@+id/f_maps"
+                    android:layout_alignEnd="@+id/f_maps"
+                    android:layout_alignBottom="@+id/f_maps"
+                    android:contentDescription="@string/fragment_container"
+                    android:src="@android:color/transparent" />
 
             </RelativeLayout>
 
