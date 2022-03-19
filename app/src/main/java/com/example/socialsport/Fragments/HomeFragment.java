@@ -79,7 +79,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         btn_add_activity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit();
             }
         });
 

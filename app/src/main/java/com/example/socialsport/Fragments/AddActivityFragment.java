@@ -52,6 +52,9 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
         activity_running.setOnClickListener(this); // calling onClick() method
 
         btn_back = view.findViewById(R.id.btn_back);
+
+
+
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,8 +66,12 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(getActivity(), view.getTag().toString(), Toast.LENGTH_SHORT).show();
-        getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new PlaceActivityFragment()).commit();
+        Bundle bundle = new Bundle();
+        bundle.putString("sport",view.getTag().toString());
+        Fragment newF = new PlaceActivityFragment();
+        newF.setArguments(bundle);
+        //Toast.makeText(getActivity(), view.getTag().toString(), Toast.LENGTH_SHORT).show();
+        getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).commit();
 
     }
 }

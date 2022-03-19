@@ -92,6 +92,10 @@
                     android:layout_alignTop="@+id/f_maps"
                     android:layout_alignEnd="@+id/f_maps"
                     android:layout_alignBottom="@+id/f_maps"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="-3dp"
                     android:contentDescription="@string/fragment_container"
                     android:src="@android:color/transparent" />
 
@@ -130,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingHorizontal="30dp"
+                    android:paddingHorizontal="20dp"
                     android:id="@+id/activity1">
 
                     <ImageView

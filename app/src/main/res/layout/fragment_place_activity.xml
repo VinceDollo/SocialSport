@@ -17,7 +17,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <LinearLayout
@@ -51,11 +51,13 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_title"
+                android:paddingHorizontal="20dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="40sp"
+                android:textSize="30sp"
                 android:textColor="@color/black"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:text="Choose the location"
                 />
 
@@ -64,7 +66,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_weight="6"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -96,13 +98,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
 
-            <View
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_validate"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_validate"
+                android:text="Validate"
+                android:textColor="@color/white"
+                android:layout_marginHorizontal="15dp"/>
+
         </LinearLayout>
 
 
