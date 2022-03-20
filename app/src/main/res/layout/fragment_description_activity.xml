@@ -169,6 +169,7 @@
                     android:id="@+id/et_number_participant_required"
                     android:background="@drawable/edit_text_border"
                     android:textColor="@color/black"
+                    android:inputType="number"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 

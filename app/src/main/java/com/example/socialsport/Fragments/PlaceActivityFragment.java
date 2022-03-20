@@ -79,7 +79,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
                 bundle.putString("location", String.valueOf(current_latLng));
                 Fragment newF = new DescriptionActivityFragment();
                 newF.setArguments(bundle);
-                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
             }
         });
 

@@ -71,7 +71,7 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
         Fragment newF = new PlaceActivityFragment();
         newF.setArguments(bundle);
         //Toast.makeText(getActivity(), view.getTag().toString(), Toast.LENGTH_SHORT).show();
-        getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).commit();
+        getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
 
     }
 }
