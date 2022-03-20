@@ -31,7 +31,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -72,12 +71,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
 
         Button btn_add_activity = view.findViewById(R.id.btn_add_activity);
-        btn_add_activity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit();
-            }
-        });
+        btn_add_activity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
 
         // Allow vertical scroll in map fragment
         ScrollView scroll = (ScrollView) view.findViewById(R.id.scrollView);
@@ -103,6 +97,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        // Turn on the My Location layer and the related control on the map.
+        updateLocationUI();
+
+        // Get the current location of the device and set the position of the map.
+        getDeviceLocation();
+
+        searchPlaceListener();
+    }
+
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -113,41 +121,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        locationPermissionGranted = false;
-        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {// If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                locationPermissionGranted = true;
-            } else
-                Log.d("Permission_error", "Permission denied");
-        }
         updateLocationUI();
     }
 
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
-
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
-
-        searchPlaceListener();
-
-    }
 
     private void updateLocationUI() {
         if (mMap == null) {
@@ -163,7 +139,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 lastKnownLocation = null;
                 getLocationPermission();
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -176,7 +152,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationClient.getLastLocation();
-                locationResult.addOnCompleteListener(getActivity(), (OnCompleteListener<Location>) task -> {
+                locationResult.addOnCompleteListener(requireActivity(), (OnCompleteListener<Location>) task -> {
                     if (task.isSuccessful()) {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.getResult();
@@ -194,7 +170,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     }
                 });
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
@@ -219,7 +195,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeToFind, 12));
                     }
                 } catch (IOException e) {
-                    Log.d("Place_error", e.toString());
+                    Log.d(TAG, e.toString());
                     e.printStackTrace();
                 }
 
