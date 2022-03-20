@@ -67,6 +67,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 writeUserToDatabase(database, user.getEmail(), name, age, user.getUid());
                                 getUserFromDatabase(database, user.getUid());
 
+                                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivity(i);
+
                                 //TODO on complete sign up treatment
                             } else {
                                 // If sign in fails, display a message to the user.

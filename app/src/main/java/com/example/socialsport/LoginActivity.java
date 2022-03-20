@@ -33,6 +33,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("LoginPage", "signInWithEmail:success");
+
+
+                            //TODO
+                            //Passer les infos utilisateurs
+                            Intent i = new Intent(getApplicationContext(), PrincipalPageActivity.class);
+                            startActivity(i);
+
                             Toast.makeText(LoginActivity.this, "Authentication succesful.",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(user);
