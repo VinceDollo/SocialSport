@@ -22,4 +22,5 @@
     <string name="fragment_container">Fragment container</string>
     <string name="go_login">Already have an account ? Login here</string>
     <string name="go_reg">Still dont have an account ? Create a free one here</string>
+    <string name="disc">Disconnect here</string>
 </resources>
