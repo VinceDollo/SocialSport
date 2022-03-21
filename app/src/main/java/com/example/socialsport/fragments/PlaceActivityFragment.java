@@ -1,53 +1,35 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.socialsport.LoginActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.example.socialsport.Map;
 import com.example.socialsport.R;
-import com.example.socialsport.entities.SportActivity;
-import com.example.socialsport.entities.User;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class PlaceActivityFragment extends Fragment implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
     private ImageButton btn_back;
     private Button btn_validate;
     private TextView tv_title;
 
     private LatLng current_latLng;
     private String sport;
+
+    public PlaceActivityFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,7 +63,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
             //add information to next fragment
             Bundle bundle1 = new Bundle();
             bundle1.putString("sport", sport);
-            bundle1.putString("location", String.valueOf(current_latLng));
+            bundle1.putString("location", String.valueOf(current_latLng)); // TODO: problème ici, la localisation n'est pas encore donnée
             Fragment newF = new DescriptionActivityFragment();
             newF.setArguments(bundle1);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
