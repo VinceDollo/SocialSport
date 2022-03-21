@@ -49,12 +49,15 @@ public class Map {
     private Location lastKnownLocation;
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085); // Sydney
 
+    AtomicReference<LatLng> current_latLng;
+
     public Map(GoogleMap googleMap, Activity activity, View view) {
         mMap = googleMap;
         this.activity = activity;
         this.view = view;
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(view.getContext());
+        current_latLng = new AtomicReference<>(defaultLocation);
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
@@ -96,10 +99,6 @@ public class Map {
     }
 
     private void getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationClient.getLastLocation();
@@ -165,7 +164,6 @@ public class Map {
         MarkerOptions marker = new MarkerOptions();
 
         BitmapDescriptor icon = checkIcon(sport);
-        AtomicReference<LatLng> current_latLng = new AtomicReference<>(defaultLocation);
 
         mMap.setOnMapClickListener(latLng -> {
             mMap.clear();
@@ -210,6 +208,10 @@ public class Map {
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    public AtomicReference<LatLng> getCurrent_latLng() {
+        return current_latLng;
     }
 
 }
