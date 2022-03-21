@@ -9,10 +9,10 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
-import com.example.socialsport.Fragments.HomeFragment;
+import com.example.socialsport.fragments.HomeFragment;
 import com.example.socialsport.Fragments.MessageFragment;
-import com.example.socialsport.Fragments.PersonFragment;
 import com.example.socialsport.entities.User;
+import com.example.socialsport.fragments.PersonFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -104,7 +104,6 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
         Log.d("Values",""+ name + " - " + email + " - " + age);
         user = new User(name,email,age);
-
     }
 
 }

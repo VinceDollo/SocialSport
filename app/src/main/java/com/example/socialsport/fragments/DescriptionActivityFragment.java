@@ -1,4 +1,4 @@
-package com.example.socialsport.Fragments;
+package com.example.socialsport.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;

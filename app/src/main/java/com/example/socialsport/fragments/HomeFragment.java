@@ -1,7 +1,6 @@
-package com.example.socialsport.Fragments;
+package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,7 +15,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.Map;
 import com.example.socialsport.R;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -45,7 +43,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         btn_add_activity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
 
         // Allow vertical scroll in map fragment
-
         ScrollView scroll = view.findViewById(R.id.scrollView);
         ImageView transparent = view.findViewById(R.id.imagetrans);
         transparent.setOnTouchListener((v, event) -> {
