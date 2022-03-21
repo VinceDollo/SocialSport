@@ -1,48 +1,46 @@
-package com.example.socialsport.Fragments;
+package com.example.socialsport;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
-import com.example.socialsport.R;
+import com.example.socialsport.fragments.HomeFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
+public class Map {
 
-    private FusedLocationProviderClient fusedLocationClient;
+    private final GoogleMap mMap;
+    private final Activity activity;
+    private final View view;
+
+    private final FusedLocationProviderClient fusedLocationClient;
     private static final String TAG = HomeFragment.class.getSimpleName();
-    private GoogleMap mMap;
-    private View view;
 
     private boolean locationPermissionGranted;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -51,72 +49,28 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private Location lastKnownLocation;
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085); // Sydney
 
+    public Map(GoogleMap googleMap, Activity activity, View view) {
+        mMap = googleMap;
+        this.activity = activity;
+        this.view = view;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home, container, false);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(view.getContext());
 
-        // Get the SupportMapFragment and request notification when the map is ready to be used.
-        SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
-        assert mMapFragment != null;
-        mMapFragment.getMapAsync(this);
-
-
-        Button btn_add_activity = view.findViewById(R.id.btn_add_activity);
-        btn_add_activity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
-
-        // Allow vertical scroll in map fragment
-        ScrollView scroll = view.findViewById(R.id.scrollView);
-        ImageView transparent = view.findViewById(R.id.imagetrans);
-        transparent.setOnTouchListener((v, event) -> {
-            int action = event.getAction();
-            switch (action) {
-                case MotionEvent.ACTION_DOWN:
-                case MotionEvent.ACTION_MOVE:
-                    // Disallow ScrollView to intercept touch events.
-                    scroll.requestDisallowInterceptTouchEvent(true);
-                    // Disable touch on transparent view
-                    return false;
-                case MotionEvent.ACTION_UP:
-                    // Allow ScrollView to intercept touch events.
-                    scroll.requestDisallowInterceptTouchEvent(false);
-                    return true;
-                default:
-                    return true;
-            }
-        });
-
-        return view;
-    }
-
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
-
-        searchPlaceListener();
     }
 
     private void getLocationPermission() {
-        if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
+        if (ContextCompat.checkSelfPermission(activity.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true;
             updateLocationUI();
         } else {
-            ActivityCompat.requestPermissions(requireActivity(),
+            ActivityCompat.requestPermissions(activity,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
@@ -149,7 +103,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationClient.getLastLocation();
-                locationResult.addOnCompleteListener(requireActivity(), task -> {
+                locationResult.addOnCompleteListener(activity, task -> {
                     if (task.isSuccessful()) {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.getResult();
@@ -182,11 +136,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 //Save the answer
                 String localisation = et_localisation.getText().toString();
-                Geocoder gc = new Geocoder(getContext());
+                Geocoder gc = new Geocoder(activity.getApplicationContext());
                 try {
                     List<Address> addresses = gc.getFromLocationName(localisation, 1);
                     if (addresses.isEmpty())
-                        Toast.makeText(getActivity(), "Error: the searched place doesn't exist", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Error: the searched place doesn't exist", Toast.LENGTH_SHORT).show();
                     else {
                         double latitude = addresses.get(0).getLatitude();
                         double longitude = addresses.get(0).getLongitude();
@@ -205,6 +159,57 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
             return false;
         });
+    }
+
+    public void addActivityMarker(String sport) {
+        MarkerOptions marker = new MarkerOptions();
+
+        BitmapDescriptor icon = checkIcon(sport);
+        AtomicReference<LatLng> current_latLng = new AtomicReference<>(defaultLocation);
+
+        mMap.setOnMapClickListener(latLng -> {
+            mMap.clear();
+            mMap.addMarker(marker.position(latLng).title("Position you choose"));
+            current_latLng.set(latLng);
+        });
+
+        if (icon != null) {
+            mMap.addMarker(marker.position(current_latLng.get()).title("default").icon(icon));
+        } else {
+            mMap.addMarker(marker.position(current_latLng.get()).title("default"));
+        }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(current_latLng.get()));
+    }
+
+    private BitmapDescriptor checkIcon(String sport) {
+        assert sport != null;
+        BitmapDescriptor icon = null;
+        switch (sport) {
+            case "football":
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_football);
+                break;
+            case "tennis":
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_tennis);
+                break;
+            case "volley":
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_volley);
+                break;
+            case "Soccer":
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
+                break;
+        }
+        return icon;
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        assert vectorDrawable != null;
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
 }

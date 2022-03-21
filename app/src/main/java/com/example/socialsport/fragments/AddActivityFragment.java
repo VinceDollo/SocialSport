@@ -1,4 +1,4 @@
-package com.example.socialsport.Fragments;
+package com.example.socialsport.fragments;
 
 import android.os.Bundle;
 
@@ -7,10 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableRow;
-import android.widget.Toast;
 
 import com.example.socialsport.R;
 

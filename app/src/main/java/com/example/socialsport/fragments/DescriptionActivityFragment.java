@@ -1,11 +1,10 @@
-package com.example.socialsport.Fragments;
+package com.example.socialsport.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.socialsport.LoginActivity;
+import com.example.socialsport.activities.LoginActivity;
 import com.example.socialsport.R;
 import com.example.socialsport.entities.SportActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,13 +63,13 @@ public class DescriptionActivityFragment extends Fragment {
         et_number_of_participant = view.findViewById(R.id.et_number_participant_required);
 
         btn_back.setOnClickListener(view12 -> {
-            //TODO add info
             Bundle bundle1 = new Bundle();
             bundle1.putString("sport", sport);
             Fragment newF = new PlaceActivityFragment();
             newF.setArguments(bundle1);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
         });
+
         btn_validate.setOnClickListener(view1 -> {
             date = et_date.getText().toString();
             time = et_time.getText().toString();
