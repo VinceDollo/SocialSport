@@ -28,7 +28,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -39,6 +39,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_email"
+                android:maxLines="1"
                 android:background="@drawable/edit_text_border"
                 android:textColor="@color/black"
                 android:layout_width="match_parent"
@@ -90,6 +91,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_name"
+                android:maxLines="1"
                 android:background="@drawable/edit_text_border"
                 android:textColor="@color/black"
                 android:layout_width="match_parent"
@@ -141,6 +143,18 @@
             android:text="@string/validate"
             android:textColor="@color/white"
             android:background="@drawable/btn_black"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_go_login_from_reg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="10dp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="10dp"
+            android:text="@string/go_login"
+            android:textColor="@color/purple_700"
+            android:background="@drawable/btn_white_noborders"/>
 
 
     </LinearLayout>

@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText et_email, et_password;
-    private Button btn_log_in;
+    private Button btn_log_in,btn_go_reg;
     int remainingTries;
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -74,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         et_email = findViewById(R.id.et_email);
         et_password = findViewById(R.id.et_password);
         btn_log_in = findViewById(R.id.btn_log_in);
+        btn_go_reg = findViewById(R.id.btn_go_reg_from_login);
         ImageButton btn_back = findViewById(R.id.btn_back);
         btn_log_in.setOnClickListener(onClickListener);
 
@@ -107,6 +108,13 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser != null) {
             System.out.println(currentUser);
         }
+        btn_go_reg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent IntentSignUpActivity = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(IntentSignUpActivity);
+            }
+        });
     }
 }
 
