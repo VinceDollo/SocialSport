@@ -1,4 +1,4 @@
-package com.example.socialsport;
+package com.example.socialsport.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,9 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
-import com.example.socialsport.Fragments.HomeFragment;
-import com.example.socialsport.Fragments.MessageFragment;
-import com.example.socialsport.Fragments.PersonFragment;
+import com.example.socialsport.R;
+import com.example.socialsport.fragments.HomeFragment;
+import com.example.socialsport.fragments.MessageFragment;
+import com.example.socialsport.fragments.PersonFragment;
 import com.example.socialsport.entities.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +23,6 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
