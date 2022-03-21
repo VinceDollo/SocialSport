@@ -1,4 +1,4 @@
-package com.example.socialsport.Fragments;
+package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -17,15 +17,11 @@ import com.example.socialsport.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 
 public class PlaceActivityFragment extends Fragment implements OnMapReadyCallback {
 
     private ImageButton btn_back;
     private Button btn_validate;
-    private TextView tv_title;
-
-    private LatLng current_latLng;
     private String sport;
 
     public PlaceActivityFragment() {
@@ -42,7 +38,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_place_activity, container, false);
 
-        tv_title = view.findViewById(R.id.tv_title);
+        TextView tv_title = view.findViewById(R.id.tv_title);
         btn_validate = view.findViewById(R.id.btn_validate);
         btn_back = view.findViewById(R.id.btn_back);
 

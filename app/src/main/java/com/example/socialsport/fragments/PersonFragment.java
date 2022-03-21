@@ -1,9 +1,10 @@
-package com.example.socialsport.Fragments;
+package com.example.socialsport.fragments;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,8 @@ public class PersonFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_person, container, false);
 
         tv_name = view.findViewById(R.id.tv_name);
-        tv_name.setText(((PrincipalPageActivity)getActivity()).getUser().getName());
+        tv_name.setText(((PrincipalPageActivity) getActivity()).getUser().getName());
+        Log.d("firebase", "" + ((PrincipalPageActivity) getActivity()).getUser().getName());
 
         return view;
     }
