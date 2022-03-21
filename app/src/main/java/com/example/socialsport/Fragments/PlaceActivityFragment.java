@@ -43,17 +43,11 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
     private ImageButton btn_back;
     private Button btn_validate;
     private TextView tv_title;
-    private FirebaseAuth mAuth;
 
 
     private LatLng current_latLng;
     private String sport;
 
-    private void writeActivityToDatabase(FirebaseDatabase database, String description, String date, String heure, String coords, String currentUserID) {
-        DatabaseReference myRef = database.getReference();
-        SportActivity newActivity = new SportActivity(description, date, heure, currentUserID,coords);
-        myRef.child("activities").push().setValue(newActivity);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,21 +83,9 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
             bundle1.putString("sport", sport);
             bundle1.putString("location", String.valueOf(current_latLng));
             Fragment newF = new DescriptionActivityFragment();
-                mAuth = FirebaseAuth.getInstance();
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                if (currentUser == null) {
-                    Intent i = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(i);
-                    Toast.makeText(getActivity(), "Sorry, you need to log back in to your account",
-                            Toast.LENGTH_SHORT).show();
-                }
-                Log.d("coords debug poing",String.valueOf(current_latLng));
-                Log.d("debug uid client",currentUser.getUid());
 
-                writeActivityToDatabase(database,"","","",String.valueOf(current_latLng), currentUser.getUid());
 
-                newF.setArguments(bundle1);
+            newF.setArguments(bundle1);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
         });
 
