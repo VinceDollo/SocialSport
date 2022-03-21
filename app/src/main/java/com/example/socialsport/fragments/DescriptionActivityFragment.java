@@ -1,4 +1,4 @@
-package com.example.socialsport.fragments;
+package com.example.socialsport.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -69,7 +69,6 @@ public class DescriptionActivityFragment extends Fragment {
             newF.setArguments(bundle1);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
         });
-
         btn_validate.setOnClickListener(view1 -> {
             date = et_date.getText().toString();
             time = et_time.getText().toString();

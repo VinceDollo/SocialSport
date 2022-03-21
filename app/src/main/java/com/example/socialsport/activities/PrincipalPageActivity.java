@@ -9,9 +9,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
-import com.example.socialsport.fragments.HomeFragment;
-import com.example.socialsport.fragments.MessageFragment;
-import com.example.socialsport.fragments.PersonFragment;
+import com.example.socialsport.Fragments.HomeFragment;
+import com.example.socialsport.Fragments.MessageFragment;
+import com.example.socialsport.Fragments.PersonFragment;
 import com.example.socialsport.entities.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 public class PrincipalPageActivity extends FragmentActivity {
 
     private FirebaseAuth mAuth;
-    private FirebaseUser user;
+    private String uid, name, email, age;
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +32,16 @@ public class PrincipalPageActivity extends FragmentActivity {
         setContentView(R.layout.principal_page_activity);
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit();
 
-        // FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //String uid = getIntent().getStringExtra("user");
-        //getUserFromDatabase(database,uid);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        //Toast.makeText(PrincipalPageActivity.this, uid, Toast.LENGTH_SHORT).show();
+        if(currentUser!=null){
+            uid = currentUser.getUid();
+            getUserFromDatabase(database, uid);
+        }else{
+            Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
+        }
 
         MeowBottomNavigation meowBottomNavigation = findViewById(R.id.bottom_app_bar);
 
@@ -61,21 +68,43 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     }
 
+    public User getUser(){
+        return user;
+    }
+
     private void replace(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).commit();
     }
 
     private void getUserFromDatabase(FirebaseDatabase database, String uid) {
         DatabaseReference myRef = database.getReference();
-        myRef.child("users").child(uid).get().addOnCompleteListener(task -> {
+
+        myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
-
-                Toast.makeText(getApplicationContext(), (String) task.getResult().getValue(), Toast.LENGTH_SHORT).show();
-                Log.e("firebase", (String) task.getResult().getValue());
+                name = task.getResult().getValue().toString();
+                Log.e("firebase", task.getResult().getValue().toString());
             }
         });
+        myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            } else {
+                email = task.getResult().getValue().toString();
+                Log.e("firebase", task.getResult().getValue().toString());
+            }
+        });
+        myRef.child("users").child(uid).child("age").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            } else {
+                age = task.getResult().getValue().toString();
+                Log.e("firebase", task.getResult().getValue().toString());
+            }
+        });
+        user = new User(name,email,age);
+
     }
 
 }

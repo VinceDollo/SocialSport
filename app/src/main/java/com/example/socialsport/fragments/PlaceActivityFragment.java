@@ -1,4 +1,4 @@
-package com.example.socialsport.fragments;
+package com.example.socialsport.Fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
