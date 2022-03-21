@@ -20,4 +20,6 @@
     <string name="browse_all_activities">Browse all activities</string>
     <string name="profil_picture">Profil picture</string>
     <string name="fragment_container">Fragment container</string>
+    <string name="go_login">Already have an account ? Login here</string>
+    <string name="go_reg">Still dont have an account ? Create a free one here</string>
 </resources>

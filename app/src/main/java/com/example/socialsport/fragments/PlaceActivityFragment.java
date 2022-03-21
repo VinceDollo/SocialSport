@@ -2,6 +2,7 @@ package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -20,8 +21,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.socialsport.LoginActivity;
 import com.example.socialsport.Map;
 import com.example.socialsport.R;
+import com.example.socialsport.entities.SportActivity;
+import com.example.socialsport.entities.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +34,10 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class PlaceActivityFragment extends Fragment implements OnMapReadyCallback {
 
@@ -59,10 +67,8 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");
-            Log.d("Error1", "Sport: " + sport);
             tv_title.setText("Choose location for " + sport);
-        } else
-            Log.d("Error2", "Sport: " + sport);
+        }
 
         //Placer la map
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);

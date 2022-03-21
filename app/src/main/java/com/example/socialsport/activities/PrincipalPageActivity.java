@@ -10,9 +10,15 @@ import com.example.socialsport.R;
 import com.example.socialsport.fragments.HomeFragment;
 import com.example.socialsport.fragments.MessageFragment;
 import com.example.socialsport.fragments.PersonFragment;
+import com.example.socialsport.Fragments.HomeFragment;
+import com.example.socialsport.Fragments.MessageFragment;
+import com.example.socialsport.Fragments.PersonFragment;
+import com.example.socialsport.entities.User;
 
 
 public class PrincipalPageActivity extends FragmentActivity {
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

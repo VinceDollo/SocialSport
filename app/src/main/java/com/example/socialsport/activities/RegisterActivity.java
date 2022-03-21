@@ -25,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText et_email, et_password, et_checkpassword, et_name, et_age;
-    private Button btn_log_in;
+    private Button btn_log_in,btn_go_login;
 
     private void writeUserToDatabase(FirebaseDatabase database, String email, String name, String age, String uid) {
         DatabaseReference myRef = database.getReference();
@@ -98,6 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
         et_age = findViewById(R.id.et_age);
 
         btn_log_in = findViewById(R.id.btn_log_in);
+        btn_go_login = findViewById(R.id.btn_go_login_from_reg);
         ImageButton btn_back = findViewById(R.id.btn_back);
         btn_log_in.setOnClickListener(onClickListener);
 
@@ -129,7 +130,13 @@ public class RegisterActivity extends AppCompatActivity {
         if (currentUser != null) {
             System.out.println(currentUser);
         }
-
-
+        btn_go_login.setOnClickListener(new View.OnClickListener() {
+                                               @Override
+                                               public void onClick(View view) {
+                                                   Intent IntentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                                                   startActivity(IntentSignUpActivity);
+                                               }
+                                           }
+        );
     }
 }
