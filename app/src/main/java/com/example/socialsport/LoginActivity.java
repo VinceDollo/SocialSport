@@ -39,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                 //TODO
                                 //Passer les infos utilisateurs
+
+
                                 Intent i = new Intent(getApplicationContext(), PrincipalPageActivity.class);
                                 startActivity(i);
 

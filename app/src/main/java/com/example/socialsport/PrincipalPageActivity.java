@@ -9,9 +9,13 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.Fragments.HomeFragment;
 import com.example.socialsport.Fragments.MessageFragment;
 import com.example.socialsport.Fragments.PersonFragment;
+import com.example.socialsport.entities.User;
 
 
 public class PrincipalPageActivity extends FragmentActivity {
+
+    private User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
