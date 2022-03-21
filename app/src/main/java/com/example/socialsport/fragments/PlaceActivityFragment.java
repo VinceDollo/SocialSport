@@ -44,30 +44,19 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
 
         tv_title = view.findViewById(R.id.tv_title);
         btn_validate = view.findViewById(R.id.btn_validate);
+        btn_back = view.findViewById(R.id.btn_back);
 
-        //recupere le sport
+        // Récupère le sport
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");
             tv_title.setText("Choose location for " + sport);
         }
 
-        //Placer la map
+        // Placer la map
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
         assert mMapFragment != null;
         mMapFragment.getMapAsync(this);
-
-        btn_back = view.findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).commit());
-        btn_validate.setOnClickListener(view12 -> {
-            //add information to next fragment
-            Bundle bundle1 = new Bundle();
-            bundle1.putString("sport", sport);
-            bundle1.putString("location", String.valueOf(current_latLng)); // TODO: problème ici, la localisation n'est pas encore donnée
-            Fragment newF = new DescriptionActivityFragment();
-            newF.setArguments(bundle1);
-            getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
-        });
 
         return view;
     }
@@ -76,6 +65,18 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         Map map = new Map(googleMap, requireActivity(), requireView());
+
+        btn_back.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).commit());
+        btn_validate.setOnClickListener(view12 -> {
+            //add information to next fragment
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("sport", sport);
+            bundle1.putString("location", String.valueOf(map.getCurrent_latLng()));
+            Fragment newF = new DescriptionActivityFragment();
+            newF.setArguments(bundle1);
+            getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
+        });
+
         map.addActivityMarker(sport);
     }
 
