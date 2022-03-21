@@ -81,20 +81,14 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         mMapFragment.getMapAsync(this);
 
         btn_back = view.findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).commit();
-            }
-        });
-        btn_validate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //add information to next fragment
-                Bundle bundle = new Bundle();
-                bundle.putString("sport", sport);
-                bundle.putString("location", String.valueOf(current_latLng));
-                Fragment newF = new DescriptionActivityFragment();
+
+        btn_back.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).commit());
+        btn_validate.setOnClickListener(view12 -> {
+            //add information to next fragment
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("sport", sport);
+            bundle1.putString("location", String.valueOf(current_latLng));
+            Fragment newF = new DescriptionActivityFragment();
                 mAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -107,11 +101,10 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
                 Log.d("coords debug poing",String.valueOf(current_latLng));
                 Log.d("debug uid client",currentUser.getUid());
 
-               writeActivityToDatabase(database,"","","",String.valueOf(current_latLng), currentUser.getUid());
+                writeActivityToDatabase(database,"","","",String.valueOf(current_latLng), currentUser.getUid());
 
-                newF.setArguments(bundle);
-                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).commit();
-            }
+                newF.setArguments(bundle1);
+            getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
         });
 
         return view;
@@ -137,14 +130,11 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current_latLng));
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                mMap.clear();
-                mMap.addMarker(marker.position(latLng).title("Position you choose"));
-                current_latLng = latLng;
-                //Toast.makeText(getActivity(), "Lat : " + latLng.latitude + " , " + "Long : " + latLng.longitude, Toast.LENGTH_LONG).show();
-            }
+        mMap.setOnMapClickListener(latLng -> {
+            mMap.clear();
+            mMap.addMarker(marker.position(latLng).title("Position you choose"));
+            current_latLng = latLng;
+            //Toast.makeText(getActivity(), "Lat : " + latLng.latitude + " , " + "Long : " + latLng.longitude, Toast.LENGTH_LONG).show();
         });
 
         //mMap.setOnInfoWindowClickListener(RegActivity.this);
