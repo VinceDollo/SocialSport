@@ -69,6 +69,8 @@ public class PrincipalPageActivity extends FragmentActivity {
     }
 
     public User getUser(){
+        Log.d("Values2",""+ user.getName() + " - " + user.getEmail() + " - " + user.getAge());
+
         return user;
     }
 
@@ -84,7 +86,6 @@ public class PrincipalPageActivity extends FragmentActivity {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 name = task.getResult().getValue().toString();
-                Log.e("firebase", task.getResult().getValue().toString());
             }
         });
         myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
@@ -92,7 +93,6 @@ public class PrincipalPageActivity extends FragmentActivity {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 email = task.getResult().getValue().toString();
-                Log.e("firebase", task.getResult().getValue().toString());
             }
         });
         myRef.child("users").child(uid).child("age").get().addOnCompleteListener(task -> {
@@ -100,9 +100,9 @@ public class PrincipalPageActivity extends FragmentActivity {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 age = task.getResult().getValue().toString();
-                Log.e("firebase", task.getResult().getValue().toString());
             }
         });
+        Log.d("Values",""+ name + " - " + email + " - " + age);
         user = new User(name,email,age);
 
     }
