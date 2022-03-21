@@ -224,6 +224,7 @@
                     android:orientation="vertical"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="7dp"
+                    android:tag="Football"
                     android:id="@+id/add_activity_football">
 
                     <ImageView

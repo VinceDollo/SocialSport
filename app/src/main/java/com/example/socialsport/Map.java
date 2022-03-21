@@ -118,6 +118,7 @@ public class Map {
         for (String key : activities.keySet()) {
 
             HashMap act=  (HashMap) activities.get(key);
+            String sport = (String)act.get("sport");
             String description = (String)act.get("description");
             String date = (String)act.get("date");
             String hour = (String)act.get("hour");
@@ -125,7 +126,7 @@ public class Map {
             String coords = (String)act.get("coords");
             ArrayList<String> uuids = (ArrayList<String>)act.get("uuids");
 
-            SportActivity current = new SportActivity(description,date,hour,uuidOrganiser,coords);
+            SportActivity current = new SportActivity(sport,description,date,hour,uuidOrganiser,coords);
             Log.d("PING", current.toString());
             Log.d("PING", current.getDescription());
             Log.d("current sport social", description);
@@ -136,7 +137,16 @@ public class Map {
 
             //TODO ADD ICON MANAGEMENT
             MarkerOptions marker = new MarkerOptions();
-            mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key));
+
+            Log.d("DEBUG",""+ sport);
+            Toast.makeText(view.getContext(), "hello "+ sport,Toast.LENGTH_SHORT).show();
+
+           // BitmapDescriptor icon = checkIcon(sport);
+          //  if (icon != null) {
+          //      mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key).icon(icon));
+          //  } else {
+                mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key));
+           // }
         }
 
         mMap.setOnMarkerClickListener(marker -> {
@@ -270,17 +280,26 @@ public class Map {
         assert sport != null;
         BitmapDescriptor icon = null;
         switch (sport) {
-            case "football":
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_football);
+            case "Football":
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_map_football);
                 break;
-            case "tennis":
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_tennis);
+            case "Tennis":
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_map_tennis);
                 break;
-            case "volley":
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_volley);
+            case "Volleyball":
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_map_volley);
                 break;
             case "Soccer":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_soccer);
+                break;
+            case "Basketball":
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_football);
+                break;
+            case "Handball":
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_hand);
+                break;
+            case "Running":
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_run);
                 break;
         }
         return icon;

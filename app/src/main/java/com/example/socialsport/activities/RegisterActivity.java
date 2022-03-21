@@ -44,7 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.d("firebase", String.valueOf(task.getResult().getValue()));
             }
         });
-
     }
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
