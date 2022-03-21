@@ -1,4 +1,4 @@
-package com.example.socialsport.Fragments;
+package com.example.socialsport.fragments;
 
 import android.os.Bundle;
 
@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.socialsport.R;
+import com.example.socialsport.activities.PrincipalPageActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +18,7 @@ import com.example.socialsport.R;
  * create an instance of this fragment.
  */
 public class MessageFragment extends Fragment {
+    private TextView display_mesgs;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +64,13 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
+        View view = inflater.inflate(R.layout.fragment_message, container, false);
+        display_mesgs = view.findViewById(R.id.messagedisplay);
+        display_mesgs.setText(((PrincipalPageActivity) getActivity()).getUser().getName());
+        return view;
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 }
