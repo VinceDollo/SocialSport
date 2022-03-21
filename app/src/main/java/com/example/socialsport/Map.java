@@ -137,6 +137,7 @@ public class Map {
 
             //TODO ADD ICON MANAGEMENT
             MarkerOptions marker = new MarkerOptions();
+            Log.e("ERROR",""+current.getActivityId());
             BitmapDescriptor icon = checkIcon(current.getActivityId());
             if (icon != null) {
                 mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(current.getActivityId()).icon(icon));
@@ -266,25 +267,25 @@ public class Map {
         BitmapDescriptor icon = null;
         switch (sport) {
             case "Football":
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_football);
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_map_football);
                 break;
             case "Tennis":
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_tennis);
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_map_tennis);
                 break;
             case "Volleyball":
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_volley);
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_map_volley);
                 break;
             case "Soccer":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_soccer);
                 break;
             case "Basketball":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_football);
                 break;
             case "Handball":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_hand);
                 break;
             case "Running":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_run);
                 break;
         }
         return icon;
