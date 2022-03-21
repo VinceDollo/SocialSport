@@ -49,7 +49,11 @@ public class DescriptionActivityFragment extends Fragment {
 
         btn_back.setOnClickListener(view12 -> {
             //TODO add info
-            getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new PlaceActivityFragment()).addToBackStack(null).commit();
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("sport", sport);
+            Fragment newF = new PlaceActivityFragment();
+            newF.setArguments(bundle1);
+            getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
         });
 
         btn_validate.setOnClickListener(view1 -> {
