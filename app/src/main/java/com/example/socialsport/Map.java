@@ -137,12 +137,16 @@ public class Map {
 
             //TODO ADD ICON MANAGEMENT
             MarkerOptions marker = new MarkerOptions();
-            BitmapDescriptor icon = checkIcon(sport);
-            if (icon != null) {
-                mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key).icon(icon));
-            } else {
+
+            Log.d("DEBUG",""+ sport);
+            Toast.makeText(view.getContext(), "hello "+ sport,Toast.LENGTH_SHORT).show();
+
+           // BitmapDescriptor icon = checkIcon(sport);
+          //  if (icon != null) {
+          //      mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key).icon(icon));
+          //  } else {
                 mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key));
-            }
+           // }
         }
 
         mMap.setOnMarkerClickListener(marker -> {
