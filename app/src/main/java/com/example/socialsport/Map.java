@@ -137,7 +137,12 @@ public class Map {
 
             //TODO ADD ICON MANAGEMENT
             MarkerOptions marker = new MarkerOptions();
-            mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(current.getActivityId()));
+            BitmapDescriptor icon = checkIcon(current.getActivityId());
+            if (icon != null) {
+                mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(current.getActivityId()).icon(icon));
+            } else {
+                mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(current.getActivityId()));
+            }
         }
 
     }
@@ -260,16 +265,25 @@ public class Map {
         assert sport != null;
         BitmapDescriptor icon = null;
         switch (sport) {
-            case "football":
+            case "Football":
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.img_football);
                 break;
-            case "tennis":
+            case "Tennis":
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.img_tennis);
                 break;
-            case "volley":
+            case "Volleyball":
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.img_volley);
                 break;
             case "Soccer":
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
+                break;
+            case "Basketball":
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
+                break;
+            case "Handball":
+                icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
+                break;
+            case "Running":
                 icon = bitmapDescriptorFromVector(activity, R.drawable.img_soccer_map);
                 break;
         }

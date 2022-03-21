@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
 import com.example.socialsport.fragments.HomeFragment;
-import com.example.socialsport.Fragments.MessageFragment;
+import com.example.socialsport.fragments.MessageFragment;
 import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.PersonFragment;
 import com.google.firebase.auth.FirebaseAuth;
