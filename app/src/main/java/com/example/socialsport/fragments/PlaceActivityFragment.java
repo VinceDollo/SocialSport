@@ -1,5 +1,6 @@
-package com.example.socialsport.Fragments;
+package com.example.socialsport.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.socialsport.Map;
 import com.example.socialsport.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,6 +46,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,8 +59,10 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");
+            Log.d("Error1", "Sport: " + sport);
             tv_title.setText("Choose location for " + sport);
-        }
+        } else
+            Log.d("Error2", "Sport: " + sport);
 
         //Placer la map
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
@@ -81,61 +87,8 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        // Add a marker in Sydney and move the camera
-        current_latLng = new LatLng(-34, 151);
-
-        MarkerOptions marker = new MarkerOptions();
-
-        BitmapDescriptor icon = checkIcon();
-        if (icon != null) {
-            //Toast.makeText(getActivity(), icon.toString(), Toast.LENGTH_LONG).show();
-            mMap.addMarker(marker.position(current_latLng).title("default").icon(icon));
-        } else {
-            //Toast.makeText(getActivity(), "Icon not set", Toast.LENGTH_LONG).show();
-
-            mMap.addMarker(marker.position(current_latLng).title("default"));
-        }
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(current_latLng));
-        mMap.setOnMapClickListener(latLng -> {
-            mMap.clear();
-            mMap.addMarker(marker.position(latLng).title("Position you choose"));
-            current_latLng = latLng;
-            //Toast.makeText(getActivity(), "Lat : " + latLng.latitude + " , " + "Long : " + latLng.longitude, Toast.LENGTH_LONG).show();
-        });
-
-        //mMap.setOnInfoWindowClickListener(RegActivity.this);
-
-    }
-
-    private BitmapDescriptor checkIcon() {
-        BitmapDescriptor icon = null;
-        Toast.makeText(getActivity(), sport, Toast.LENGTH_LONG).show();
-        switch (sport) {
-            case "football":
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_football);
-                break;
-            case "tennis":
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_tennis);
-                break;
-            case "volley":
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.img_volley);
-                break;
-            case "Soccer":
-                icon = bitmapDescriptorFromVector(getActivity(), R.drawable.img_soccer_map);
-                break;
-        }
-        return icon;
-    }
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
+        Map map = new Map(googleMap, requireActivity(), requireView());
+        map.addActivityMarker(sport);
     }
 
 }
