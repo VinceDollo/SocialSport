@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 
 public class PrincipalPageActivity extends FragmentActivity {
 
@@ -82,14 +84,14 @@ public class PrincipalPageActivity extends FragmentActivity {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
-                user.setName(task.getResult().getValue().toString());
+                user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
         });
         myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
-                user.setEmail(task.getResult().getValue().toString());
+                user.setEmail(Objects.requireNonNull(task.getResult().getValue()).toString());
 
             }
         });
@@ -97,7 +99,7 @@ public class PrincipalPageActivity extends FragmentActivity {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
-                user.setAge(task.getResult().getValue().toString());
+                user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
 
             }
         });

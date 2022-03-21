@@ -98,17 +98,16 @@
             android:text="@string/forgot_password"
             android:textColor="@color/black" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_go_reg_from_login"
+        <TextView
+            android:id="@+id/tv_go_reg_from_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textSize="10dp"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="10dp"
+            android:textStyle="italic"
+            android:gravity="center"
             android:text="@string/go_reg"
-            android:textColor="@color/purple_700"
-            android:background="@drawable/btn_white_noborders"/>
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

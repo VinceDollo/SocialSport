@@ -13,7 +13,7 @@ public class SportActivity {
     private ArrayList<String> uuids;
 
     public SportActivity(String activityId,String description, String date, String hour, String uuidOrganiser, String coords) {
-        ArrayList<String> uuids = new ArrayList<String>();
+        ArrayList<String> uuids = new ArrayList<>();
         uuids.add(uuidOrganiser);
 
         this.activityId = activityId;
@@ -23,7 +23,6 @@ public class SportActivity {
         this.uuidOrganiser = uuidOrganiser;
         this.coords = coords;
         this.uuids = uuids;
-        ;
     }
 
     public String getActivityId() {
