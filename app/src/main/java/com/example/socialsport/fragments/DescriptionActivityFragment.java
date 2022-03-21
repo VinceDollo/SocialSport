@@ -33,7 +33,7 @@ public class DescriptionActivityFragment extends Fragment {
 
     private void writeActivityToDatabase(FirebaseDatabase database, String description, String date, String heure, String coords, String currentUserID) {
         DatabaseReference myRef = database.getReference();
-        SportActivity newActivity = new SportActivity("", description, date, heure, currentUserID, coords);
+        SportActivity newActivity = new SportActivity( description, date, heure, currentUserID, coords);
         myRef.child("activities").push().setValue(newActivity);
     }
 
