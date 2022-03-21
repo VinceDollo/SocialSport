@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class PrincipalPageActivity extends FragmentActivity {
 
     private FirebaseAuth mAuth;
-    private String uid, name, email, age;
+    private String uid;
 
     private User user;
 
@@ -78,32 +78,30 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     private void getUserFromDatabase(FirebaseDatabase database, String uid) {
         DatabaseReference myRef = database.getReference();
-
+        user = new User(null,null,null);
         myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
-                name = task.getResult().getValue().toString();
-                Log.e("firebase", task.getResult().getValue().toString());
+                user.setName(task.getResult().getValue().toString());
             }
         });
         myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
-                email = task.getResult().getValue().toString();
-                Log.e("firebase", task.getResult().getValue().toString());
+                user.setEmail(task.getResult().getValue().toString());
+
             }
         });
         myRef.child("users").child(uid).child("age").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
-                age = task.getResult().getValue().toString();
-                Log.e("firebase", task.getResult().getValue().toString());
+                user.setAge(task.getResult().getValue().toString());
+
             }
         });
-        user = new User(name,email,age);
     }
 
 }
