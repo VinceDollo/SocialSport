@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -84,12 +85,12 @@ public class Map {
         getAllActivities(mMap);
     }
 
-    public LatLng stringToLatLng(String string){
-        String res = string.substring(string.indexOf("(")+1, string.indexOf(")"));
-        String[] latlong =  res.split(",");
+    public LatLng stringToLatLng(String string) {
+        String res = string.substring(string.indexOf("(") + 1, string.indexOf(")"));
+        String[] latlong = res.split(",");
         double latitude = Double.parseDouble(latlong[0]);
         double longitude = Double.parseDouble(latlong[1]);
-        return new LatLng(latitude,longitude);
+        return new LatLng(latitude, longitude);
     }
 
     public void getAllActivities(GoogleMap mMap) {
@@ -98,33 +99,34 @@ public class Map {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String,Object> map=new HashMap<>();//Creating HashMap
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                HashMap<String, Object> map = new HashMap<>();//Creating HashMap
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Object act = ds.getValue();    //Static types are wanky here
-                    map.put(ds.getKey(),act);
+                    map.put(ds.getKey(), act);
                 }
-                setLocationPoints(map,mMap);
+                setLocationPoints(map, mMap);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         };
         usersRef.addValueEventListener(eventListener);
     }
 
-    private void setLocationPoints(HashMap<String,Object>  activities, GoogleMap mMap) {
+    private void setLocationPoints(HashMap<String, Object> activities, GoogleMap mMap) {
 
         for (String key : activities.keySet()) {
+            HashMap act = (HashMap) activities.get(key);
+            assert act != null;
+            String description = (String) act.get("description");
+            String date = (String) act.get("date");
+            String hour = (String) act.get("hour");
+            String uuidOrganiser = (String) act.get("uuidOrganiser");
+            String coords = (String) act.get("coords");
+            ArrayList<String> uuids = (ArrayList<String>) act.get("uuids");
 
-            HashMap act=  (HashMap) activities.get(key);
-            String description = (String)act.get("description");
-            String date = (String)act.get("date");
-            String hour = (String)act.get("hour");
-            String uuidOrganiser = (String)act.get("uuidOrganiser");
-            String coords = (String)act.get("coords");
-            ArrayList<String> uuids = (ArrayList<String>)act.get("uuids");
-
-            SportActivity current = new SportActivity(key,description,date,hour,uuidOrganiser,coords);
+            SportActivity current = new SportActivity(key, description, date, hour, uuidOrganiser, coords);
             Log.d("PING", current.toString());
             Log.d("PING", current.getDescription());
             Log.d("current sport social", description);
@@ -139,7 +141,6 @@ public class Map {
         }
 
     }
-
 
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(activity.getApplicationContext(),
@@ -241,7 +242,7 @@ public class Map {
         BitmapDescriptor icon = checkIcon(sport);
 
         mMap.setOnMapClickListener(latLng -> {
-            mMap.clear();
+            //mMap.clear();
             mMap.addMarker(marker.position(latLng).title("Position you choose"));
             current_latLng.set(latLng);
         });
