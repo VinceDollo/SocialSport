@@ -1,5 +1,6 @@
 package com.example.socialsport.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
  * create an instance of this fragment.
  */
 public class MessageFragment extends Fragment {
-    private LinearLayout lldisplay_mesgs;
+    private LinearLayout lldisplay_mesgs,llreponse,lllist_mesgs;
     private DatabaseReference mDatabase;
 
 
@@ -79,6 +80,8 @@ public class MessageFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_message, container, false);
         lldisplay_mesgs = view.findViewById(R.id.llmessagedisplay);
+        llreponse = view.findViewById(R.id.llmessagereponse);
+        lllist_mesgs = view.findViewById(R.id.lllistmessgs);
         return view;
     }
     @Override
@@ -95,6 +98,7 @@ public class MessageFragment extends Fragment {
                         Button btn = new Button(MessageFragment.this.getContext());
                         String contact =snapshot.getKey().toString();
                         btn.setText(contact);
+                        btn.setBackgroundColor(Color.rgb(255,127,80));
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -104,6 +108,13 @@ public class MessageFragment extends Fragment {
                         btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                lllist_mesgs.removeAllViews();
+                                LinearLayout.LayoutParams paramsll = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT,
+                                        300
+                                );
+                                lllist_mesgs.setLayoutParams(paramsll);
+                                lllist_mesgs.setVisibility(View.VISIBLE);
                                 mDatabase.child("chat").child("YB1RV3E1hxU0sOGRxzC0n3QhdNH2").child(contact).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -113,44 +124,49 @@ public class MessageFragment extends Fragment {
                                         else {
                                             for (DataSnapshot snapshot : task.getResult().getChildren()) {
                                                 TextView tv = new TextView(MessageFragment.this.getContext());
-                                                tv.setText(snapshot.getValue().toString());
+                                                String message = snapshot.child("message").getValue().toString();
+                                                String date = snapshot.child("date").getValue().toString();
+                                                String sender = snapshot.child("sender").getValue().toString();
+                                                if (sender.equals("true")) {
+                                                    tv.setText("<- "+message+" envoyé le : "+date);
+                                                }
+                                                else{
+                                                    tv.setText("-> "+message+" recu le : "+date);
+                                                }
                                                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                                         LinearLayout.LayoutParams.MATCH_PARENT,
                                                         LinearLayout.LayoutParams.WRAP_CONTENT
                                                 );
                                                 tv.setLayoutParams(params);
-                                                lldisplay_mesgs.addView(tv);
+                                                lllist_mesgs.addView(tv);
                                             }
-                                            Button btnrep = new Button(MessageFragment.this.getContext());
-                                            btnrep.setText("Repondre à "+contact);
+                                            llreponse.setVisibility(View.VISIBLE);
+                                            llreponse.removeAllViews();
+                                            llreponse.setLayoutParams(paramsll);
+                                            EditText et = new EditText(MessageFragment.this.getContext());
                                             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                                     LinearLayout.LayoutParams.MATCH_PARENT,
                                                     LinearLayout.LayoutParams.WRAP_CONTENT
                                             );
-                                            btnrep.setLayoutParams(params);
-                                            btnrep.setOnClickListener(new View.OnClickListener() {
+                                            llreponse.addView(et);
+                                            et.setLayoutParams(params);
+                                            Button btnsend = new Button(MessageFragment.this.getContext());
+                                            btnsend.setBackgroundColor(Color.rgb(50,205,50));
+                                            btnsend.setText("SEND");
+                                            btnsend.setLayoutParams(params);
+                                            btnsend.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-                                                    EditText et = new EditText(MessageFragment.this.getContext());
-                                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                                            LinearLayout.LayoutParams.MATCH_PARENT,
-                                                            LinearLayout.LayoutParams.WRAP_CONTENT
-                                                    );
-                                                    lldisplay_mesgs.addView(et);
-                                                    et.setLayoutParams(params);
-                                                    Button btnsend = new Button(MessageFragment.this.getContext());
-                                                    btnsend.setText("SEND");
-                                                    btnsend.setLayoutParams(params);
-                                                    btnsend.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            Toast.makeText(MessageFragment.this.getContext(), "Message sent", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                                    lldisplay_mesgs.addView(btnsend);
+                                                    String msg = et.getText().toString();
+                                                    if(!msg.isEmpty()){
+                                                        Toast.makeText(MessageFragment.this.getContext(), "Message sent", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                    else{
+                                                        Toast.makeText(MessageFragment.this.getContext(), "Error message is empty", Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
                                             });
-                                            lldisplay_mesgs.addView(btnrep);
+                                            llreponse.addView(btnsend);
                                         }
                                     }
                                 });

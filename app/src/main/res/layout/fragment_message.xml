@@ -28,7 +28,18 @@
                     android:textSize="20dp"
                     android:textStyle="bold"
                     />
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
+                    android:id="@+id/llmessagereponse"
+                    android:orientation="vertical" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
+                    android:id="@+id/lllistmessgs"
+                    android:orientation="vertical" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
