@@ -42,10 +42,14 @@ public class PersonFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        btn_disc.setOnClickListener(view -> {
-            FirebaseDatabase.getInstance().goOffline();
-            Intent IntentLoginActivity = new Intent(PersonFragment.this.getContext(), WelcomeActivity.class);
-            startActivity(IntentLoginActivity);
+        btn_disc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseDatabase.getInstance().goOffline();
+                Intent IntentLoginActivity = new Intent(PersonFragment.this.getContext(), WelcomeActivity.class);
+                startActivity(IntentLoginActivity);
+                getActivity().onBackPressed();
+            }
         });
     }
 }

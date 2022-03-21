@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class SportActivity {
 
+
+    private String sport;
     private String description;
     private String date;
     private String hour;
@@ -11,16 +13,27 @@ public class SportActivity {
     private String coords;
     private ArrayList<String> uuids;
 
-    public SportActivity(String description, String date, String hour, String uuidOrganiser, String coords) {
+
+
+    public SportActivity(String sport, String description, String date, String hour, String uuidOrganiser, String coords) {
         ArrayList<String> uuids = new ArrayList<>();
         uuids.add(uuidOrganiser);
 
+        this.sport = sport;
         this.description = description;
         this.date = date;
         this.hour = hour;
         this.uuidOrganiser = uuidOrganiser;
         this.coords = coords;
         this.uuids = uuids;
+    }
+
+    public String getSport() {
+        return sport;
+    }
+
+    public void setSport(String sport) {
+        this.sport = sport;
     }
 
 
