@@ -60,10 +60,11 @@ public class DescriptionActivityFragment extends Fragment {
                 date = et_date.getText().toString();
                 time = et_time.getText().toString();
                 description = et_description.getText().toString();
-                number_participant = Integer.parseInt(et_number_of_participant.getText().toString());
+                String string_number_participant = et_number_of_participant.getText().toString();
 
-                if(date.equals("") || time.equals("") || description.equals("") || et_number_of_participant.getText().toString().equals("")){
+                if(date.equals("") || time.equals("") || description.equals("") || string_number_participant.equals("")){
                     //ELOY Info a recuperer + sport et coordinates
+                    number_participant = Integer.parseInt(string_number_participant);
                     Toast.makeText(getActivity(), "Empty fiels", Toast.LENGTH_SHORT).show();
                 }else {
                     getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new PlaceActivityFragment()).commit();
