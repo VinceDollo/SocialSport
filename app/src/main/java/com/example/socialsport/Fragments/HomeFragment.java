@@ -74,8 +74,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         btn_add_activity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
 
         // Allow vertical scroll in map fragment
-        ScrollView scroll = (ScrollView) view.findViewById(R.id.scrollView);
-        ImageView transparent = (ImageView) view.findViewById(R.id.imagetrans);
+        ScrollView scroll = view.findViewById(R.id.scrollView);
+        ImageView transparent = view.findViewById(R.id.imagetrans);
         transparent.setOnTouchListener((v, event) -> {
             int action = event.getAction();
             switch (action) {
@@ -102,10 +102,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        // Turn on the My Location layer and the related control on the map.
+        getLocationPermission();
         updateLocationUI();
-
-        // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
         searchPlaceListener();
@@ -116,14 +114,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true;
+            updateLocationUI();
         } else {
             ActivityCompat.requestPermissions(requireActivity(),
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
-        updateLocationUI();
     }
-
 
     private void updateLocationUI() {
         if (mMap == null) {
@@ -152,7 +149,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationClient.getLastLocation();
-                locationResult.addOnCompleteListener(requireActivity(), (OnCompleteListener<Location>) task -> {
+                locationResult.addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.getResult();
@@ -160,6 +157,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(lastKnownLocation.getLatitude(),
                                             lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                        } else {
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
                         }
                     } else {
                         Log.d(TAG, "Current location is null. Using defaults.");
@@ -177,7 +176,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     public void searchPlaceListener() {
         // Create searching localisation method
-        EditText et_localisation = (EditText) view.findViewById(R.id.et_search_city);
+        EditText et_localisation = view.findViewById(R.id.et_search_city);
         et_localisation.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
