@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.fragments.HomeFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -28,8 +29,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -50,6 +58,15 @@ public class Map {
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085); // Sydney
 
     AtomicReference<LatLng> current_latLng;
+    private List<SportActivity> activities = new ArrayList<>();
+
+    public List<SportActivity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<SportActivity> activities) {
+        this.activities = activities;
+    }
 
     public Map(GoogleMap googleMap, Activity activity, View view) {
         mMap = googleMap;
@@ -64,7 +81,65 @@ public class Map {
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
+        getAllActivities(mMap);
     }
+
+    public LatLng stringToLatLng(String string){
+        String res = string.substring(string.indexOf("(")+1, string.indexOf(")"));
+        String[] latlong =  res.split(",");
+        double latitude = Double.parseDouble(latlong[0]);
+        double longitude = Double.parseDouble(latlong[1]);
+        return new LatLng(latitude,longitude);
+    }
+
+    public void getAllActivities(GoogleMap mMap) {
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference usersRef = rootRef.child("activities");
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String,Object> map=new HashMap<>();//Creating HashMap
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Object act = ds.getValue();    //Static types are wanky here
+                    map.put(ds.getKey(),act);
+                }
+                setLocationPoints(map,mMap);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        usersRef.addValueEventListener(eventListener);
+    }
+
+    private void setLocationPoints(HashMap<String,Object>  activities, GoogleMap mMap) {
+
+        for (String key : activities.keySet()) {
+
+            HashMap act=  (HashMap) activities.get(key);
+            String description = (String)act.get("description");
+            String date = (String)act.get("date");
+            String hour = (String)act.get("hour");
+            String uuidOrganiser = (String)act.get("uuidOrganiser");
+            String coords = (String)act.get("coords");
+            ArrayList<String> uuids = (ArrayList<String>)act.get("uuids");
+
+            SportActivity current = new SportActivity(key,description,date,hour,uuidOrganiser,coords);
+            Log.d("PING", current.toString());
+            Log.d("PING", current.getDescription());
+            Log.d("current sport social", description);
+            Log.d("current sport social", "hey");
+
+            current.setUuids(uuids);
+            getActivities().add(current);
+
+            //TODO ADD ICON MANAGEMENT
+            MarkerOptions marker = new MarkerOptions();
+            mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(current.getActivityId()));
+        }
+
+    }
+
 
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(activity.getApplicationContext(),
