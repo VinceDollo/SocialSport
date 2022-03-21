@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -46,6 +47,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");
+            Toast.makeText(getContext(), sport,Toast.LENGTH_SHORT).show();
             tv_title.setText("Choose location for " + sport);
         }
 
