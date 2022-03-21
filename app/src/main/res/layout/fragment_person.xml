@@ -40,6 +40,18 @@
             android:textSize="40dp"
             android:gravity="center"/>
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_disconnect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_black"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="15dp"
+            android:text="@string/disc"
+            android:textColor="@color/white" />
+
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
