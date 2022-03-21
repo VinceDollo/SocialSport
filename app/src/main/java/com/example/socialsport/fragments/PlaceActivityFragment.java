@@ -47,7 +47,6 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");
-            Toast.makeText(getContext(), sport,Toast.LENGTH_SHORT).show();
             tv_title.setText("Choose location for " + sport);
         }
 
