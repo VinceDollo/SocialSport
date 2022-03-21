@@ -41,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.d("firebase", String.valueOf(task.getResult().getValue()));
             }
         });
+
     }
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -60,15 +61,17 @@ public class RegisterActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("Sign up page", "createUserWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                Toast.makeText(RegisterActivity.this, "Authentication success.",
-                                        Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(RegisterActivity.this, "Authentication success.", Toast.LENGTH_SHORT).show();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 assert user != null;
                                 writeUserToDatabase(database, user.getEmail(), name, age, user.getUid());
                                 getUserFromDatabase(database, user.getUid());
+                                Toast.makeText(RegisterActivity.this, user.getUid(), Toast.LENGTH_SHORT).show();
+                                Log.d("USER UID", user.getUid());
 
-                                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivity(i);
+                               // Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                               // i.putExtra("user", (String) user.getUid());
+                               // startActivity(i);
 
                                 //TODO on complete sign up treatment
                             } else {

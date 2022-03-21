@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText et_email, et_password;
     private Button btn_log_in,btn_go_reg;
-    int remainingTries;
+    private int remainingTries;
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override

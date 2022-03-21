@@ -24,7 +24,7 @@
             android:value="AIzaSyDGVKD7PXJ_oXTIP6hs1tCdb654VG6e02Y" />
 
         <activity
-            android:name=".PrincipalPageActivity"
+            android:name=".WelcomeActivity"
             android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>
@@ -34,7 +34,7 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".WelcomeActivity" />
+        <activity android:name=".PrincipalPageActivity" />
     </application>
 
 </manifest>
