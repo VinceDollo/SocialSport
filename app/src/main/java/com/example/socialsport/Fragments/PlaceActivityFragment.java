@@ -53,7 +53,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
 
         //recupere le sport
         Bundle bundle = this.getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             sport = bundle.getString("sport");
             tv_title.setText("Choose location for " + sport);
         }
@@ -64,23 +64,15 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         mMapFragment.getMapAsync(this);
 
         btn_back = view.findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).commit();
-            }
-        });
-        btn_validate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //add information to next fragment
-                Bundle bundle = new Bundle();
-                bundle.putString("sport",sport);
-                bundle.putString("location", String.valueOf(current_latLng));
-                Fragment newF = new DescriptionActivityFragment();
-                newF.setArguments(bundle);
-                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
-            }
+        btn_back.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).commit());
+        btn_validate.setOnClickListener(view12 -> {
+            //add information to next fragment
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("sport", sport);
+            bundle1.putString("location", String.valueOf(current_latLng));
+            Fragment newF = new DescriptionActivityFragment();
+            newF.setArguments(bundle1);
+            getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
         });
 
         return view;
@@ -96,7 +88,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         MarkerOptions marker = new MarkerOptions();
 
         BitmapDescriptor icon = checkIcon();
-        if(icon != null){
+        if (icon != null) {
             //Toast.makeText(getActivity(), icon.toString(), Toast.LENGTH_LONG).show();
             mMap.addMarker(marker.position(current_latLng).title("default").icon(icon));
         } else {
@@ -106,24 +98,21 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current_latLng));
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                mMap.clear();
-                mMap.addMarker(marker.position(latLng).title("Position you choose"));
-                current_latLng = latLng;
-                //Toast.makeText(getActivity(), "Lat : " + latLng.latitude + " , " + "Long : " + latLng.longitude, Toast.LENGTH_LONG).show();
-            }
+        mMap.setOnMapClickListener(latLng -> {
+            mMap.clear();
+            mMap.addMarker(marker.position(latLng).title("Position you choose"));
+            current_latLng = latLng;
+            //Toast.makeText(getActivity(), "Lat : " + latLng.latitude + " , " + "Long : " + latLng.longitude, Toast.LENGTH_LONG).show();
         });
 
         //mMap.setOnInfoWindowClickListener(RegActivity.this);
 
     }
 
-    private BitmapDescriptor checkIcon(){
+    private BitmapDescriptor checkIcon() {
         BitmapDescriptor icon = null;
         Toast.makeText(getActivity(), sport, Toast.LENGTH_LONG).show();
-        switch (sport){
+        switch (sport) {
             case "football":
                 icon = BitmapDescriptorFactory.fromResource(R.drawable.img_football);
                 break;
