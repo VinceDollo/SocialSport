@@ -24,17 +24,29 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
+import com.example.socialsport.entities.SportActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -49,12 +61,75 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static final int DEFAULT_ZOOM = 15;
 
     private Location lastKnownLocation;
+    private  List<SportActivity> activities = new ArrayList<>();
+
+    public List<SportActivity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<SportActivity> activities) {
+        this.activities = activities;
+    }
+
+    public String stringToLatLng(String string){
+        String res = string.substring(string.indexOf("(")+1, string.indexOf(")"));
+        return res;
+    }
+
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085); // Sydney
+
+    public void getAllActivities(GoogleMap mMap) {
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference usersRef = rootRef.child("activities");
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Object> list = new ArrayList<>();
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Object act = ds.getValue();    //Static types are wanky here
+                    list.add(act);
+                }
+                Log.d("TAG", list.toString());
+                setLocationPoints(list,mMap);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        usersRef.addValueEventListener(eventListener);
+    }
+
+    private void setLocationPoints(List<Object> activities, GoogleMap mMap) {
+
+        for (Object activity : activities) {
+            HashMap act=  (HashMap) activity;
+            String description = (String)act.get("description");
+            String date = (String)act.get("date");
+            String hour = (String)act.get("hour");
+            String uuidOrganiser = (String)act.get("uuidOrganiser");
+            String coords = (String)act.get("coords");
+            ArrayList<String> uuids = (ArrayList<String>)act.get("uuids");
+
+            SportActivity current = new SportActivity(description,date,hour,uuidOrganiser,coords);
+            current.setUuids(uuids);
+            getActivities().add(current);
+
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.img_tennis);   //TODO ADD ICON MANAGEMENT
+            MarkerOptions marker = new MarkerOptions();
+            Log.d("coords", stringToLatLng(current.getCoords()));
+//            mMap.addMarker(marker.position(current.getCoords()).title("default").icon(icon));
+
+
+
+        }
+
+    }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -100,6 +175,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+        getAllActivities(mMap);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         getLocationPermission();
