@@ -49,7 +49,6 @@ public class PrincipalPageActivity extends FragmentActivity {
         meowBottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.img_message));
         meowBottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.img_person));
 
-
         meowBottomNavigation.show(1, true);
         meowBottomNavigation.setOnClickMenuListener(model -> {
             switch (model.getId()) {
