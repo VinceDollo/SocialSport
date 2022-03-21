@@ -31,9 +31,9 @@ public class DescriptionActivityFragment extends Fragment {
     private FirebaseAuth mAuth;
 
 
-    private void writeActivityToDatabase(FirebaseDatabase database, String description, String date, String heure, String coords, String currentUserID) {
+    private void writeActivityToDatabase(FirebaseDatabase database,String sport, String description, String date, String heure, String coords, String currentUserID) {
         DatabaseReference myRef = database.getReference();
-        SportActivity newActivity = new SportActivity("", description, date, heure, currentUserID, coords);
+        SportActivity newActivity = new SportActivity( sport, description, date, heure, currentUserID, coords);
         myRef.child("activities").push().setValue(newActivity);
     }
 
@@ -89,7 +89,7 @@ public class DescriptionActivityFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                 }
 
-                writeActivityToDatabase(database, description, date, time, coordinates, currentUser.getUid());
+                writeActivityToDatabase(database,sport, description, date, time, coordinates, currentUser.getUid());
                 getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit();
             }
         });

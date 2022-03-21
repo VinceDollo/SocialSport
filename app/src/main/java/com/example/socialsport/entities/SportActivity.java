@@ -4,19 +4,22 @@ import java.util.ArrayList;
 
 public class SportActivity {
 
+
+    private String sport;
     private String description;
-    private String activityId;
     private String date;
     private String hour;
     private String uuidOrganiser;
     private String coords;
     private ArrayList<String> uuids;
 
-    public SportActivity(String activityId,String description, String date, String hour, String uuidOrganiser, String coords) {
+
+
+    public SportActivity(String sport, String description, String date, String hour, String uuidOrganiser, String coords) {
         ArrayList<String> uuids = new ArrayList<>();
         uuids.add(uuidOrganiser);
 
-        this.activityId = activityId;
+        this.sport = sport;
         this.description = description;
         this.date = date;
         this.hour = hour;
@@ -25,13 +28,14 @@ public class SportActivity {
         this.uuids = uuids;
     }
 
-    public String getActivityId() {
-        return activityId;
+    public String getSport() {
+        return sport;
     }
 
-    public void setActivityId(String activityId) {
-        this.activityId = activityId;
+    public void setSport(String sport) {
+        this.sport = sport;
     }
+
 
     public String getCoords() {
         return coords;
