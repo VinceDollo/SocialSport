@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,9 +149,11 @@ public class PersonFragment extends Fragment {
                 myActivities.add(currentAct);
             }
         }
-        Log.d("mezianeactiv",myActivities.toString());    
+        Log.d("mezianeactiv",myActivities.toString());
 
+        int cmp =0;
         for(SportActivity currentAct : myActivities){
+
             TextView tv = new TextView(PersonFragment.this.getContext());
             tv.setText("Activity : "+currentAct.getSport() +" ("+currentAct.getDate()+", "
             +currentAct.getCoords()+")");
@@ -158,7 +161,16 @@ public class PersonFragment extends Fragment {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
+            if(cmp != 0){
+                params.setMargins(0,30,0,0);
+            }
+
+            cmp++;
+
             tv.setLayoutParams(params);
+            tv.setBackgroundResource(R.drawable.btn_finished_activities);
+            tv.setPadding(20,30,20,30);
+            tv.setGravity(Gravity.CENTER);
             llactivities.addView(tv);
         }
     }
