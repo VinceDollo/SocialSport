@@ -11,8 +11,6 @@ w
 Gapp/src/main/java/com/example/socialsport/activities/LoginActivity.java,b/0/b010c27799cbce44caa5b877ceb08cda57227ae5
 }
 Mapp/src/androidTest/java/com/example/socialsport/ExampleInstrumentedTest.java,d/6/d630e16f28f56ff78c478139c35bd4eaf35738b9
-„
-Tapp/src/main/java/com/example/socialsport/fragments/DescriptionActivityFragment.java,7/c/7c972601cf4185e360ac87d0340d5f9c0f680cb0
 x
 Happ/src/main/java/com/example/socialsport/fragments/MessageFragment.java,b/1/b1ed71d04a82a96b16520aecc9f92c17ce9e6464
 |

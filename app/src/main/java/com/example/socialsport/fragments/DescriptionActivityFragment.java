@@ -1,10 +1,11 @@
 package com.example.socialsport.fragments;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.socialsport.activities.LoginActivity;
+import androidx.fragment.app.Fragment;
+
 import com.example.socialsport.R;
+import com.example.socialsport.activities.LoginActivity;
 import com.example.socialsport.entities.SportActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,15 +28,23 @@ public class DescriptionActivityFragment extends Fragment {
 
     private ImageButton btn_back;
     private Button btn_validate;
-    private EditText et_description, et_time, et_date, et_number_of_participant;
-    private String sport, coordinates, description, date, time;
-    private int number_participant;
+    private EditText et_description;
+    private EditText et_time;
+    private EditText et_date;
+    private EditText et_number_of_participant;
+    private String sport;
+    private String coordinates;
+    private String description;
+    private String date;
+    private String time;
+    private int number_participants;
     private FirebaseAuth mAuth;
+    private DatePickerDialog datePicker;
+    private TimePickerDialog timePicker;
 
-
-    private void writeActivityToDatabase(FirebaseDatabase database,String sport, String description, String date, String heure, String coords, String currentUserID) {
+    private void writeActivityToDatabase(FirebaseDatabase database, String sport, String description, String date, String heure, String coords, String currentUserID) {
         DatabaseReference myRef = database.getReference();
-        SportActivity newActivity = new SportActivity( sport, description, date, heure, currentUserID, coords);
+        SportActivity newActivity = new SportActivity(sport, description, date, heure, currentUserID, coords);
         myRef.child("activities").push().setValue(newActivity);
     }
 
@@ -42,6 +53,7 @@ public class DescriptionActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,6 +82,25 @@ public class DescriptionActivityFragment extends Fragment {
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
         });
 
+        et_date.setOnClickListener(v -> {
+            final Calendar cldr = Calendar.getInstance();
+            int day = cldr.get(Calendar.DAY_OF_MONTH);
+            int month = cldr.get(Calendar.MONTH);
+            int year = cldr.get(Calendar.YEAR);
+            datePicker = new DatePickerDialog(getActivity(), (view2, year1, monthOfYear, dayOfMonth) ->
+                    et_date.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1), year, month, day);
+            datePicker.show();
+        });
+
+        et_time.setOnClickListener(v -> {
+            final Calendar cldr = Calendar.getInstance();
+            int hour = cldr.get(Calendar.HOUR_OF_DAY);
+            int minutes = cldr.get(Calendar.MINUTE);
+            timePicker = new TimePickerDialog(getActivity(), (tp, sHour, sMinute) ->
+                    et_time.setText(sHour + ":" + sMinute), hour, minutes, true);
+            timePicker.show();
+        });
+
         btn_validate.setOnClickListener(view1 -> {
             date = et_date.getText().toString();
             time = et_time.getText().toString();
@@ -79,7 +110,7 @@ public class DescriptionActivityFragment extends Fragment {
             if (date.equals("") || time.equals("") || description.equals("") || string_number_participant.equals("")) {
                 Toast.makeText(getActivity(), "Empty field(s)", Toast.LENGTH_SHORT).show();
             } else {
-                number_participant = Integer.parseInt(string_number_participant);
+                number_participants = Integer.parseInt(string_number_participant);
                 mAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -90,7 +121,9 @@ public class DescriptionActivityFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                 }
 
-                writeActivityToDatabase(database,sport, description, date, time, coordinates, currentUser.getUid());
+                if (currentUser != null) {
+                    writeActivityToDatabase(database, sport, description, date, time, coordinates, currentUser.getUid());
+                }
                 getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
             }
         });
