@@ -107,6 +107,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             if (clicked != null) {
                 Log.d("HomeFragment", clicked.getDescription());
                 result.putString("sport", clicked.getSport());
+                result.putString("activityID", title);
                 result.putStringArrayList("participants", clicked.getUuids());
                 result.putString("organiserUuid", clicked.getUuidOrganiser());
                 result.putString("dateTime", clicked.getDate() + ", " + clicked.getHour());
