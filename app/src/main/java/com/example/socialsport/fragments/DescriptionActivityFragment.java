@@ -69,6 +69,7 @@ public class DescriptionActivityFragment extends Fragment {
             newF.setArguments(bundle1);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
         });
+
         btn_validate.setOnClickListener(view1 -> {
             date = et_date.getText().toString();
             time = et_time.getText().toString();
@@ -90,7 +91,7 @@ public class DescriptionActivityFragment extends Fragment {
                 }
 
                 writeActivityToDatabase(database,sport, description, date, time, coordinates, currentUser.getUid());
-                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
             }
         });
 

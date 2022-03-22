@@ -26,6 +26,7 @@
 
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_profil"
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="120dp"
