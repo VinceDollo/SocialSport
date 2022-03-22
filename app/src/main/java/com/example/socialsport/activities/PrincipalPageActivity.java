@@ -2,6 +2,7 @@ package com.example.socialsport.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 
@@ -38,7 +40,10 @@ public class PrincipalPageActivity extends FragmentActivity {
     ArrayList<String> name = new ArrayList<String>();
     ArrayList<String> message = new ArrayList<String>();
 
-    private int[] images = {R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football};
+    HashMap<String, ArrayList<String>> map;
+
+
+    private int[] images = {R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,7 @@ public class PrincipalPageActivity extends FragmentActivity {
         setContentView(R.layout.principal_page_activity);
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -84,9 +90,21 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
+    public MeowBottomNavigation getMeowBottomNavigation(){
+        return meowBottomNavigation;
+    }
+
+    public User getUser(){
+        return user;
+    }
+
+    private void replace(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
+    }
+
     private void getUserFromDatabase(String uid) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        user = new User(null, null, null);
+        user = new User(null,null,null);
         myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
@@ -99,6 +117,7 @@ public class PrincipalPageActivity extends FragmentActivity {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 user.setEmail(Objects.requireNonNull(task.getResult().getValue()).toString());
+
             }
         });
         myRef.child("users").child(uid).child("age").get().addOnCompleteListener(task -> {
@@ -110,19 +129,9 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
-    public MeowBottomNavigation getMeowBottomNavigation() {
-        return meowBottomNavigation;
-    }
 
-    public User getUser() {
-        return user;
-    }
-
-    private void replace(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
-    }
-
-    public void updateMessage() {
+    public void  updateMessage(){
+        map = new HashMap<String, ArrayList<String>>();
         FirebaseDatabase.getInstance().getReference().child("chat").child(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -131,6 +140,7 @@ public class PrincipalPageActivity extends FragmentActivity {
                 } else {
                     for (DataSnapshot snapshot : task.getResult().getChildren()) {
                         String contact = snapshot.getKey();
+                        map.put(contact,new ArrayList<String>());
                         name.add(contact);
                         FirebaseDatabase.getInstance().getReference().child("chat").child(FirebaseAuth.getInstance().getUid()).child(contact).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                             @Override
@@ -139,6 +149,7 @@ public class PrincipalPageActivity extends FragmentActivity {
                                     Log.e("firebase", "Error getting data", task.getException());
                                 } else {
                                     for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                                        map.get(contact).add(snapshot.child("message").getValue().toString() + "//" + snapshot.child("date").getValue().toString() + "//" + snapshot.child("sender").getValue().toString());
                                         message.add(snapshot.child("message").getValue().toString() + "//" + snapshot.child("date").getValue().toString() + "//" + snapshot.child("sender").getValue().toString());
                                     }
                                 }
@@ -147,14 +158,16 @@ public class PrincipalPageActivity extends FragmentActivity {
                     }
                 }
             }
+
         });
+
     }
 
-    public ArrayList<String> getNames() {
-        return name;
+    public HashMap<String, ArrayList<String>> getMap(){
+        return map;
     }
 
-    public ArrayList<String> getMessage() {
+    public ArrayList<String> getMessage(){
         return message;
     }
 

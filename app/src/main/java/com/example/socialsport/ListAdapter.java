@@ -12,25 +12,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class ListAdapter extends BaseAdapter {
 
     Context context;
     private ArrayList<String> name;
-    private ArrayList<String> messages;
+    private HashMap<String, ArrayList<String>> name_message;
     private final int [] images;
 
-    public ListAdapter(Context context, ArrayList<String> name, ArrayList<String> messages, int [] images){
+    public ListAdapter(Context context, HashMap<String, ArrayList<String>> name_message, int [] images){
         this.context = context;
-        this.name = name;
-        this.messages = messages;
+        this.name_message = name_message;
         this.images = images;
     }
 
     @Override
     public int getCount() {
-        return name.size();
+        return name_message.size();
     }
 
     @Override
@@ -72,12 +72,17 @@ public class ListAdapter extends BaseAdapter {
             result=convertView;
         }
 
-        String[] array = messages.get(position).split("//");
-        String msg = array[0];
-        String[] array2 = array[1].split(" ");
+        Object firstKey = name_message.keySet().toArray()[position];
+
+        ArrayList<String> array =  name_message.get(firstKey);
+
+        String[] array1 = array.get(array.size()-1).split("//");
+        String msg = array1[0];
+        String[] array2 = array1[1].split(" ");
         String date = array2[0];
         String time = array2[1];
-        String sender = array[2];
+        String sender = array1[2];
+
 
         Log.d("SENDER", ""+ sender);
         if(sender.equals("true")){
@@ -85,7 +90,7 @@ public class ListAdapter extends BaseAdapter {
         }else{
             viewHolder.sender.setImageResource(R.drawable.img_message_received_2);
         }
-        viewHolder.txtName.setText(name.get(position));
+        viewHolder.txtName.setText(firstKey.toString());
         viewHolder.txtMessage.setText(msg);
         viewHolder.txtTime.setText(time);
         viewHolder.txtDate.setText(date);
