@@ -53,12 +53,7 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
 
 
 
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit();
-            }
-        });
+        btn_back.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit());
         return view;
     }
 
@@ -68,7 +63,6 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
         bundle.putString("sport",view.getTag().toString());
         Fragment newF = new PlaceActivityFragment();
         newF.setArguments(bundle);
-        //Toast.makeText(getActivity(), view.getTag().toString(), Toast.LENGTH_SHORT).show();
         getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
 
     }

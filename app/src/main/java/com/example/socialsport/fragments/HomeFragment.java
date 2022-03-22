@@ -2,6 +2,7 @@ package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.Map;
 import com.example.socialsport.R;
+import com.example.socialsport.entities.SportActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -70,6 +73,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
         Map map = new Map(googleMap, this.getActivity(), view);
         map.searchPlaceListener(); // Enable search location listener
+
+        map.getmMap().setOnMarkerClickListener(marker -> {
+            Bundle result = new Bundle();
+            marker.hideInfoWindow();
+            String title = (marker.getTitle());
+            SportActivity clicked = map.getSportActivities().get(title);
+            if (clicked != null) {
+                Log.d("Clicked", clicked.getDescription());
+                result.putStringArrayList("participants", clicked.getUuids());
+                Fragment newF = new OverviewFragment();
+                newF.setArguments(result);
+                map.getmMap().animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+                assert this.getFragmentManager() != null;
+                this.getFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
+            }
+            return true;
+        });
     }
 
 }

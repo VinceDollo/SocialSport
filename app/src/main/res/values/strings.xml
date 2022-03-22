@@ -23,4 +23,8 @@
     <string name="go_login">Already have an account ? Login here</string>
     <string name="go_reg">Still dont have an account ? Create a free one here</string>
     <string name="disc">Disconnect here</string>
+    <string name="participate">Participate</string>
+    <string name="organiser">Organiser</string>
+    <string name="message">Message</string>
+    <string name="participants">Participants</string>
 </resources>

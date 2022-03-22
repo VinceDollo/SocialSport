@@ -15,11 +15,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.fragments.HomeFragment;
+import com.example.socialsport.fragments.OverviewFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,7 +30,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -59,13 +61,10 @@ public class Map {
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085); // Sydney
 
     AtomicReference<LatLng> current_latLng;
-    private HashMap<String,SportActivity> activities=new HashMap<>();
-    public  HashMap<String,SportActivity>getActivities() {
-        return activities;
-    }
+    private HashMap<String, SportActivity> sportActivities = new HashMap<>();
 
-    public void setActivities( HashMap<String,SportActivity> activities) {
-        this.activities = activities;
+    public HashMap<String, SportActivity> getSportActivities() {
+        return sportActivities;
     }
 
     public Map(GoogleMap googleMap, Activity activity, View view) {
@@ -81,86 +80,64 @@ public class Map {
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
-        getAllActivities(mMap);
+        getAllActivities();
     }
 
-    public LatLng stringToLatLng(String string){
-        String res = string.substring(string.indexOf("(")+1, string.indexOf(")"));
-        String[] latlong =  res.split(",");
+    public LatLng stringToLatLng(String string) {
+        String res = string.substring(string.indexOf("(") + 1, string.indexOf(")"));
+        String[] latlong = res.split(",");
         double latitude = Double.parseDouble(latlong[0]);
         double longitude = Double.parseDouble(latlong[1]);
-        return new LatLng(latitude,longitude);
+        return new LatLng(latitude, longitude);
     }
 
-    public void getAllActivities(GoogleMap mMap) {
+    public void getAllActivities() {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference usersRef = rootRef.child("activities");
+        DatabaseReference activitiesRef = rootRef.child("activities");
+
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String,Object> map=new HashMap<>();//Creating HashMap
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Object act = ds.getValue();    //Static types are wanky here
-                    map.put(ds.getKey(),act);
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    HashMap act = (HashMap) ds.getValue(); //Static types are wanky here
+                    assert act != null;
+                    Log.d("Firebase_debug", act.toString());
+
+                    String sport = (String) act.get("sport");
+                    String description = (String) act.get("description");
+                    String date = (String) act.get("date");
+                    String hour = (String) act.get("hour");
+                    String uuidOrganiser = (String) act.get("uuidOrganiser");
+                    String coords = (String) act.get("coords");
+                    ArrayList<String> uuids = (ArrayList<String>) act.get("uuids");
+
+                    SportActivity newActivity = new SportActivity(sport, description, date, hour, uuidOrganiser, coords);
+                    newActivity.setUuids(uuids);
+
+                    sportActivities.put(ds.getKey(), newActivity);
                 }
-                setLocationPoints(map,mMap);
+                setLocationPoints();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) { //
+            }
         };
-        usersRef.addValueEventListener(eventListener);
+        activitiesRef.addValueEventListener(eventListener);
     }
 
-    private void setLocationPoints(HashMap<String,Object>  activities, GoogleMap mMap) {
-        this.setActivities(new HashMap<String,SportActivity>());
-
-        for (String key : activities.keySet()) {
-
-            HashMap act=  (HashMap) activities.get(key);
-            String sport = (String)act.get("sport");
-            String description = (String)act.get("description");
-            String date = (String)act.get("date");
-            String hour = (String)act.get("hour");
-            String uuidOrganiser = (String)act.get("uuidOrganiser");
-            String coords = (String)act.get("coords");
-            ArrayList<String> uuids = (ArrayList<String>)act.get("uuids");
-
-            SportActivity current = new SportActivity(sport,description,date,hour,uuidOrganiser,coords);
-            Log.d("PING", current.toString());
-            Log.d("PING", current.getDescription());
-            Log.d("current sport social", description);
-            Log.d("current sport social", "hey");
-
-            current.setUuids(uuids);
-            getActivities().put(key,current);
-
-            //TODO ADD ICON MANAGEMENT
+    private void setLocationPoints() {
+        for (java.util.Map.Entry<String, SportActivity> currentActivity : sportActivities.entrySet()) {
             MarkerOptions marker = new MarkerOptions();
-
-            Log.d("DEBUG",""+ sport);
-           // Toast.makeText(view.getContext(), "hello "+ sport,Toast.LENGTH_SHORT).show();
-
-            BitmapDescriptor icon = checkIcon(sport);
+            assert currentActivity != null;
+            BitmapDescriptor icon = checkIcon(currentActivity.getValue().getSport());
             if (icon != null) {
-                mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key).icon(icon));
+                mMap.addMarker(marker.position(stringToLatLng(currentActivity.getValue().getCoords())).title(currentActivity.getKey()).icon(icon));
             } else {
-                mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key));
+                mMap.addMarker(marker.position(stringToLatLng(currentActivity.getValue().getCoords())).title(currentActivity.getKey()));
             }
         }
-
-        mMap.setOnMarkerClickListener(marker -> {
-            marker.hideInfoWindow();
-            String title = (marker.getTitle());
-            SportActivity clicked = getActivities().get(title);
-            Log.d("Clicked",clicked.getDescription());
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-            //Using position get Value from arraylist
-            return true;
-        });
-
     }
-
 
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(activity.getApplicationContext(),
@@ -190,7 +167,7 @@ public class Map {
                 getLocationPermission();
             }
         } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 
@@ -219,18 +196,18 @@ public class Map {
                 });
             }
         } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage(), e);
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 
     public void searchPlaceListener() {
         // Create searching localisation method
-        EditText et_localisation = view.findViewById(R.id.et_search_city);
-        et_localisation.setOnKeyListener((v, keyCode, event) -> {
+        EditText etLocalisation = view.findViewById(R.id.et_search_city);
+        etLocalisation.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 //Save the answer
-                String localisation = et_localisation.getText().toString();
+                String localisation = etLocalisation.getText().toString();
                 Geocoder gc = new Geocoder(activity.getApplicationContext());
                 try {
                     List<Address> addresses = gc.getFromLocationName(localisation, 1);
@@ -248,7 +225,7 @@ public class Map {
                 }
 
                 //Delete text from edit text
-                et_localisation.setText("");
+                etLocalisation.setText("");
 
                 return true;
             }
@@ -301,6 +278,8 @@ public class Map {
             case "Running":
                 icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_run);
                 break;
+            default:
+                break;
         }
         return icon;
     }
@@ -317,6 +296,10 @@ public class Map {
 
     public AtomicReference<LatLng> getCurrent_latLng() {
         return current_latLng;
+    }
+
+    public GoogleMap getmMap() {
+        return mMap;
     }
 
 }

@@ -23,9 +23,6 @@ import java.util.Objects;
 
 public class PrincipalPageActivity extends FragmentActivity {
 
-    private FirebaseAuth mAuth;
-    private String uid;
-
     private User user;
 
     @Override
@@ -35,13 +32,13 @@ public class PrincipalPageActivity extends FragmentActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser!=null){
-            uid = currentUser.getUid();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
             getUserFromDatabase(database, uid);
-        }else{
+        } else {
             Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
         }
 
@@ -66,20 +63,19 @@ public class PrincipalPageActivity extends FragmentActivity {
             }
             return null;
         });
-
     }
 
-    public User getUser(){
+    public User getUser() {
         return user;
     }
 
-    private void replace(Fragment fragment) {
+    public void replace(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).commit();
     }
 
     private void getUserFromDatabase(FirebaseDatabase database, String uid) {
         DatabaseReference myRef = database.getReference();
-        user = new User(null,null,null);
+        user = new User(null, null, null);
         myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
@@ -92,7 +88,6 @@ public class PrincipalPageActivity extends FragmentActivity {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 user.setEmail(Objects.requireNonNull(task.getResult().getValue()).toString());
-
             }
         });
         myRef.child("users").child(uid).child("age").get().addOnCompleteListener(task -> {
@@ -100,7 +95,6 @@ public class PrincipalPageActivity extends FragmentActivity {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
-
             }
         });
     }
