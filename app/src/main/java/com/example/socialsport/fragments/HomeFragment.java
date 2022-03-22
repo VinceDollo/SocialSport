@@ -52,14 +52,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mMapFragment.getMapAsync(this);
 
         //Modifier la bottomBar quand on clique sur profil
-        ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(1,true);
+        ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(1, true);
 
         findViewById();
 
         btn_add_activity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
         civ_profil.setOnClickListener(view1 -> {
-            MeowBottomNavigation meowBottomNavigation =((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation();
-            meowBottomNavigation.show(3,true);
+            MeowBottomNavigation meowBottomNavigation = ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation();
+            meowBottomNavigation.show(3, true);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new PersonFragment()).addToBackStack(null).commit();
         });
 
@@ -69,14 +69,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-    private void findViewById(){
+    private void findViewById() {
         civ_profil = view.findViewById(R.id.civ_profil);
         btn_add_activity = view.findViewById(R.id.btn_add_activity);
         scroll = view.findViewById(R.id.scrollView);
         transparent = view.findViewById(R.id.imagetrans);
     }
 
-    private boolean mapOnTouchListener(View v, MotionEvent event){
+    private boolean mapOnTouchListener(View v, MotionEvent event) {
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -108,6 +108,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 Log.d("HomeFragment", clicked.getDescription());
                 result.putString("sport", clicked.getSport());
                 result.putStringArrayList("participants", clicked.getUuids());
+                result.putString("organiserUuid", clicked.getUuidOrganiser());
+                result.putString("dateTime", clicked.getDate() + ", " + clicked.getHour());
+                result.putString("location", clicked.getCoords());
                 Fragment newF = new OverviewFragment();
                 newF.setArguments(result);
                 map.getmMap().animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
