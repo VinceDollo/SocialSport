@@ -62,9 +62,12 @@ public class MessageFragment extends Fragment {
         lv_chat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Toast.makeText(getContext(), ((PrincipalPageActivity) requireActivity()).getNames().get(i)+" "+((PrincipalPageActivity) requireActivity()).getNames().get(i), Toast.LENGTH_SHORT).show();
-
+                Bundle bundle = new Bundle();
+                bundle.putString("name",((PrincipalPageActivity) requireActivity()).getNames().get(i));
+                bundle.putString("message",((PrincipalPageActivity) requireActivity()).getMessage().get(i));
+                Fragment newF = new ConversationFragment();
+                newF.setArguments(bundle);
+                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
             }
         });
 
