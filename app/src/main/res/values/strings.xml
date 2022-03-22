@@ -27,4 +27,8 @@
     <string name="organiser">Organiser</string>
     <string name="message">Message</string>
     <string name="participants">Participants</string>
+    <string name="enter_a_date">Enter a date</string>
+    <string name="enter_a_time">Enter a time</string>
+    <string name="number_of_participants_required">Number of participants required</string>
+    <string name="enter_a_number">Enter a number</string>
 </resources>
