@@ -1,11 +1,7 @@
 package com.example.socialsport;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -25,9 +22,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -58,14 +53,11 @@ public class Map {
     private Location lastKnownLocation;
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085); // Sydney
 
-    AtomicReference<LatLng> current_latLng;
-    private HashMap<String,SportActivity> activities=new HashMap<>();
-    public  HashMap<String,SportActivity>getActivities() {
-        return activities;
-    }
+    AtomicReference<LatLng> currentLatLng;
+    private final HashMap<String, SportActivity> sportActivities = new HashMap<>();
 
-    public void setActivities( HashMap<String,SportActivity> activities) {
-        this.activities = activities;
+    public HashMap<String, SportActivity> getSportActivities() {
+        return sportActivities;
     }
 
     public Map(GoogleMap googleMap, Activity activity, View view) {
@@ -74,93 +66,71 @@ public class Map {
         this.view = view;
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(view.getContext());
-        current_latLng = new AtomicReference<>(defaultLocation);
+        currentLatLng = new AtomicReference<>(defaultLocation);
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
-        getAllActivities(mMap);
+        getAllActivities();
     }
 
-    public LatLng stringToLatLng(String string){
-        String res = string.substring(string.indexOf("(")+1, string.indexOf(")"));
-        String[] latlong =  res.split(",");
+    public LatLng stringToLatLng(String string) {
+        String res = string.substring(string.indexOf("(") + 1, string.indexOf(")"));
+        String[] latlong = res.split(",");
         double latitude = Double.parseDouble(latlong[0]);
         double longitude = Double.parseDouble(latlong[1]);
-        return new LatLng(latitude,longitude);
+        return new LatLng(latitude, longitude);
     }
 
-    public void getAllActivities(GoogleMap mMap) {
+    public void getAllActivities() {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference usersRef = rootRef.child("activities");
+        DatabaseReference activitiesRef = rootRef.child("activities");
+
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String,Object> map=new HashMap<>();//Creating HashMap
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Object act = ds.getValue();    //Static types are wanky here
-                    map.put(ds.getKey(),act);
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    HashMap act = (HashMap) ds.getValue(); //Static types are wanky here
+                    assert act != null;
+                    Log.d("Firebase_activity", act.toString());
+
+                    String sport = (String) act.get("sport");
+                    String description = (String) act.get("description");
+                    String date = (String) act.get("date");
+                    String hour = (String) act.get("hour");
+                    String uuidOrganiser = (String) act.get("uuidOrganiser");
+                    String coords = (String) act.get("coords");
+                    ArrayList<String> uuids = (ArrayList<String>) act.get("uuids");
+
+                    SportActivity newActivity = new SportActivity(sport, description, date, hour, uuidOrganiser, coords);
+                    newActivity.setUuids(uuids);
+
+                    sportActivities.put(ds.getKey(), newActivity);
                 }
-                setLocationPoints(map,mMap);
+                setLocationPoints();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) { //
+            }
         };
-        usersRef.addValueEventListener(eventListener);
+        activitiesRef.addValueEventListener(eventListener);
     }
 
-    private void setLocationPoints(HashMap<String,Object>  activities, GoogleMap mMap) {
-        this.setActivities(new HashMap<String,SportActivity>());
-
-        for (String key : activities.keySet()) {
-
-            HashMap act=  (HashMap) activities.get(key);
-            String sport = (String)act.get("sport");
-            String description = (String)act.get("description");
-            String date = (String)act.get("date");
-            String hour = (String)act.get("hour");
-            String uuidOrganiser = (String)act.get("uuidOrganiser");
-            String coords = (String)act.get("coords");
-            ArrayList<String> uuids = (ArrayList<String>)act.get("uuids");
-
-            SportActivity current = new SportActivity(sport,description,date,hour,uuidOrganiser,coords);
-            Log.d("PING", current.toString());
-            Log.d("PING", current.getDescription());
-            Log.d("current sport social", description);
-            Log.d("current sport social", "hey");
-
-            current.setUuids(uuids);
-            getActivities().put(key,current);
-
-            //TODO ADD ICON MANAGEMENT
+    private void setLocationPoints() {
+        for (java.util.Map.Entry<String, SportActivity> currentActivity : sportActivities.entrySet()) {
             MarkerOptions marker = new MarkerOptions();
-
-            Log.d("DEBUG",""+ sport);
-           // Toast.makeText(view.getContext(), "hello "+ sport,Toast.LENGTH_SHORT).show();
-
-            BitmapDescriptor icon = checkIcon(sport);
+            assert currentActivity != null;
+            BitmapDescriptor icon = Utils.getBitmapDescriptor(activity, currentActivity.getValue().getSport());
             if (icon != null) {
-                mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key).icon(icon));
+                mMap.addMarker(marker.position(stringToLatLng(currentActivity.getValue().getCoords())).title(currentActivity.getKey()).icon(icon));
             } else {
-                mMap.addMarker(marker.position(stringToLatLng(current.getCoords())).title(key));
+                mMap.addMarker(marker.position(stringToLatLng(currentActivity.getValue().getCoords())).title(currentActivity.getKey()));
             }
         }
-
-        mMap.setOnMarkerClickListener(marker -> {
-            marker.hideInfoWindow();
-            String title = (marker.getTitle());
-            SportActivity clicked = getActivities().get(title);
-            Log.d("Clicked",clicked.getDescription());
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-            //Using position get Value from arraylist
-            return true;
-        });
-
     }
-
 
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(activity.getApplicationContext(),
@@ -190,7 +160,7 @@ public class Map {
                 getLocationPermission();
             }
         } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 
@@ -219,18 +189,18 @@ public class Map {
                 });
             }
         } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage(), e);
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 
     public void searchPlaceListener() {
         // Create searching localisation method
-        EditText et_localisation = view.findViewById(R.id.et_search_city);
-        et_localisation.setOnKeyListener((v, keyCode, event) -> {
+        EditText etLocalisation = view.findViewById(R.id.et_search_city);
+        etLocalisation.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 //Save the answer
-                String localisation = et_localisation.getText().toString();
+                String localisation = etLocalisation.getText().toString();
                 Geocoder gc = new Geocoder(activity.getApplicationContext());
                 try {
                     List<Address> addresses = gc.getFromLocationName(localisation, 1);
@@ -248,7 +218,7 @@ public class Map {
                 }
 
                 //Delete text from edit text
-                et_localisation.setText("");
+                etLocalisation.setText("");
 
                 return true;
             }
@@ -259,64 +229,29 @@ public class Map {
     public void addActivityMarker(String sport) {
         MarkerOptions marker = new MarkerOptions();
 
-        BitmapDescriptor icon = checkIcon(sport);
+        BitmapDescriptor icon = Utils.getBitmapDescriptor(activity, sport);
 
         mMap.setOnMapClickListener(latLng -> {
             mMap.clear();
             mMap.addMarker(marker.position(latLng).title("Position you choose"));
-            current_latLng.set(latLng);
+            currentLatLng.set(latLng);
         });
 
         if (icon != null) {
-            mMap.addMarker(marker.position(current_latLng.get()).title("default").icon(icon));
+            mMap.addMarker(marker.position(currentLatLng.get()).title("default").icon(icon));
         } else {
-            mMap.addMarker(marker.position(current_latLng.get()).title("default"));
+            mMap.addMarker(marker.position(currentLatLng.get()).title("default"));
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(current_latLng.get()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng.get()));
     }
 
-    private BitmapDescriptor checkIcon(String sport) {
-        assert sport != null;
-        BitmapDescriptor icon = null;
-        switch (sport) {
-            case "Football":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_football);
-                break;
-            case "Tennis":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_tennis);
-                break;
-            case "Volleyball":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_volley);
-                break;
-            case "Soccer":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_soccer);
-                break;
-            case "Basketball":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_basket);
-                break;
-            case "Handball":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_hand);
-                break;
-            case "Running":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_run);
-                break;
-        }
-        return icon;
+    public AtomicReference<LatLng> getCurrentLatLng() {
+        return currentLatLng;
     }
 
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        assert vectorDrawable != null;
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
-    public AtomicReference<LatLng> getCurrent_latLng() {
-        return current_latLng;
+    public GoogleMap getmMap() {
+        return mMap;
     }
 
 }

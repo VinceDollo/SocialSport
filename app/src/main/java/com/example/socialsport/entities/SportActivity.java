@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class SportActivity {
 
-
     private String sport;
     private String description;
     private String date;
@@ -12,8 +11,6 @@ public class SportActivity {
     private String uuidOrganiser;
     private String coords;
     private ArrayList<String> uuids;
-
-
 
     public SportActivity(String sport, String description, String date, String hour, String uuidOrganiser, String coords) {
         ArrayList<String> uuids = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.example.socialsport.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,7 @@ public class PrincipalPageActivity extends FragmentActivity {
     ArrayList<String> name = new ArrayList<String>();
     ArrayList<String> message = new ArrayList<String>();
 
-    HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+    HashMap<String, ArrayList<String>> map;
 
 
     private int[] images = {R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football};
@@ -56,10 +57,10 @@ public class PrincipalPageActivity extends FragmentActivity {
 
         updateMessage();
 
-        if(currentUser!=null){
+        if (currentUser != null) {
             uid = currentUser.getUid();
-            getUserFromDatabase(database, uid);
-        }else{
+            getUserFromDatabase(uid);
+        } else {
             Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
         }
 
@@ -82,6 +83,8 @@ public class PrincipalPageActivity extends FragmentActivity {
                 case 3:
                     replace(new PersonFragment());
                     break;
+                default:
+                    break;
             }
             return null;
         });
@@ -99,8 +102,8 @@ public class PrincipalPageActivity extends FragmentActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
     }
 
-    private void getUserFromDatabase(FirebaseDatabase database, String uid) {
-        DatabaseReference myRef = database.getReference();
+    private void getUserFromDatabase(String uid) {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
         user = new User(null,null,null);
         myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -122,10 +125,10 @@ public class PrincipalPageActivity extends FragmentActivity {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
-
             }
         });
     }
+
 
     public void  updateMessage(){
         map = new HashMap<String, ArrayList<String>>();

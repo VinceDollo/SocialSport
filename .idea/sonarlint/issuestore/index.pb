@@ -1,5 +1,15 @@
 
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-b
-2app/src/main/java/com/example/socialsport/Map.java,1/2/1254210212bc520e32fff0484471cbd299ffe5e5
+l
+<app/src/main/java/com/example/socialsport/entities/User.java,5/2/52d4e7e7c4196e8a71fd88562366acb09e75b23a
+n
+>app/src/test/java/com/example/socialsport/ExampleUnitTest.java,8/4/84702697e172a3255d2e7969dd79fb4e9ad7df8e
+y
+Iapp/src/main/java/com/example/socialsport/activities/WelcomeActivity.java,2/1/2159049aa32729e1343307a2093f8221b9c9ea59
+w
+Gapp/src/main/java/com/example/socialsport/activities/LoginActivity.java,b/0/b010c27799cbce44caa5b877ceb08cda57227ae5
+}
+Mapp/src/androidTest/java/com/example/socialsport/ExampleInstrumentedTest.java,d/6/d630e16f28f56ff78c478139c35bd4eaf35738b9
+„
+Tapp/src/main/java/com/example/socialsport/fragments/DescriptionActivityFragment.java,7/c/7c972601cf4185e360ac87d0340d5f9c0f680cb0

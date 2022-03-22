@@ -54,7 +54,6 @@ public class PersonFragment extends Fragment {
             mGetContent.launch("image/*");
         });
 
-
         tv_name.setText(((PrincipalPageActivity) requireActivity()).getUser().getName());
         Log.d("firebase", "" + ((PrincipalPageActivity) requireActivity()).getUser().getName());
         btn_disc = view.findViewById(R.id.btn_disconnect);

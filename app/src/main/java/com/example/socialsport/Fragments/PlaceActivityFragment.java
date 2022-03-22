@@ -68,7 +68,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
             //add information to next fragment
             Bundle bundle1 = new Bundle();
             bundle1.putString("sport", sport);
-            bundle1.putString("location", String.valueOf(map.getCurrent_latLng()));
+            bundle1.putString("location", String.valueOf(map.getCurrentLatLng()));
             Fragment newF = new DescriptionActivityFragment();
             newF.setArguments(bundle1);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
