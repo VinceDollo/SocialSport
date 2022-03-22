@@ -47,6 +47,12 @@ public class OverviewFragment extends Fragment {
     CircleImageView imgOrganiser;
     ArrayList<String> participantsUuids;
 
+    private void stateButton() {
+        if (participantsUuids.contains(mAuth.getCurrentUser().getUid()))
+            btnParticipate.setText("Leave");
+        else
+            btnParticipate.setText("Participate");
+    }
 
     private void queryDbUsers() {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -94,6 +100,7 @@ public class OverviewFragment extends Fragment {
                     currentParticipants.remove(mAuth.getCurrentUser().getUid());
                 }
                 participantsUuids = currentParticipants;
+                stateButton();
                 FirebaseDatabase.getInstance().getReference().child("activities").child(activityID).child("uuids").setValue(currentParticipants);
             }
         });
@@ -118,6 +125,7 @@ public class OverviewFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             participantsUuids = bundle.getStringArrayList("participants");
+            stateButton();
             queryDbUsers();
 
             btnParticipate.setOnClickListener(view -> handleParticipate(bundle.getString("activityID")));
