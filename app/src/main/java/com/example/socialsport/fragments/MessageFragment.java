@@ -8,68 +8,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.socialsport.ListAdapter;
 import com.example.socialsport.R;
+import com.example.socialsport.activities.PrincipalPageActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MessageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MessageFragment extends Fragment {
-    private LinearLayout lldisplay_mesgs;
     private DatabaseReference mDatabase;
+    private ListView lv_chat;
 
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public MessageFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MessageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MessageFragment newInstance(String param1, String param2) {
-        MessageFragment fragment = new MessageFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private int[] images = {R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -78,23 +44,54 @@ public class MessageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_message, container, false);
+
+        ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(2,true);
+
+/*
         lldisplay_mesgs = view.findViewById(R.id.llmessagedisplay);
+        llreponse = view.findViewById(R.id.llmessagereponse);
+        lllist_mesgs = view.findViewById(R.id.lllistmessgs);*/
+
+        lv_chat = view.findViewById(R.id.lv_chat);
+
+
+        ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getNames(), ((PrincipalPageActivity) requireActivity()).getMessage(), images);
+
+        lv_chat.setAdapter(lAdapter);
+
+        lv_chat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle = new Bundle();
+                bundle.putString("name",((PrincipalPageActivity) requireActivity()).getNames().get(i));
+                bundle.putString("message",((PrincipalPageActivity) requireActivity()).getMessage().get(i));
+                Fragment newF = new ConversationFragment();
+                newF.setArguments(bundle);
+                getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
+            }
+        });
+
         return view;
     }
+
+
     @Override
     public void onStart() {
         super.onStart();
-        mDatabase.child("chat").child("YB1RV3E1hxU0sOGRxzC0n3QhdNH2").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
-                    for (DataSnapshot snapshot : task.getResult().getChildren()) {
+    }
+
+
+
+                                    /*
+                                        TextView tv = new TextView(MessageFragment.this.getContext());
+                                        String message = snapshot.child("message").getValue().toString();
+                                        String date = snapshot.child("date").getValue().toString();
+                                        String sender = snapshot.child("sender").getValue().toString();*/
+                        /*
                         Button btn = new Button(MessageFragment.this.getContext());
                         String contact =snapshot.getKey().toString();
                         btn.setText(contact);
+                        btn.setBackgroundColor(Color.rgb(255,127,80));
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -104,6 +101,13 @@ public class MessageFragment extends Fragment {
                         btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                lllist_mesgs.removeAllViews();
+                                LinearLayout.LayoutParams paramsll = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT,
+                                        300
+                                );
+                                lllist_mesgs.setLayoutParams(paramsll);
+                                lllist_mesgs.setVisibility(View.VISIBLE);
                                 mDatabase.child("chat").child("YB1RV3E1hxU0sOGRxzC0n3QhdNH2").child(contact).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -113,55 +117,63 @@ public class MessageFragment extends Fragment {
                                         else {
                                             for (DataSnapshot snapshot : task.getResult().getChildren()) {
                                                 TextView tv = new TextView(MessageFragment.this.getContext());
-                                                tv.setText(snapshot.getValue().toString());
+                                                String message = snapshot.child("message").getValue().toString();
+                                                String date = snapshot.child("date").getValue().toString();
+                                                String sender = snapshot.child("sender").getValue().toString();
+                                                if (sender.equals("true")) {
+                                                    tv.setText("<- "+message+" envoyé le : "+date);
+                                                }
+                                                else{
+                                                    tv.setText("-> "+message+" recu le : "+date);
+                                                }
                                                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                                         LinearLayout.LayoutParams.MATCH_PARENT,
                                                         LinearLayout.LayoutParams.WRAP_CONTENT
                                                 );
                                                 tv.setLayoutParams(params);
-                                                lldisplay_mesgs.addView(tv);
+                                                lllist_mesgs.addView(tv);
                                             }
-                                            Button btnrep = new Button(MessageFragment.this.getContext());
-                                            btnrep.setText("Repondre à "+contact);
+                                            llreponse.setVisibility(View.VISIBLE);
+                                            llreponse.removeAllViews();
+                                            llreponse.setLayoutParams(paramsll);
+                                            EditText et = new EditText(MessageFragment.this.getContext());
                                             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                                     LinearLayout.LayoutParams.MATCH_PARENT,
                                                     LinearLayout.LayoutParams.WRAP_CONTENT
                                             );
-                                            btnrep.setLayoutParams(params);
-                                            btnrep.setOnClickListener(new View.OnClickListener() {
+                                            llreponse.addView(et);
+                                            et.setLayoutParams(params);
+                                            Button btnsend = new Button(MessageFragment.this.getContext());
+                                            btnsend.setBackgroundColor(Color.rgb(50,205,50));
+                                            btnsend.setText("SEND");
+                                            btnsend.setLayoutParams(params);
+                                            btnsend.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-                                                    EditText et = new EditText(MessageFragment.this.getContext());
-                                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                                            LinearLayout.LayoutParams.MATCH_PARENT,
-                                                            LinearLayout.LayoutParams.WRAP_CONTENT
-                                                    );
-                                                    lldisplay_mesgs.addView(et);
-                                                    et.setLayoutParams(params);
-                                                    Button btnsend = new Button(MessageFragment.this.getContext());
-                                                    btnsend.setText("SEND");
-                                                    btnsend.setLayoutParams(params);
-                                                    btnsend.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            Toast.makeText(MessageFragment.this.getContext(), "Message sent", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                                    lldisplay_mesgs.addView(btnsend);
+                                                    String msg = et.getText().toString();
+                                                    if(!msg.isEmpty()){
+                                                        Toast.makeText(MessageFragment.this.getContext(), "Message sent", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                    else{
+                                                        Toast.makeText(MessageFragment.this.getContext(), "Error message is empty", Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
                                             });
-                                            lldisplay_mesgs.addView(btnrep);
+                                            llreponse.addView(btnsend);
                                         }
                                     }
                                 });
                             }
                         });
                         lldisplay_mesgs.addView(btn);
+
+
+
                     }
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
                 }
             }
         });
 
-    }
+    }*/
 }

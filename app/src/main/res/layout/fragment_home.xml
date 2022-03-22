@@ -42,8 +42,8 @@
                         android:textColor="@color/black"
                         android:textSize="40sp" />
 
-                    <ImageButton
-                        android:id="@+id/ib_profil_picture"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_profil"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

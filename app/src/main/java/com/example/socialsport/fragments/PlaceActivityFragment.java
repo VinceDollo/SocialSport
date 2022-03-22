@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -47,7 +46,6 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");
-            Toast.makeText(getContext(), ""+sport,Toast.LENGTH_SHORT).show();
             tv_title.setText("Choose location for " + sport);
         }
 
@@ -55,6 +53,8 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
         assert mMapFragment != null;
         mMapFragment.getMapAsync(this);
+
+        btn_back.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
 
         return view;
     }
@@ -64,7 +64,6 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap) {
         Map map = new Map(googleMap, requireActivity(), requireView());
 
-        btn_back.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).commit());
         btn_validate.setOnClickListener(view12 -> {
             //add information to next fragment
             Bundle bundle1 = new Bundle();
