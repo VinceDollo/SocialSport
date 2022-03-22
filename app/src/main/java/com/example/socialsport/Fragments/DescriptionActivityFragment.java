@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -32,6 +34,8 @@ public class DescriptionActivityFragment extends Fragment {
     private EditText et_time;
     private EditText et_date;
     private EditText et_number_of_participant;
+    private TextView tv_info_description;
+    private TextView tv_description;
     private String sport;
     private String coordinates;
     private String description;
@@ -41,6 +45,7 @@ public class DescriptionActivityFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatePickerDialog datePicker;
     private TimePickerDialog timePicker;
+    private boolean isIconClicked = false;
 
     private void writeActivityToDatabase(FirebaseDatabase database, String sport, String description, String date, String heure, String coords, String currentUserID) {
         DatabaseReference myRef = database.getReference();
@@ -53,7 +58,7 @@ public class DescriptionActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "ResourceAsColor"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,6 +78,9 @@ public class DescriptionActivityFragment extends Fragment {
         et_date = view.findViewById(R.id.et_date);
         et_description = view.findViewById(R.id.et_description);
         et_number_of_participant = view.findViewById(R.id.et_number_participant_required);
+        et_number_of_participant = view.findViewById(R.id.et_number_participant_required);
+        tv_info_description = view.findViewById(R.id.info_description);
+        tv_description = view.findViewById(R.id.tv_description);
 
         btn_back.setOnClickListener(view12 -> {
             Bundle bundle1 = new Bundle();
@@ -99,6 +107,26 @@ public class DescriptionActivityFragment extends Fragment {
             timePicker = new TimePickerDialog(getActivity(), (tp, sHour, sMinute) ->
                     et_time.setText(sHour + ":" + sMinute), hour, minutes, true);
             timePicker.show();
+        });
+
+        tv_description.setOnTouchListener((view13, motionEvent) -> {
+                    final int DRAWABLE_LEFT = 0;
+                    final int DRAWABLE_TOP = 1;
+                    final int DRAWABLE_RIGHT = 2;
+                    final int DRAWABLE_BOTTOM = 3;
+                    if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                        if(motionEvent.getRawX() >= (tv_description.getRight() - tv_description.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            if(isIconClicked){
+                                tv_info_description.setText("");
+                                isIconClicked = false;
+                            }else{
+                                tv_info_description.setText("Enter a short description about your activity, the level of the participants and every informations that could be useful for participants");
+                                isIconClicked = true;
+                            }
+                            return true;
+                        }
+                    }
+                    return false;
         });
 
         btn_validate.setOnClickListener(view1 -> {
