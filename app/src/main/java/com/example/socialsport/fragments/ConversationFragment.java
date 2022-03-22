@@ -11,11 +11,14 @@ import android.widget.TextView;
 
 import com.example.socialsport.R;
 
+import java.util.ArrayList;
+
 public class ConversationFragment extends Fragment {
 
     private View view;
     private TextView tv_name, tv_message;
-    private String message, name;
+    private String name;
+    private ArrayList<String> message;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,13 +34,18 @@ public class ConversationFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             name = bundle.getString("name");
-            message = bundle.getString("message");
+            message = bundle.getStringArrayList("message");
         }
 
         tv_message = view.findViewById(R.id.message);
         tv_name = view.findViewById(R.id.name);
 
-        tv_message.setText(message);
+        String messagesText = "";
+        for (String msg: message) {
+            messagesText += msg.split("//")[0] + "\n";
+        }
+
+        tv_message.setText(messagesText);
         tv_name.setText(name);
 
 

@@ -31,6 +31,8 @@ public class MessageFragment extends Fragment {
     private DatabaseReference mDatabase;
     private ListView lv_chat;
 
+
+    //TODO changer avec image de bdd
     private int[] images = {R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football};
 
     @Override
@@ -55,16 +57,19 @@ public class MessageFragment extends Fragment {
         lv_chat = view.findViewById(R.id.lv_chat);
 
 
-        ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getNames(), ((PrincipalPageActivity) requireActivity()).getMessage(), images);
+        ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getMap(), images);
 
         lv_chat.setAdapter(lAdapter);
+
+
 
         lv_chat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Object firstKey = ((PrincipalPageActivity) requireActivity()).getMap().keySet().toArray()[i];
                 Bundle bundle = new Bundle();
-                bundle.putString("name",((PrincipalPageActivity) requireActivity()).getNames().get(i));
-                bundle.putString("message",((PrincipalPageActivity) requireActivity()).getMessage().get(i));
+                bundle.putString("name", (String) firstKey);
+                bundle.putStringArrayList("message",((PrincipalPageActivity) requireActivity()).getMap().get(firstKey));
                 Fragment newF = new ConversationFragment();
                 newF.setArguments(bundle);
                 getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
