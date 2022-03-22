@@ -55,6 +55,7 @@
             android:text="Finished activities"
             android:textColor="@color/black"
             android:textSize="20dp"
+            android:id="@+id/finishedactivities"
             android:layout_marginTop="30dp"
             android:textStyle="bold"
             android:gravity="center"/>
@@ -67,61 +68,11 @@
             android:orientation="vertical"
             android:fillViewport="true">
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/llactivitiefinished"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TableRow
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_finished_activities"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="20dp"
-                    android:tag="Soccer"
-                    android:id="@+id/add_activity_soccer">
-
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/img_soccer"
-                            android:backgroundTint="@color/black"
-                            android:layout_gravity="center"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="7"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="SOCCER"
-                                android:textSize="17dp"
-                                android:textStyle="bold"
-                                android:textColor="@color/black"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="10/12/2020"
-                                android:textSize="17dp"
-                                android:textColor="@color/black"/>
-
-                        </LinearLayout>
-
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"/>
-
-            </TableLayout>
+                android:orientation="vertical" />
 
         </ScrollView>
 

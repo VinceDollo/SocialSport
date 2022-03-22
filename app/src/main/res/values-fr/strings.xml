@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enter_your_password">Entrez votre mot de passe</string>
+    <string name="enter_your_email">Entrez votre email</string>
+    <string name="log_in">Se connecter</string>
+    <string name="back_vector">Flèche de retour</string>
+    <string name="forgot_password">Mot de passe oublié</string>
+    <string name="app_image">Image de l\'application</string>
+    <string name="register">S\'inscrire</string>
+    <string name="verify_your_password">Vérifiez votre mot de passe</string>
+    <string name="enter_your_name">Entrez votre nom</string>
+    <string name="age">Age</string>
+    <string name="years_old">Ans</string>
+    <string name="validate">Valider</string>
+    <string name="hello_blank_fragment">Bonjour fragment vide</string>
+    <string name="discover">Chercher</string>
+    <string name="type_a_location">Taper une position</string>
+    <string name="add_an_activity">Ajouter une activité</string>
+    <string name="browse_all_activities">Rechercher parmi toutes les activités</string>
+    <string name="profil_picture">Image de profil</string>
+    <string name="fragment_container">Fragment pour le container</string>
+    <string name="go_login">Vous avez déjà un compte? Connectez vous ici</string>
+    <string name="go_reg">Vous n\'avez toujours pas de comptes? Créer en un ici</string>
+    <string name="disc">Déconnecter vous ici</string>
+    <string name="participate">Rejoindre l\'activité</string>
+    <string name="organiser">Organiser</string>
+    <string name="message">Envoyer un message</string>
+    <string name="participants">Participants</string>
+</resources>
