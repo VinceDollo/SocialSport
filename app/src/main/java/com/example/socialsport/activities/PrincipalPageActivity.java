@@ -2,7 +2,6 @@ package com.example.socialsport.activities;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,8 +38,7 @@ public class PrincipalPageActivity extends FragmentActivity {
     ArrayList<String> name = new ArrayList<String>();
     ArrayList<String> message = new ArrayList<String>();
 
-
-    private int[] images = {R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football};
+    private int[] images = {R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +46,14 @@ public class PrincipalPageActivity extends FragmentActivity {
         setContentView(R.layout.principal_page_activity);
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         updateMessage();
 
-        if(currentUser!=null){
+        if (currentUser != null) {
             uid = currentUser.getUid();
-            getUserFromDatabase(database, uid);
+            getUserFromDatabase(uid);
         } else {
             Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
         }
@@ -80,27 +77,15 @@ public class PrincipalPageActivity extends FragmentActivity {
                 case 3:
                     replace(new PersonFragment());
                     break;
+                default:
+                    break;
             }
             return null;
         });
     }
 
-    public MeowBottomNavigation getMeowBottomNavigation(){
-        return meowBottomNavigation;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void replace(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).commit();
-    private void replace(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
-    }
-
-    private void getUserFromDatabase(FirebaseDatabase database, String uid) {
-        DatabaseReference myRef = database.getReference();
+    private void getUserFromDatabase(String uid) {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
         user = new User(null, null, null);
         myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -125,7 +110,19 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
-    public void  updateMessage(){
+    public MeowBottomNavigation getMeowBottomNavigation() {
+        return meowBottomNavigation;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    private void replace(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
+    }
+
+    public void updateMessage() {
         FirebaseDatabase.getInstance().getReference().child("chat").child(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -153,11 +150,11 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
-    public ArrayList<String> getNames(){
+    public ArrayList<String> getNames() {
         return name;
     }
 
-    public ArrayList<String> getMessage(){
+    public ArrayList<String> getMessage() {
         return message;
     }
 

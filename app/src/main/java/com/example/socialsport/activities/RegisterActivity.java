@@ -13,13 +13,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.socialsport.DatabaseUtils;
+import com.example.socialsport.Utils;
 import com.example.socialsport.R;
-import com.example.socialsport.entities.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
@@ -49,8 +46,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                // Toast.makeText(RegisterActivity.this, "Authentication success.", Toast.LENGTH_SHORT).show();
                                 assert user != null;
-                                DatabaseUtils.writeUser(user.getEmail(), name, age, user.getUid());
-                                DatabaseUtils.getUser(user.getUid());
+                                Utils.writeUserIntoDatabase(user.getEmail(), name, age, user.getUid());
+                                Utils.getUserFromDatabase(user.getUid());
                                 Toast.makeText(RegisterActivity.this, user.getUid(), Toast.LENGTH_SHORT).show();
                                 Log.d("USER UID", user.getUid());
 
@@ -91,8 +88,8 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         btn_back.setOnClickListener(view -> {
-            Intent IntentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
-            startActivity(IntentWelcomeActivity);
+            Intent intentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
+            startActivity(intentWelcomeActivity);
             finish();
         });
 
@@ -115,11 +112,11 @@ public class RegisterActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            System.out.println(currentUser);
+            Log.d("Start", currentUser.toString());
         }
         tv_go_login.setOnClickListener(view -> {
-            Intent IntentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(IntentSignUpActivity);
+            Intent intentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intentSignUpActivity);
         }
         );
     }

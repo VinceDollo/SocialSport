@@ -67,10 +67,18 @@
                 android:background="@android:color/black" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img_person"
+                android:id="@+id/img_organiser"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/name_organiser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="30sp" />
 
             <TextView
                 android:layout_width="match_parent"

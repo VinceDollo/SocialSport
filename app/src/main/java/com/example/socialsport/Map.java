@@ -1,11 +1,7 @@
 package com.example.socialsport;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,17 +14,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.fragments.HomeFragment;
-import com.example.socialsport.fragments.OverviewFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
@@ -60,8 +53,8 @@ public class Map {
     private Location lastKnownLocation;
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085); // Sydney
 
-    AtomicReference<LatLng> current_latLng;
-    private HashMap<String, SportActivity> sportActivities = new HashMap<>();
+    AtomicReference<LatLng> currentLatLng;
+    private final HashMap<String, SportActivity> sportActivities = new HashMap<>();
 
     public HashMap<String, SportActivity> getSportActivities() {
         return sportActivities;
@@ -73,7 +66,7 @@ public class Map {
         this.view = view;
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(view.getContext());
-        current_latLng = new AtomicReference<>(defaultLocation);
+        currentLatLng = new AtomicReference<>(defaultLocation);
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
@@ -101,7 +94,7 @@ public class Map {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     HashMap act = (HashMap) ds.getValue(); //Static types are wanky here
                     assert act != null;
-                    Log.d("Firebase_debug", act.toString());
+                    Log.d("Firebase_activity", act.toString());
 
                     String sport = (String) act.get("sport");
                     String description = (String) act.get("description");
@@ -130,7 +123,7 @@ public class Map {
         for (java.util.Map.Entry<String, SportActivity> currentActivity : sportActivities.entrySet()) {
             MarkerOptions marker = new MarkerOptions();
             assert currentActivity != null;
-            BitmapDescriptor icon = checkIcon(currentActivity.getValue().getSport());
+            BitmapDescriptor icon = Utils.getBitmapDescriptor(activity, currentActivity.getValue().getSport());
             if (icon != null) {
                 mMap.addMarker(marker.position(stringToLatLng(currentActivity.getValue().getCoords())).title(currentActivity.getKey()).icon(icon));
             } else {
@@ -236,66 +229,25 @@ public class Map {
     public void addActivityMarker(String sport) {
         MarkerOptions marker = new MarkerOptions();
 
-        BitmapDescriptor icon = checkIcon(sport);
+        BitmapDescriptor icon = Utils.getBitmapDescriptor(activity, sport);
 
         mMap.setOnMapClickListener(latLng -> {
             mMap.clear();
             mMap.addMarker(marker.position(latLng).title("Position you choose"));
-            current_latLng.set(latLng);
+            currentLatLng.set(latLng);
         });
 
         if (icon != null) {
-            mMap.addMarker(marker.position(current_latLng.get()).title("default").icon(icon));
+            mMap.addMarker(marker.position(currentLatLng.get()).title("default").icon(icon));
         } else {
-            mMap.addMarker(marker.position(current_latLng.get()).title("default"));
+            mMap.addMarker(marker.position(currentLatLng.get()).title("default"));
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(current_latLng.get()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng.get()));
     }
 
-    private BitmapDescriptor checkIcon(String sport) {
-        assert sport != null;
-        BitmapDescriptor icon = null;
-        switch (sport) {
-            case "Football":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_football);
-                break;
-            case "Tennis":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_tennis);
-                break;
-            case "Volleyball":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_volley);
-                break;
-            case "Soccer":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_soccer);
-                break;
-            case "Basketball":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_basket);
-                break;
-            case "Handball":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_hand);
-                break;
-            case "Running":
-                icon = bitmapDescriptorFromVector(activity, R.drawable.img_map_run);
-                break;
-            default:
-                break;
-        }
-        return icon;
-    }
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        assert vectorDrawable != null;
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
-    public AtomicReference<LatLng> getCurrent_latLng() {
-        return current_latLng;
+    public AtomicReference<LatLng> getCurrentLatLng() {
+        return currentLatLng;
     }
 
     public GoogleMap getmMap() {

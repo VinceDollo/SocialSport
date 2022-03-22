@@ -64,17 +64,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
 
         // Allow vertical scroll in map fragment
-        transparent.setOnTouchListener((v, event) -> {
-            return mapOnTouchListener(v, event);
-        });
+        transparent.setOnTouchListener(this::mapOnTouchListener);
 
         return view;
-    }
-
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        Map map = new Map(googleMap, this.getActivity(), view);
-        map.searchPlaceListener(); // Enable search location listener
     }
 
     private void findViewById(){
@@ -113,7 +105,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             String title = (marker.getTitle());
             SportActivity clicked = map.getSportActivities().get(title);
             if (clicked != null) {
-                Log.d("Clicked", clicked.getDescription());
+                Log.d("HomeFragment", clicked.getDescription());
+                result.putString("sport", clicked.getSport());
                 result.putStringArrayList("participants", clicked.getUuids());
                 Fragment newF = new OverviewFragment();
                 newF.setArguments(result);
