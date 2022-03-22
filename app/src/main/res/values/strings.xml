@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">SocialSport</string>
+    <string name="app_name" translatable="false">SocialSport</string>
     <string name="enter_your_password">Enter your password</string>
     <string name="enter_your_email">Enter your email</string>
-    <string name="log_in">Log in</string>
     <string name="back_vector">Back vector</string>
     <string name="forgot_password">Forgot password ?</string>
     <string name="app_image">App image</string>
@@ -32,4 +31,5 @@
     <string name="number_of_participants_required">Number of participants required</string>
     <string name="enter_a_number">Enter a number</string>
     <string name="more_details_about_your_activity">More details about your activity</string>
+    <string name="log_in">Log in</string>
 </resources>
