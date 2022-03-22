@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_margin="20dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_participant"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
+        android:layout_width="80dp"
+        android:layout_height="80dp" />
 
     <TextView
         android:id="@+id/name_participant"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="14sp" />
+        android:textSize="20sp"
+        tools:ignore="RtlCompat" />
 
 </TableRow>
