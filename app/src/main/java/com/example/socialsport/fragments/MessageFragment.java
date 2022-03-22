@@ -54,6 +54,7 @@ public class MessageFragment extends Fragment {
 
         lv_chat = view.findViewById(R.id.lv_chat);
 
+
         ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getNames(), ((PrincipalPageActivity) requireActivity()).getMessage(), images);
 
         lv_chat.setAdapter(lAdapter);

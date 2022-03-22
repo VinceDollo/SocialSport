@@ -4,12 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="100dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         android:layout_height="50dp"
         android:src="@drawable/img_volley"
         android:layout_margin="10dp"/>
@@ -22,7 +23,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="10"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical">
@@ -47,6 +48,7 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/sender"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -54,15 +56,36 @@
             android:src="@drawable/img_message_received"
             app:tint="@color/theme" />
 
-        <TextView
-            android:id="@+id/date"
-            android:text="10/09/2020"
-            android:layout_width="0dp"
-            android:textSize="12dp"
-            android:textColor="@color/black"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/date"
+                android:text="10/09/2020"
+                android:layout_width="wrap_content"
+                android:textSize="12dp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/time"
+                android:text="16:54"
+                android:layout_width="wrap_content"
+                android:textSize="12dp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

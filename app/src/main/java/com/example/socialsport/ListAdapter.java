@@ -1,6 +1,8 @@
 package com.example.socialsport;
+import android.annotation.SuppressLint;
 import android.content.Context;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,7 @@ public class ListAdapter extends BaseAdapter {
         return i;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position,  View convertView, ViewGroup parent) {
 
@@ -57,6 +60,9 @@ public class ListAdapter extends BaseAdapter {
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.tv_name1);
             viewHolder.txtMessage = (TextView) convertView.findViewById(R.id.tv_message);
             viewHolder.icon = (ImageView) convertView.findViewById(R.id.imageView);
+            viewHolder.sender = (ImageView) convertView.findViewById(R.id.sender);
+            viewHolder.txtTime = convertView.findViewById(R.id.time);
+            viewHolder.txtDate = convertView.findViewById(R.id.date);
 
             result=convertView;
 
@@ -66,9 +72,25 @@ public class ListAdapter extends BaseAdapter {
             result=convertView;
         }
 
+        String[] array = messages.get(position).split("//");
+        String msg = array[0];
+        String[] array2 = array[1].split(" ");
+        String date = array2[0];
+        String time = array2[1];
+        String sender = array[2];
+
+        Log.d("SENDER", ""+ sender);
+        if(sender.equals("true")){
+            viewHolder.sender.setImageResource(R.drawable.img_message_send);
+        }else{
+            viewHolder.sender.setImageResource(R.drawable.img_message_received_2);
+        }
         viewHolder.txtName.setText(name.get(position));
-        viewHolder.txtMessage.setText(messages.get(position));
+        viewHolder.txtMessage.setText(msg);
+        viewHolder.txtTime.setText(time);
+        viewHolder.txtDate.setText(date);
         viewHolder.icon.setImageResource(images[position]);
+
         return convertView;
     }
 
@@ -77,7 +99,10 @@ public class ListAdapter extends BaseAdapter {
 
         TextView txtName;
         TextView txtMessage;
-        ImageView icon;
+        TextView txtTime;
+        TextView txtDate;
+
+        ImageView icon,sender;
 
     }
 
