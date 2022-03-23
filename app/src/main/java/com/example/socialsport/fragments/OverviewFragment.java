@@ -98,6 +98,9 @@ public class OverviewFragment extends Fragment {
                     currentParticipants.add(mAuth.getCurrentUser().getUid());
                 } else {
                     currentParticipants.remove(mAuth.getCurrentUser().getUid());
+                    if(currentParticipants.isEmpty()){
+                        FirebaseDatabase.getInstance().getReference().child("activities").child(activityID).setValue(currentParticipants);
+                    }
                 }
                 participantsUuids = currentParticipants;
                 stateButton();
