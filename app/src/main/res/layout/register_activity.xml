@@ -161,7 +161,7 @@
             android:textSize="10dp"
             android:textStyle="italic"
             android:gravity="center"
-            android:text="@string/go_reg"
+            android:text="@string/go_login"
             android:textColor="@color/black"/>
 
     </LinearLayout>

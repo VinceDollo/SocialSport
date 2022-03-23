@@ -45,7 +45,7 @@ public class OverviewFragment extends Fragment {
     TextView dateTime;
     TextView location;
     CircleImageView imgOrganiser;
-    ArrayList<String> participantsUuids;
+    ArrayList<String> participantsUuids = new ArrayList<>();
 
     private void stateButton() {
         if (participantsUuids.contains(mAuth.getCurrentUser().getUid()))

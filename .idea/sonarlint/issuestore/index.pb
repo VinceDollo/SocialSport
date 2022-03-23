@@ -15,17 +15,9 @@ x
 Happ/src/main/java/com/example/socialsport/fragments/MessageFragment.java,b/1/b1ed71d04a82a96b16520aecc9f92c17ce9e6464
 |
 Lapp/src/main/java/com/example/socialsport/fragments/AddActivityFragment.java,f/d/fd9c74387ec9a372b45607f87da380ebb23ea91a
-j
-:app/src/main/java/com/example/socialsport/ListAdapter.java,5/8/5855c31a00a86999dec885dc2800ea6e27c3f7b4
-z
-Japp/src/main/java/com/example/socialsport/activities/RegisterActivity.java,b/1/b1785d5c12c8c1a78cb63fd71a64e7c05682c304
 ~
 Napp/src/main/java/com/example/socialsport/fragments/PlaceActivityFragment.java,6/4/64d2573b0880522e76c7ba638088d5120dc9a304
-w
-Gapp/src/main/java/com/example/socialsport/fragments/PersonFragment.java,8/1/8191a7f9b51f69639cb6062519b579b0ea367ecc
 u
 Eapp/src/main/java/com/example/socialsport/entities/SportActivity.java,b/1/b197e3c08f6936da118d456e84014e577fd8691e
 d
 4app/src/main/java/com/example/socialsport/Utils.java,2/3/2307fc796eab8c99f9bc4d757c37973f956f0c70
-
-Oapp/src/main/java/com/example/socialsport/activities/PrincipalPageActivity.java,5/e/5e5bca5e824150b3171303d3dc685fa9b00f71ff

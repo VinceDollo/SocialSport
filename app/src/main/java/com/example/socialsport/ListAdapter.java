@@ -1,4 +1,5 @@
 package com.example.socialsport;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 
@@ -13,24 +14,23 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class ListAdapter extends BaseAdapter {
-
     Context context;
-    private ArrayList<String> name;
-    private HashMap<String, ArrayList<String>> name_message;
-    private final int [] images;
+    private final Map<String, ArrayList<String>> nameMessage;
+    private final int[] images;
 
-    public ListAdapter(Context context, HashMap<String, ArrayList<String>> name_message, int [] images){
+    public ListAdapter(Context context, Map<String, ArrayList<String>> nameMessage, int[] images) {
         this.context = context;
-        this.name_message = name_message;
+        this.nameMessage = nameMessage;
         this.images = images;
     }
 
     @Override
     public int getCount() {
-        return name_message.size();
+        return nameMessage.size();
     }
 
     @Override
@@ -45,12 +45,8 @@ public class ListAdapter extends BaseAdapter {
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public View getView(int position,  View convertView, ViewGroup parent) {
-
-
+    public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-
-        final View result;
 
         if (convertView == null) {
 
@@ -63,20 +59,17 @@ public class ListAdapter extends BaseAdapter {
             viewHolder.sender = (ImageView) convertView.findViewById(R.id.sender);
             viewHolder.txtTime = convertView.findViewById(R.id.time);
             viewHolder.txtDate = convertView.findViewById(R.id.date);
-
-            result=convertView;
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
         }
 
-        Object firstKey = name_message.keySet().toArray()[position];
+        Object firstKey = nameMessage.keySet().toArray()[position];
 
-        ArrayList<String> array =  name_message.get(firstKey);
+        ArrayList<String> array = nameMessage.get(firstKey);
 
-        String[] array1 = array.get(array.size()-1).split("//");
+        assert array != null;
+        String[] array1 = array.get(array.size() - 1).split("//");
         String msg = array1[0];
         String[] array2 = array1[1].split(" ");
         String date = array2[0];
@@ -84,10 +77,10 @@ public class ListAdapter extends BaseAdapter {
         String sender = array1[2];
 
 
-        Log.d("SENDER", ""+ sender);
-        if(sender.equals("true")){
+        Log.d("SENDER", "" + sender);
+        if (sender.equals("true")) {
             viewHolder.sender.setImageResource(R.drawable.img_message_send);
-        }else{
+        } else {
             viewHolder.sender.setImageResource(R.drawable.img_message_received_2);
         }
         viewHolder.txtName.setText(firstKey.toString());
@@ -101,14 +94,13 @@ public class ListAdapter extends BaseAdapter {
 
 
     private static class ViewHolder {
-
         TextView txtName;
         TextView txtMessage;
         TextView txtTime;
         TextView txtDate;
 
-        ImageView icon,sender;
-
+        ImageView icon;
+        ImageView sender;
     }
 
 }
