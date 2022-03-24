@@ -40,7 +40,7 @@ public class PrincipalPageActivity extends FragmentActivity {
     HashMap<String, ArrayList<String>> map;
 
 
-    private int[] images = {R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football};
+    private int[] images = {R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +86,11 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
-    public MeowBottomNavigation getMeowBottomNavigation(){
+    public MeowBottomNavigation getMeowBottomNavigation() {
         return meowBottomNavigation;
     }
 
-    public User getUser(){
+    public User getUser() {
         return user;
     }
 
@@ -100,7 +100,7 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     private void getUserFromDatabase(String uid) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        user = new User(null,null,null);
+        user = new User(null, null, null);
         myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
@@ -125,8 +125,7 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
-
-    public void  updateMessage(){
+    public void updateMessage() {
         map = new HashMap<>();
         FirebaseDatabase.getInstance().getReference().child("chat").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -134,7 +133,7 @@ public class PrincipalPageActivity extends FragmentActivity {
             } else {
                 for (DataSnapshot snapshot : task.getResult().getChildren()) {
                     String contact = snapshot.getKey();
-                    map.put(contact,new ArrayList<>());
+                    map.put(contact, new ArrayList<>());
                     name.add(contact);
                     assert contact != null;
                     FirebaseDatabase.getInstance().getReference().child("chat").child(FirebaseAuth.getInstance().getUid()).child(contact).get().addOnCompleteListener(task1 -> {
@@ -153,7 +152,7 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     }
 
-    public Map<String, ArrayList<String>> getMap(){
+    public Map<String, ArrayList<String>> getMap() {
         return map;
     }
 

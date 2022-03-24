@@ -49,9 +49,9 @@ public class OverviewFragment extends Fragment {
 
     private void stateButton() {
         if (participantsUuids.contains(mAuth.getCurrentUser().getUid()))
-            btnParticipate.setText("Leave");
+            btnParticipate.setText(R.string.leave);
         else
-            btnParticipate.setText("Participate");
+            btnParticipate.setText(R.string.participate);
     }
 
     private void queryDbUsers() {

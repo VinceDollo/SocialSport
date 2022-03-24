@@ -21,3 +21,9 @@ u
 Eapp/src/main/java/com/example/socialsport/entities/SportActivity.java,b/1/b197e3c08f6936da118d456e84014e577fd8691e
 d
 4app/src/main/java/com/example/socialsport/Utils.java,2/3/2307fc796eab8c99f9bc4d757c37973f956f0c70
+„
+Tapp/src/main/java/com/example/socialsport/fragments/DescriptionActivityFragment.java,7/c/7c972601cf4185e360ac87d0340d5f9c0f680cb0
+@
+app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
+u
+Eapp/src/main/java/com/example/socialsport/fragments/HomeFragment.java,b/d/bde7070e45bff9ee427f804a7d3f3c06f0b714fd

@@ -33,4 +33,9 @@
     <string name="more_details_about_your_activity" translatable="false">More details about your activity</string>
     <string name="log_in">Log in</string>
     <string name="in_coming_activities">In-coming activities</string>
+    <string name="soccer" translatable="false">SOCCER</string>
+    <string name="basketball" translatable="false">BASKETBALL</string>
+    <string name="volleyball" translatable="false">VOLLEYBALL</string>
+    <string name="handball" translatable="false">HANDBALL</string>
+    <string name="leave">Leave</string>
 </resources>
