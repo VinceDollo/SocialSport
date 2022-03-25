@@ -44,16 +44,11 @@ public class RegisterActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("Sign up page", "createUserWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-                               // Toast.makeText(RegisterActivity.this, "Authentication success.", Toast.LENGTH_SHORT).show();
                                 assert user != null;
                                 Utils.writeUserIntoDatabase(user.getEmail(), name, age, user.getUid());
                                 Utils.getUserFromDatabase(user.getUid());
-                                Toast.makeText(RegisterActivity.this, user.getUid(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "Account successfully created.", Toast.LENGTH_SHORT).show();
                                 Log.d("USER UID", user.getUid());
-
-                               // Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                               // i.putExtra("user", (String) user.getUid());
-                               // startActivity(i);
 
                                 //TODO on complete sign up treatment
                             } else {

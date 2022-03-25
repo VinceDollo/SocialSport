@@ -1,8 +1,16 @@
 package com.example.socialsport.fragments;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -10,34 +18,19 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.socialsport.R;
-import com.example.socialsport.activities.LoginActivity;
 import com.example.socialsport.activities.PrincipalPageActivity;
-import com.example.socialsport.activities.WelcomeActivity;
 import com.example.socialsport.entities.SportActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -47,11 +40,11 @@ public class PersonFragment extends Fragment {
     private FirebaseAuth mAuth;
     private LinearLayout llactivities;
     private CircleImageView civ_profil;
-    private TextView tv_name,tvfinishedAct;
+    private TextView tv_name, tvfinishedAct;
     private int count;
     private final ArrayList<SportActivity> sportActivities = new ArrayList<>();
     private final ArrayList<SportActivity> myActivities = new ArrayList<>();
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,16 +57,14 @@ public class PersonFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_person, container, false);
 
-        ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3,true);
+        ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3, true);
 
         tv_name = view.findViewById(R.id.tv_name);
-        tvfinishedAct=view.findViewById(R.id.finishedactivities);
+        tvfinishedAct = view.findViewById(R.id.finishedactivities);
         civ_profil = view.findViewById(R.id.civ_profil);
-        llactivities=view.findViewById(R.id.llactivitiefinished);
+        llactivities = view.findViewById(R.id.llactivitiefinished);
 
-        civ_profil.setOnClickListener(view1 -> {
-            mGetContent.launch("image/*");
-        });
+        civ_profil.setOnClickListener(view1 -> mGetContent.launch("image/*"));
 
         tv_name.setText(((PrincipalPageActivity) requireActivity()).getUser().getName());
         Log.d("firebase", "" + ((PrincipalPageActivity) requireActivity()).getUser().getName());
@@ -86,13 +77,10 @@ public class PersonFragment extends Fragment {
         super.onStart();
         getAllActivities();
 
-        btn_disc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                getActivity().finish();
-                getActivity().onBackPressed();
-            }
+        btn_disc.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            getActivity().finish();
+            getActivity().onBackPressed();
         });
     }
 
@@ -102,10 +90,9 @@ public class PersonFragment extends Fragment {
                 public void onActivityResult(Uri uri) {
                     civ_profil.setImageURI(uri);
                 }
-    });
+            });
 
     public void getAllActivities() {
-        System.out.println("traitement Act");
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference activitiesRef = rootRef.child("activities");
 
@@ -129,9 +116,10 @@ public class PersonFragment extends Fragment {
                     newActivity.setUuids(uuids);
                     sportActivities.add(newActivity);
                 }
-                Log.d("meziane",sportActivities.toString());
+                Log.d("meziane", sportActivities.toString());
                 getMyActivities();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { //
             }
@@ -139,37 +127,37 @@ public class PersonFragment extends Fragment {
         activitiesRef.addValueEventListener(eventListener);
     }
 
+    @SuppressLint("SetTextI18n")
     public void getMyActivities() {
-        System.out.println("traitement get my Act");
-        for(SportActivity currentAct : sportActivities){
+        for (SportActivity currentAct : sportActivities) {
             ArrayList<String> uids = currentAct.getUuids();
-            Log.d("verification",uids.toString()+" kkk"+mAuth.getCurrentUser().getUid());
-            if (uids.contains(mAuth.getCurrentUser().getUid().toString())){
-                System.out.println("correct");
-                myActivities.add(currentAct);
+            if (!uids.isEmpty()) {
+                Log.d("verification", uids + " |||" + Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
+                if (uids.contains(mAuth.getCurrentUser().getUid())) {
+                    myActivities.add(currentAct);
+                }
             }
         }
-        Log.d("mezianeactiv",myActivities.toString());
+        Log.d("mezianeactiv", myActivities.toString());
 
-        int cmp =0;
-        for(SportActivity currentAct : myActivities){
-
+        int cmp = 0;
+        for (SportActivity currentAct : myActivities) {
             TextView tv = new TextView(PersonFragment.this.getContext());
-            tv.setText("Activity : "+currentAct.getSport() +" ("+currentAct.getDate()+", "
-            +currentAct.getCoords()+")");
+            tv.setText("Activity : " + currentAct.getSport() + " (" + currentAct.getDate() + ", "
+                    + currentAct.getCoords() + ")");
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            if(cmp != 0){
-                params.setMargins(0,30,0,0);
+            if (cmp != 0) {
+                params.setMargins(0, 30, 0, 0);
             }
 
             cmp++;
 
             tv.setLayoutParams(params);
             tv.setBackgroundResource(R.drawable.btn_finished_activities);
-            tv.setPadding(20,30,20,30);
+            tv.setPadding(20, 30, 20, 30);
             tv.setGravity(Gravity.CENTER);
             llactivities.addView(tv);
         }

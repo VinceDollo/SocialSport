@@ -151,9 +151,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="center"
-                        android:text="SOCCER"
+                        android:text="@string/soccer"
                         android:textColor="@color/black"
-                        android:textSize="17dp" />
+                        android:textSize="17sp" />
 
                 </TableRow>
 
@@ -180,9 +180,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="center"
-                        android:text="BASKETBALL"
+                        android:text="@string/basketball"
                         android:textColor="@color/black"
-                        android:textSize="17dp" />
+                        android:textSize="17sp" />
 
                 </TableRow>
 
@@ -208,9 +208,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="center"
-                        android:text="VOLLEYBALL"
+                        android:text="@string/volleyball"
                         android:textColor="@color/black"
-                        android:textSize="17dp" />
+                        android:textSize="17sp" />
 
                 </TableRow>
 
@@ -236,9 +236,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="center"
-                        android:text="HANDBALL"
+                        android:text="@string/handball"
                         android:textColor="@color/black"
-                        android:textSize="17dp" />
+                        android:textSize="17sp" />
 
                 </TableRow>
 
@@ -247,7 +247,6 @@
                     android:layout_height="100dp" />
 
             </TableLayout>
-
 
         </LinearLayout>
 

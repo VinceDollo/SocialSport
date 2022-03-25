@@ -18,7 +18,6 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.Map;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
-import com.example.socialsport.activities.RegisterActivity;
 import com.example.socialsport.entities.SportActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

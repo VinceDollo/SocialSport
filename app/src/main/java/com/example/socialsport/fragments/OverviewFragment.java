@@ -45,13 +45,13 @@ public class OverviewFragment extends Fragment {
     TextView dateTime;
     TextView location;
     CircleImageView imgOrganiser;
-    ArrayList<String> participantsUuids;
+    ArrayList<String> participantsUuids = new ArrayList<>();
 
     private void stateButton() {
         if (participantsUuids.contains(mAuth.getCurrentUser().getUid()))
-            btnParticipate.setText("Leave");
+            btnParticipate.setText(R.string.leave);
         else
-            btnParticipate.setText("Participate");
+            btnParticipate.setText(R.string.participate);
     }
 
     private void queryDbUsers() {
@@ -98,6 +98,9 @@ public class OverviewFragment extends Fragment {
                     currentParticipants.add(mAuth.getCurrentUser().getUid());
                 } else {
                     currentParticipants.remove(mAuth.getCurrentUser().getUid());
+                    if(currentParticipants.isEmpty()){
+                        FirebaseDatabase.getInstance().getReference().child("activities").child(activityID).setValue(currentParticipants);
+                    }
                 }
                 participantsUuids = currentParticipants;
                 stateButton();

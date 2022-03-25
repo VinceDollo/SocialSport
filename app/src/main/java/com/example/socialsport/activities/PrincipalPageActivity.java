@@ -2,21 +2,17 @@ package com.example.socialsport.activities;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
+import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.HomeFragment;
 import com.example.socialsport.fragments.MessageFragment;
-import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.PersonFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -43,7 +40,7 @@ public class PrincipalPageActivity extends FragmentActivity {
     HashMap<String, ArrayList<String>> map;
 
 
-    private int[] images = {R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football};
+    private int[] images = {R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +48,6 @@ public class PrincipalPageActivity extends FragmentActivity {
         setContentView(R.layout.principal_page_activity);
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -90,11 +86,11 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
-    public MeowBottomNavigation getMeowBottomNavigation(){
+    public MeowBottomNavigation getMeowBottomNavigation() {
         return meowBottomNavigation;
     }
 
-    public User getUser(){
+    public User getUser() {
         return user;
     }
 
@@ -104,7 +100,7 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     private void getUserFromDatabase(String uid) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        user = new User(null,null,null);
+        user = new User(null, null, null);
         myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
@@ -129,46 +125,35 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
-
-    public void  updateMessage(){
-        map = new HashMap<String, ArrayList<String>>();
-        FirebaseDatabase.getInstance().getReference().child("chat").child(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                } else {
-                    for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                        String contact = snapshot.getKey();
-                        map.put(contact,new ArrayList<String>());
-                        name.add(contact);
-                        FirebaseDatabase.getInstance().getReference().child("chat").child(FirebaseAuth.getInstance().getUid()).child(contact).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                if (!task.isSuccessful()) {
-                                    Log.e("firebase", "Error getting data", task.getException());
-                                } else {
-                                    for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                                        map.get(contact).add(snapshot.child("message").getValue().toString() + "//" + snapshot.child("date").getValue().toString() + "//" + snapshot.child("sender").getValue().toString());
-                                        message.add(snapshot.child("message").getValue().toString() + "//" + snapshot.child("date").getValue().toString() + "//" + snapshot.child("sender").getValue().toString());
-                                    }
-                                }
+    public void updateMessage() {
+        map = new HashMap<>();
+        FirebaseDatabase.getInstance().getReference().child("chat").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            } else {
+                for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                    String contact = snapshot.getKey();
+                    map.put(contact, new ArrayList<>());
+                    name.add(contact);
+                    assert contact != null;
+                    FirebaseDatabase.getInstance().getReference().child("chat").child(FirebaseAuth.getInstance().getUid()).child(contact).get().addOnCompleteListener(task1 -> {
+                        if (!task1.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task1.getException());
+                        } else {
+                            for (DataSnapshot snapshot1 : task1.getResult().getChildren()) {
+                                Objects.requireNonNull(map.get(contact)).add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
+                                message.add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
-
         });
 
     }
 
-    public HashMap<String, ArrayList<String>> getMap(){
+    public Map<String, ArrayList<String>> getMap() {
         return map;
-    }
-
-    public ArrayList<String> getMessage(){
-        return message;
     }
 
 }
