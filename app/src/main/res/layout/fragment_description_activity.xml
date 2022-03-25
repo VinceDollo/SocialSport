@@ -71,18 +71,6 @@
                 android:textStyle="bold" />
 
 
-            <TextView
-                android:id="@+id/info_description"
-                android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textStyle="italic"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="8dp"
-                android:text=""/>
-
-
         </LinearLayout>
 
 

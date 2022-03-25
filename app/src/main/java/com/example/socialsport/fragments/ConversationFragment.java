@@ -1,12 +1,16 @@
 package com.example.socialsport.fragments;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.socialsport.R;
@@ -19,6 +23,7 @@ public class ConversationFragment extends Fragment {
     private TextView tv_name, tv_message;
     private String name;
     private ArrayList<String> message;
+    private LinearLayout ll_coversation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,15 +42,41 @@ public class ConversationFragment extends Fragment {
             message = bundle.getStringArrayList("message");
         }
 
-        tv_message = view.findViewById(R.id.message);
+
+        ll_coversation = view.findViewById(R.id.ll_conversation);
         tv_name = view.findViewById(R.id.name);
 
-        String messagesText = "";
+
+
+        String messages = "";
+        String sender ="";
+        String time ="";
+
         for (String msg: message) {
-            messagesText += msg.split("//")[0] + "\n";
+            String[] a = msg.split("//");
+            messages=a[0];
+            sender = a[2];
+            TextView textView = new TextView(getContext());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0,0,0,20);
+            textView.setText(messages);
+            textView.setTextSize(15);
+            textView.setPadding(30,20,30,20);
+            if(sender.equals("false")){
+                params.gravity = Gravity.LEFT;
+                textView.setTextColor(textView.getContext().getColor(R.color.black));
+                textView.setBackgroundResource(R.drawable.tv_received_message);
+            }else {
+                params.gravity = Gravity.RIGHT;
+                textView.setBackgroundResource(R.drawable.tv_send_message);
+                textView.setTextColor(textView.getContext().getColor(R.color.white));
+                textView.setLayoutParams(params);
+            }
+            textView.setLayoutParams(params);
+
+            ll_coversation.addView(textView);
         }
 
-        tv_message.setText(messagesText);
         tv_name.setText(name);
 
 

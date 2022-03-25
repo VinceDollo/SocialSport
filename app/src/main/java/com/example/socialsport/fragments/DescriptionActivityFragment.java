@@ -1,8 +1,10 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -79,7 +81,6 @@ public class DescriptionActivityFragment extends Fragment {
         et_description = view.findViewById(R.id.et_description);
         et_number_of_participant = view.findViewById(R.id.et_number_participant_required);
         et_number_of_participant = view.findViewById(R.id.et_number_participant_required);
-        tv_info_description = view.findViewById(R.id.info_description);
         tv_description = view.findViewById(R.id.tv_description);
 
         btn_back.setOnClickListener(view12 -> {
@@ -116,13 +117,12 @@ public class DescriptionActivityFragment extends Fragment {
                     final int DRAWABLE_BOTTOM = 3;
                     if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                         if(motionEvent.getRawX() >= (tv_description.getRight() - tv_description.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                            if(isIconClicked){
-                                tv_info_description.setText("");
-                                isIconClicked = false;
-                            }else{
-                                tv_info_description.setText("Enter a short description about your activity, the level of the participants and every informations that could be useful for participants");
-                                isIconClicked = true;
-                            }
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setCancelable(true);
+                            builder.setTitle("What should you describe ?");
+                            builder.setMessage("Here, you can discribe the level required for the participants, and everything that will be useful for the people who wanted to join this activity");
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
                             return true;
                         }
                     }
