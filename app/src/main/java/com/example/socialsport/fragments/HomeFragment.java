@@ -24,6 +24,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -107,7 +109,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 Log.d("HomeFragment", clicked.getDescription());
                 result.putString("sport", clicked.getSport());
                 result.putString("activityID", title);
-                result.putStringArrayList("participants", clicked.getUuids());
+                result.putStringArrayList("participants", (ArrayList<String>) clicked.getUuids());
                 result.putString("organiserUuid", clicked.getUuidOrganiser());
                 result.putString("dateTime", clicked.getDate() + ", " + clicked.getHour());
                 result.putString("location", clicked.getCoords());

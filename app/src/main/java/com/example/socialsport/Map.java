@@ -76,14 +76,6 @@ public class Map {
         getAllActivities();
     }
 
-    public LatLng stringToLatLng(String string) {
-        String res = string.substring(string.indexOf("(") + 1, string.indexOf(")"));
-        String[] latlong = res.split(",");
-        double latitude = Double.parseDouble(latlong[0]);
-        double longitude = Double.parseDouble(latlong[1]);
-        return new LatLng(latitude, longitude);
-    }
-
     public void getAllActivities() {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference activitiesRef = rootRef.child("activities");
@@ -125,9 +117,9 @@ public class Map {
             assert currentActivity != null;
             BitmapDescriptor icon = Utils.getBitmapDescriptor(activity, currentActivity.getValue().getSport());
             if (icon != null) {
-                mMap.addMarker(marker.position(stringToLatLng(currentActivity.getValue().getCoords())).title(currentActivity.getKey()).icon(icon));
+                mMap.addMarker(marker.position(Utils.stringToLatLng(currentActivity.getValue().getCoords())).title(currentActivity.getKey()).icon(icon));
             } else {
-                mMap.addMarker(marker.position(stringToLatLng(currentActivity.getValue().getCoords())).title(currentActivity.getKey()));
+                mMap.addMarker(marker.position(Utils.stringToLatLng(currentActivity.getValue().getCoords())).title(currentActivity.getKey()));
             }
         }
     }
@@ -210,7 +202,7 @@ public class Map {
                         double latitude = addresses.get(0).getLatitude();
                         double longitude = addresses.get(0).getLongitude();
                         LatLng placeToFind = new LatLng(latitude, longitude);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeToFind, 12));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeToFind, 15));
                     }
                 } catch (IOException e) {
                     Log.d(TAG, e.toString());

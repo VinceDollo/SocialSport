@@ -1,6 +1,8 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
 import com.example.socialsport.Utils;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,8 +28,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -48,7 +53,7 @@ public class OverviewFragment extends Fragment {
     ArrayList<String> participantsUuids = new ArrayList<>();
 
     private void stateButton() {
-        if (participantsUuids.contains(mAuth.getCurrentUser().getUid()))
+        if (participantsUuids.contains(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()))
             btnParticipate.setText(R.string.leave);
         else
             btnParticipate.setText(R.string.participate);
@@ -98,7 +103,7 @@ public class OverviewFragment extends Fragment {
                     currentParticipants.add(mAuth.getCurrentUser().getUid());
                 } else {
                     currentParticipants.remove(mAuth.getCurrentUser().getUid());
-                    if(currentParticipants.isEmpty()){
+                    if (currentParticipants.isEmpty()) {
                         FirebaseDatabase.getInstance().getReference().child("activities").child(activityID).setValue(currentParticipants);
                     }
                 }
@@ -107,6 +112,39 @@ public class OverviewFragment extends Fragment {
                 FirebaseDatabase.getInstance().getReference().child("activities").child(activityID).child("uuids").setValue(currentParticipants);
             }
         });
+    }
+
+    public void setViewContent(){
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            participantsUuids = bundle.getStringArrayList("participants");
+            stateButton();
+            queryDbUsers();
+
+            btnParticipate.setOnClickListener(view -> handleParticipate(bundle.getString("activityID")));
+
+            String sport = bundle.getString("sport");
+            imgSport.setImageBitmap(Utils.getBitmap(getActivity(), sport));
+            nameSport.setText(sport);
+            dateTime.setText(bundle.getString("dateTime"));
+
+            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+            LatLng locationLatLng = Utils.stringToLatLng(bundle.getString("location"));
+            StringBuilder locationString = new StringBuilder();
+            try {
+                Address locationAddress = geocoder.getFromLocation(locationLatLng.latitude, locationLatLng.longitude, 1).get(0);
+                int i = 0;
+                while (locationAddress.getAddressLine(i) != null) {
+                    locationString.append(locationAddress.getAddressLine(i));
+                    locationString.append(", ");
+                    i++;
+                }
+                locationString.delete(locationString.length() - 2, locationString.length() - 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            location.setText(locationString);
+        }
     }
 
     @Nullable
@@ -125,20 +163,7 @@ public class OverviewFragment extends Fragment {
 
         btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit());
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            participantsUuids = bundle.getStringArrayList("participants");
-            stateButton();
-            queryDbUsers();
-
-            btnParticipate.setOnClickListener(view -> handleParticipate(bundle.getString("activityID")));
-
-            String sport = bundle.getString("sport");
-            imgSport.setImageBitmap(Utils.getBitmap(getActivity(), sport));
-            nameSport.setText(sport);
-            dateTime.setText(bundle.getString("dateTime"));
-            location.setText(bundle.getString("location"));
-        }
+        setViewContent();
 
         return view;
     }

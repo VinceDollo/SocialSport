@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,19 +22,48 @@ import java.util.Objects;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private EditText et_email, et_password, et_checkpassword, et_name, et_age;
-    private Button btn_log_in;
-    private TextView tv_go_login;
+    private EditText etEmail;
+    private EditText etPassword;
+    private EditText etCheckPassword;
+    private EditText etName;
+    private EditText etAge;
+    private Button btnLogin;
+    private ImageButton btnBack;
+    private TextView tvGoLogin;
 
-    private final View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.register_activity);
+        mAuth = FirebaseAuth.getInstance();
+        etEmail = findViewById(R.id.et_email);
+        etPassword = findViewById(R.id.et_password);
+        etCheckPassword = findViewById(R.id.et_check_password);
+        etName = findViewById(R.id.et_name);
+        etAge = findViewById(R.id.et_age);
+
+        btnLogin = findViewById(R.id.btn_log_in);
+        tvGoLogin = findViewById(R.id.tv_go_login_from_reg);
+        btnBack = findViewById(R.id.btn_back);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            Log.d("Start", currentUser.toString());
+        }
+
+        btnLogin.setOnClickListener(view -> {
             //TODO with better way
-            String email = et_email.getText().toString();
-            String password = et_password.getText().toString();
-            String checkPassword = et_checkpassword.getText().toString();
-            String name = et_name.getText().toString();
-            String age = et_age.getText().toString();
+            String email = etEmail.getText().toString();
+            String password = etPassword.getText().toString();
+            String checkPassword = etCheckPassword.getText().toString();
+            String name = etName.getText().toString();
+            String age = etAge.getText().toString();
 
             if (checkPassword.compareTo(password) == 0) {
                 mAuth.createUserWithEmailAndPassword(email, password)
@@ -62,57 +90,30 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
             }
-        }
-    };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_activity);
-        mAuth = FirebaseAuth.getInstance();
-        et_email = findViewById(R.id.et_email);
-        et_password = findViewById(R.id.et_password);
-        et_checkpassword = findViewById(R.id.et_check_password);
-        et_name = findViewById(R.id.et_name);
-        et_age = findViewById(R.id.et_age);
-
-        btn_log_in = findViewById(R.id.btn_log_in);
-        tv_go_login = findViewById(R.id.tv_go_login_from_reg);
-        ImageButton btn_back = findViewById(R.id.btn_back);
-        btn_log_in.setOnClickListener(onClickListener);
+        });
 
 
-        btn_back.setOnClickListener(view -> {
+        btnBack.setOnClickListener(view -> {
             Intent intentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intentWelcomeActivity);
             finish();
         });
 
-        et_password.setOnKeyListener((v, keyCode, event) -> {
+        etPassword.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 // Perform action on key press
-                btn_log_in.performClick();
+                btnLogin.performClick();
                 return true;
             }
             return false;
         });
-    }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            Log.d("Start", currentUser.toString());
-        }
-        tv_go_login.setOnClickListener(view -> {
-            Intent intentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intentSignUpActivity);
-        }
+        tvGoLogin.setOnClickListener(view -> {
+                    Intent intentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intentSignUpActivity);
+                }
         );
     }
 }

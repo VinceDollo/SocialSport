@@ -130,7 +130,7 @@ public class PersonFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     public void getMyActivities() {
         for (SportActivity currentAct : sportActivities) {
-            ArrayList<String> uids = currentAct.getUuids();
+            ArrayList<String> uids = (ArrayList<String>) currentAct.getUuids();
             if (!uids.isEmpty()) {
                 Log.d("verification", uids + " |||" + Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
                 if (uids.contains(mAuth.getCurrentUser().getUid())) {

@@ -31,16 +31,12 @@ public class PrincipalPageActivity extends FragmentActivity {
     private String uid;
     private MeowBottomNavigation meowBottomNavigation;
     private User user;
-    private int lastValue;
 
 
-    ArrayList<String> name = new ArrayList<String>();
-    ArrayList<String> message = new ArrayList<String>();
+    ArrayList<String> name = new ArrayList<>();
+    ArrayList<String> message = new ArrayList<>();
 
     HashMap<String, ArrayList<String>> map;
-
-
-    private int[] images = {R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

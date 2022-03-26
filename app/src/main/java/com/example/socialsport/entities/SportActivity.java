@@ -1,6 +1,7 @@
 package com.example.socialsport.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SportActivity {
 
@@ -13,16 +14,14 @@ public class SportActivity {
     private ArrayList<String> uuids;
 
     public SportActivity(String sport, String description, String date, String hour, String uuidOrganiser, String coords) {
-        ArrayList<String> uuids = new ArrayList<>();
-        uuids.add(uuidOrganiser);
-
         this.sport = sport;
         this.description = description;
         this.date = date;
         this.hour = hour;
         this.uuidOrganiser = uuidOrganiser;
         this.coords = coords;
-        this.uuids = uuids;
+        uuids = new ArrayList<>();
+        uuids.add(uuidOrganiser);
     }
 
     public String getSport() {
@@ -74,12 +73,12 @@ public class SportActivity {
         this.uuidOrganiser = uuidOrganiser;
     }
 
-    public ArrayList<String> getUuids() {
+    public List<String> getUuids() {
         return uuids;
     }
 
-    public void setUuids(ArrayList<String> uuids) {
-        this.uuids = uuids;
+    public void setUuids(List<String> uuids) {
+        this.uuids = (ArrayList<String>) uuids;
     }
 
 

@@ -19,18 +19,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 public class PlaceActivityFragment extends Fragment implements OnMapReadyCallback {
-
-    private ImageButton btn_back;
-    private Button btn_validate;
+    private Button btnValidate;
     private String sport;
-
-    public PlaceActivityFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -38,34 +28,32 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_place_activity, container, false);
 
-        TextView tv_title = view.findViewById(R.id.tv_title);
-        btn_validate = view.findViewById(R.id.btn_validate);
-        btn_back = view.findViewById(R.id.btn_back);
+        TextView tvTitle = view.findViewById(R.id.tv_title);
+        btnValidate = view.findViewById(R.id.btn_validate);
+        ImageButton btnBack = view.findViewById(R.id.btn_back);
 
-        // Récupère le sport
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");
-            tv_title.setText("Choose location for " + sport);
+            tvTitle.setText("Choose location for " + sport);
         }
 
-        // Placer la map
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
         assert mMapFragment != null;
         mMapFragment.getMapAsync(this);
 
-        btn_back.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
+        btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
 
         return view;
     }
 
-
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         Map map = new Map(googleMap, requireActivity(), requireView());
+        map.searchPlaceListener();
 
-        btn_validate.setOnClickListener(view12 -> {
-            //add information to next fragment
+        btnValidate.setOnClickListener(view12 -> {
+            //Add information to next fragment
             Bundle bundle1 = new Bundle();
             bundle1.putString("sport", sport);
             bundle1.putString("location", String.valueOf(map.getCurrentLatLng()));

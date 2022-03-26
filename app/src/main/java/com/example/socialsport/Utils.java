@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import com.example.socialsport.entities.User;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
@@ -34,6 +35,14 @@ public class Utils {
             }
         });
         Log.d("Firebase_user2", userString.toString());
+    }
+
+    public static LatLng stringToLatLng(String string) {
+        String res = string.substring(string.indexOf("(") + 1, string.indexOf(")"));
+        String[] latLng = res.split(",");
+        double latitude = Double.parseDouble(latLng[0]);
+        double longitude = Double.parseDouble(latLng[1]);
+        return new LatLng(latitude, longitude);
     }
 
     public static BitmapDescriptor getBitmapDescriptor(Context context, String sport) {

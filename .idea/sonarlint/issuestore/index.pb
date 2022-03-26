@@ -1,8 +1,6 @@
 
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-l
-<app/src/main/java/com/example/socialsport/entities/User.java,5/2/52d4e7e7c4196e8a71fd88562366acb09e75b23a
 n
 >app/src/test/java/com/example/socialsport/ExampleUnitTest.java,8/4/84702697e172a3255d2e7969dd79fb4e9ad7df8e
 y
@@ -15,15 +13,11 @@ x
 Happ/src/main/java/com/example/socialsport/fragments/MessageFragment.java,b/1/b1ed71d04a82a96b16520aecc9f92c17ce9e6464
 |
 Lapp/src/main/java/com/example/socialsport/fragments/AddActivityFragment.java,f/d/fd9c74387ec9a372b45607f87da380ebb23ea91a
-~
-Napp/src/main/java/com/example/socialsport/fragments/PlaceActivityFragment.java,6/4/64d2573b0880522e76c7ba638088d5120dc9a304
-u
-Eapp/src/main/java/com/example/socialsport/entities/SportActivity.java,b/1/b197e3c08f6936da118d456e84014e577fd8691e
-d
-4app/src/main/java/com/example/socialsport/Utils.java,2/3/2307fc796eab8c99f9bc4d757c37973f956f0c70
 „
 Tapp/src/main/java/com/example/socialsport/fragments/DescriptionActivityFragment.java,7/c/7c972601cf4185e360ac87d0340d5f9c0f680cb0
 @
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
-u
-Eapp/src/main/java/com/example/socialsport/fragments/HomeFragment.java,b/d/bde7070e45bff9ee427f804a7d3f3c06f0b714fd
+P
+ app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
+j
+:app/src/main/java/com/example/socialsport/ListAdapter.java,5/8/5855c31a00a86999dec885dc2800ea6e27c3f7b4
