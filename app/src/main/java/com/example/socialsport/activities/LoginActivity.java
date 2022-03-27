@@ -26,51 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_log_in;
     private int remainingTries;
 
-    private final View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            String email = et_email.getText().toString();
-            String password = et_password.getText().toString();
-
-            if (!email.isEmpty()&!password.isEmpty()) {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, task -> {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("LoginPage", "signInWithEmail:success");
-
-
-                                //TODO
-                                //Passer les infos utilisateurs
-
-
-                                Intent i = new Intent(getApplicationContext(), PrincipalPageActivity.class);
-                                startActivity(i);
-
-                                Toast.makeText(LoginActivity.this, "Authentication succesful.",
-                                        Toast.LENGTH_SHORT).show();
-                                //updateUI(user);
-                            } else {
-                                remainingTries--;
-                                // If sign in fails, display a message to the user.
-                                Log.w("LoginPage", "signInWithEmail:failure", task.getException());
-                                Toast.makeText(LoginActivity.this, "Email/password are not corrects, remaining tries : "+remainingTries,
-                                        Toast.LENGTH_SHORT).show();
-                                // updateUI(null);
-                                if(remainingTries==0){
-                                    btn_log_in.setEnabled(false);
-                                    btn_log_in.setBackgroundColor(Color.DKGRAY);
-                                }
-                            }
-                        });
-            }
-        else {
-                Toast.makeText(LoginActivity.this, "Email and/or password is empty",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,13 +36,49 @@ public class LoginActivity extends AppCompatActivity {
         btn_log_in = findViewById(R.id.btn_log_in);
         tv_go_reg = findViewById(R.id.tv_go_reg_from_login);
         ImageButton btn_back = findViewById(R.id.btn_back);
-        btn_log_in.setOnClickListener(onClickListener);
+        btn_log_in.setOnClickListener(view -> {
+            String email = et_email.getText().toString();
+            String password = et_password.getText().toString();
 
-        remainingTries=3;
+            if (!email.isEmpty() & !password.isEmpty()) {
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("LoginPage", "signInWithEmail:success");
+
+                        //TODO
+                        //Passer les infos utilisateurs
+
+                        Intent i = new Intent(getApplicationContext(), PrincipalPageActivity.class);
+                        startActivity(i);
+
+                        Toast.makeText(LoginActivity.this, "Authentication succesful.",
+                                Toast.LENGTH_SHORT).show();
+                        //updateUI(user);
+                    } else {
+                        remainingTries--;
+                        // If sign in fails, display a message to the user.
+                        Log.w("LoginPage", "signInWithEmail:failure", task.getException());
+                        Toast.makeText(LoginActivity.this, "Email/password are not corrects, remaining tries : " + remainingTries,
+                                Toast.LENGTH_SHORT).show();
+                        // updateUI(null);
+                        if (remainingTries == 0) {
+                            btn_log_in.setEnabled(false);
+                            btn_log_in.setBackgroundColor(Color.DKGRAY);
+                        }
+                    }
+                });
+            } else {
+                Toast.makeText(LoginActivity.this, "Email and/or password is empty",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        remainingTries = 3;
 
         btn_back.setOnClickListener(view -> {
-            Intent IntentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
-            startActivity(IntentWelcomeActivity);
+            Intent intentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
+            startActivity(intentWelcomeActivity);
             finish();
         });
 
@@ -108,17 +99,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            System.out.println(currentUser);
-        }
-        tv_go_reg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent IntentSignUpActivity = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(IntentSignUpActivity);
-            }
+        tv_go_reg.setOnClickListener(view -> {
+            Intent intentSignUpActivity = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(intentSignUpActivity);
         });
     }
 }

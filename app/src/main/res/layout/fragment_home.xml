@@ -64,7 +64,7 @@
                     android:drawableStart="@drawable/img_search"
                     android:gravity="center"
                     android:hint="@string/type_a_location"
-                    android:imeOptions="actionDone"
+                    android:imeOptions="actionGo"
                     android:inputType="text"
                     android:singleLine="true"
                     android:paddingHorizontal="10dp"

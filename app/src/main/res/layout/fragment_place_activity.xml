@@ -15,8 +15,7 @@
         <LinearLayout
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -58,32 +57,31 @@
                 android:textSize="30sp"
                 android:textColor="@color/black"
                 android:gravity="center"
-                android:text="Choose the location"
-                />
+                android:text="@string/choose_the_location" />
+
+            <EditText
+                android:id="@+id/et_search_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:autofillHints=""
+                android:background="@drawable/edit_text_border_search_bar"
+                android:drawableStart="@drawable/img_search"
+                android:gravity="center"
+                android:hint="@string/type_a_location"
+                android:imeOptions="actionGo"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:textColor="@color/dark_grey" />
 
         </LinearLayout>
-
-        <EditText
-            android:id="@+id/et_search_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
-            android:autofillHints=""
-            android:background="@drawable/edit_text_border_search_bar"
-            android:drawableStart="@drawable/img_search"
-            android:gravity="center"
-            android:hint="@string/type_a_location"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:maxLines="1"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="5dp"
-            android:textColor="@color/dark_grey" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -114,8 +112,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="20dp">
 
@@ -124,11 +121,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_validate"
-                android:text="Validate"
+                android:text="@string/validate"
                 android:textColor="@color/white"
                 android:layout_marginHorizontal="15dp"/>
 
         </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
 
 
     </LinearLayout>

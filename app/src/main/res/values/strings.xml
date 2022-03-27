@@ -38,4 +38,5 @@
     <string name="volleyball" translatable="false">VOLLEYBALL</string>
     <string name="handball" translatable="false">HANDBALL</string>
     <string name="leave">Leave</string>
+    <string name="choose_the_location">Choose the location</string>
 </resources>

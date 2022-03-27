@@ -28,4 +28,6 @@
     <string name="participants">Participants</string>
     <string name="in_coming_activities">Activitées à venir</string>
     <string name="leave">Quitter</string>
+    <string name="choose_the_location">Choisissez la position</string>
+
 </resources>
