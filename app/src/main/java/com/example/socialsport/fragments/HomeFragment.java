@@ -30,16 +30,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
-    private Button btn_add_activity;
+    private Button btnAddActivity;
     private View view;
     private ScrollView scroll;
-    private CircleImageView civ_profil;
+    private CircleImageView civProfile;
     private ImageView transparent;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -52,13 +47,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         assert mMapFragment != null;
         mMapFragment.getMapAsync(this);
 
-        //Modifier la bottomBar quand on clique sur profil
+        // Change bottomBar when clicking on profile icon
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(1, true);
 
         findViewById();
 
-        btn_add_activity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
-        civ_profil.setOnClickListener(view1 -> {
+        btnAddActivity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
+        civProfile.setOnClickListener(view1 -> {
             MeowBottomNavigation meowBottomNavigation = ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation();
             meowBottomNavigation.show(3, true);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new PersonFragment()).addToBackStack(null).commit();
@@ -71,8 +66,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void findViewById() {
-        civ_profil = view.findViewById(R.id.civ_profil);
-        btn_add_activity = view.findViewById(R.id.btn_add_activity);
+        civProfile = view.findViewById(R.id.civ_profil);
+        btnAddActivity = view.findViewById(R.id.btn_add_activity);
         scroll = view.findViewById(R.id.scrollView);
         transparent = view.findViewById(R.id.imagetrans);
     }
@@ -104,6 +99,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             Bundle result = new Bundle();
             marker.hideInfoWindow();
             String title = (marker.getTitle());
+
             SportActivity clicked = map.getSportActivities().get(title);
             if (clicked != null) {
                 Log.d("HomeFragment", clicked.getDescription());
@@ -116,8 +112,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 Fragment newF = new OverviewFragment();
                 newF.setArguments(result);
                 map.getmMap().animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-                assert this.getFragmentManager() != null;
-                this.getFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
+                this.getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
             }
             return true;
         });

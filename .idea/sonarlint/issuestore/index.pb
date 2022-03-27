@@ -3,8 +3,6 @@
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 n
 >app/src/test/java/com/example/socialsport/ExampleUnitTest.java,8/4/84702697e172a3255d2e7969dd79fb4e9ad7df8e
-y
-Iapp/src/main/java/com/example/socialsport/activities/WelcomeActivity.java,2/1/2159049aa32729e1343307a2093f8221b9c9ea59
 w
 Gapp/src/main/java/com/example/socialsport/activities/LoginActivity.java,b/0/b010c27799cbce44caa5b877ceb08cda57227ae5
 }

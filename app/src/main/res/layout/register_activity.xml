@@ -48,7 +48,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_email"
-                android:maxLines="1"
+                android:singleLine="true"
                 android:background="@drawable/edit_text_border"
                 android:textColor="@color/black"
                 android:layout_width="match_parent"
@@ -69,6 +69,7 @@
                 android:background="@drawable/edit_text_border"
                 android:textColor="@color/black"
                 android:inputType="textPassword"
+                android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
@@ -78,6 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:singleLine="true"
             android:hint="@string/verify_your_password"
             app:passwordToggleTint="@color/black"
             app:passwordToggleEnabled="true">
@@ -100,7 +102,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_name"
-                android:maxLines="1"
+                android:singleLine="true"
                 android:background="@drawable/edit_text_border"
                 android:textColor="@color/black"
                 android:layout_width="match_parent"

@@ -190,7 +190,7 @@ public class Map {
         EditText etLocalisation = view.findViewById(R.id.et_search_city);
         etLocalisation.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
-            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 //Save the answer
                 String localisation = etLocalisation.getText().toString();
                 Geocoder gc = new Geocoder(activity.getApplicationContext());

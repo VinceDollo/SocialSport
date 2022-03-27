@@ -92,7 +92,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
         btnBack.setOnClickListener(view -> {
             Intent intentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intentWelcomeActivity);
@@ -101,8 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         etPassword.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 // Perform action on key press
                 btnLogin.performClick();
                 return true;
