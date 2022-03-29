@@ -19,12 +19,6 @@ j
 :app/src/main/java/com/example/socialsport/ListAdapter.java,5/8/5855c31a00a86999dec885dc2800ea6e27c3f7b4
 l
 <app/src/main/java/com/example/socialsport/entities/User.java,5/2/52d4e7e7c4196e8a71fd88562366acb09e75b23a
-w
-Gapp/src/main/java/com/example/socialsport/fragments/PersonFragment.java,8/1/8191a7f9b51f69639cb6062519b579b0ea367ecc
-y
-Iapp/src/main/java/com/example/socialsport/fragments/OverviewFragment.java,8/6/8605517c12c56886faf5b58e29d169601a49a691
-d
-4app/src/main/java/com/example/socialsport/Utils.java,2/3/2307fc796eab8c99f9bc4d757c37973f956f0c70
 y
 Iapp/src/main/java/com/example/socialsport/activities/WelcomeActivity.java,2/1/2159049aa32729e1343307a2093f8221b9c9ea59
 ~

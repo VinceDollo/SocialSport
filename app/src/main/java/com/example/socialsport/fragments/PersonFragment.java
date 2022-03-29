@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
+import com.example.socialsport.Utils;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,13 +37,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PersonFragment extends Fragment {
 
-    private Button btn_disc;
+    private Button btnDisc;
     private FirebaseAuth mAuth;
-    private LinearLayout llactivities;
-    private CircleImageView civ_profil;
-    private TextView tv_name, tvfinishedAct;
-    private int count;
-    private final ArrayList<SportActivity> sportActivities = new ArrayList<>();
+    private LinearLayout llActivities;
+    private CircleImageView civProfile;
+        private final ArrayList<SportActivity> sportActivities = new ArrayList<>();
     private final ArrayList<SportActivity> myActivities = new ArrayList<>();
 
     @Override
@@ -59,16 +58,15 @@ public class PersonFragment extends Fragment {
 
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3, true);
 
-        tv_name = view.findViewById(R.id.tv_name);
-        tvfinishedAct = view.findViewById(R.id.finishedactivities);
-        civ_profil = view.findViewById(R.id.civ_profil);
-        llactivities = view.findViewById(R.id.llactivitiefinished);
+        TextView tvName = view.findViewById(R.id.tv_name);
+        civProfile = view.findViewById(R.id.civ_profil);
+        llActivities = view.findViewById(R.id.llactivitiefinished);
 
-        civ_profil.setOnClickListener(view1 -> mGetContent.launch("image/*"));
+        civProfile.setOnClickListener(view1 -> mGetContent.launch("image/*"));
 
-        tv_name.setText(((PrincipalPageActivity) requireActivity()).getUser().getName());
+        tvName.setText(((PrincipalPageActivity) requireActivity()).getUser().getName());
         Log.d("firebase", "" + ((PrincipalPageActivity) requireActivity()).getUser().getName());
-        btn_disc = view.findViewById(R.id.btn_disconnect);
+        btnDisc = view.findViewById(R.id.btn_disconnect);
         return view;
     }
 
@@ -77,10 +75,10 @@ public class PersonFragment extends Fragment {
         super.onStart();
         getAllActivities();
 
-        btn_disc.setOnClickListener(view -> {
+        btnDisc.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
-            getActivity().finish();
-            getActivity().onBackPressed();
+            requireActivity().finish();
+            requireActivity().onBackPressed();
         });
     }
 
@@ -88,7 +86,7 @@ public class PersonFragment extends Fragment {
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    civ_profil.setImageURI(uri);
+                    civProfile.setImageURI(uri);
                 }
             });
 
@@ -96,9 +94,9 @@ public class PersonFragment extends Fragment {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference activitiesRef = rootRef.child("activities");
 
-        ValueEventListener eventListener = new ValueEventListener() {
+        activitiesRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     HashMap act = (HashMap) ds.getValue(); //Static types are wanky here
                     assert act != null;
@@ -116,15 +114,13 @@ public class PersonFragment extends Fragment {
                     newActivity.setUuids(uuids);
                     sportActivities.add(newActivity);
                 }
-                Log.d("meziane", sportActivities.toString());
                 getMyActivities();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { //
             }
-        };
-        activitiesRef.addValueEventListener(eventListener);
+        });
     }
 
     @SuppressLint("SetTextI18n")
@@ -138,13 +134,12 @@ public class PersonFragment extends Fragment {
                 }
             }
         }
-        Log.d("mezianeactiv", myActivities.toString());
 
         int cmp = 0;
         for (SportActivity currentAct : myActivities) {
             TextView tv = new TextView(PersonFragment.this.getContext());
-            tv.setText("Activity : " + currentAct.getSport() + " (" + currentAct.getDate() + ", "
-                    + currentAct.getCoords() + ")");
+            tv.setText(currentAct.getSport() + " : " + currentAct.getDate() + "\n"
+                    + Utils.getPrintableLocation(getActivity(), currentAct.getCoords()));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -159,7 +154,7 @@ public class PersonFragment extends Fragment {
             tv.setBackgroundResource(R.drawable.btn_finished_activities);
             tv.setPadding(20, 30, 20, 30);
             tv.setGravity(Gravity.CENTER);
-            llactivities.addView(tv);
+            llActivities.addView(tv);
         }
     }
 }

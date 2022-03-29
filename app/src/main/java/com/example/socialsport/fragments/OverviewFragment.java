@@ -114,7 +114,7 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-    public void setViewContent(){
+    public void setViewContent() {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             participantsUuids = bundle.getStringArrayList("participants");
@@ -127,23 +127,7 @@ public class OverviewFragment extends Fragment {
             imgSport.setImageBitmap(Utils.getBitmap(getActivity(), sport));
             nameSport.setText(sport);
             dateTime.setText(bundle.getString("dateTime"));
-
-            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-            LatLng locationLatLng = Utils.stringToLatLng(bundle.getString("location"));
-            StringBuilder locationString = new StringBuilder();
-            try {
-                Address locationAddress = geocoder.getFromLocation(locationLatLng.latitude, locationLatLng.longitude, 1).get(0);
-                int i = 0;
-                while (locationAddress.getAddressLine(i) != null) {
-                    locationString.append(locationAddress.getAddressLine(i));
-                    locationString.append(", ");
-                    i++;
-                }
-                locationString.delete(locationString.length() - 2, locationString.length() - 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            location.setText(locationString);
+            location.setText(Utils.getPrintableLocation(getActivity(), bundle.getString("location")));
         }
     }
 

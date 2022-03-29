@@ -1,9 +1,12 @@
 package com.example.socialsport;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
@@ -14,6 +17,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -43,6 +48,25 @@ public class Utils {
         double latitude = Double.parseDouble(latLng[0]);
         double longitude = Double.parseDouble(latLng[1]);
         return new LatLng(latitude, longitude);
+    }
+
+    public static String getPrintableLocation(Activity activity, String location) {
+        Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
+        LatLng locationLatLng = Utils.stringToLatLng(location);
+        StringBuilder locationString = new StringBuilder();
+        try {
+            Address locationAddress = geocoder.getFromLocation(locationLatLng.latitude, locationLatLng.longitude, 1).get(0);
+            int i = 0;
+            while (locationAddress.getAddressLine(i) != null) {
+                locationString.append(locationAddress.getAddressLine(i));
+                locationString.append(", ");
+                i++;
+            }
+            locationString.delete(locationString.length() - 2, locationString.length() - 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return locationString.toString();
     }
 
     public static BitmapDescriptor getBitmapDescriptor(Context context, String sport) {
