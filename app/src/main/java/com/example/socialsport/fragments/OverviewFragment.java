@@ -1,8 +1,6 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
 import com.example.socialsport.Utils;
-import com.google.android.gms.maps.model.LatLng;
+import com.example.socialsport.entities.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,10 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -74,11 +69,11 @@ public class OverviewFragment extends Fragment {
                             Log.e(tag, "Error getting data", task.getException());
                         } else {
                             @SuppressLint("InflateParams") TableRow row = (TableRow) LayoutInflater.from(getActivity()).inflate(R.layout.table_row, null);
-                            HashMap<String, String> participant = (HashMap<String, String>) Objects.requireNonNull(task.getResult().getValue());
+                            User participant = task.getResult().getValue(User.class);
                             //TODO: add person image
+                            assert participant != null;
                             Log.d(tag, participant.toString());
-                            Log.d(tag, "");
-                            ((TextView) row.findViewById(R.id.name_participant)).setText(participant.get("name"));
+                            ((TextView) row.findViewById(R.id.name_participant)).setText(participant.getName());
                             tableLayout.addView(row);
                         }
                     });
@@ -97,7 +92,7 @@ public class OverviewFragment extends Fragment {
             if (!task.isSuccessful()) {
                 Log.e(tag, "Error getting data", task.getException());
             } else {
-                Log.d(tag, ">" + Objects.requireNonNull(task.getResult().getValue()).getClass());
+                Log.d(tag, Objects.requireNonNull(task.getResult().getValue()).getClass().toString());
                 ArrayList<String> currentParticipants = (ArrayList<String>) task.getResult().getValue();
                 if (!currentParticipants.contains(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())) {
                     currentParticipants.add(mAuth.getCurrentUser().getUid());

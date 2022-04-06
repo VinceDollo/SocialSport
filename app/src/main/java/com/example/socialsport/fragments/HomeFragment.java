@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
-import com.example.socialsport.Map;
+import com.example.socialsport.MapCustom;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        Map map = new Map(googleMap, this.getActivity(), view);
+        MapCustom map = new MapCustom(googleMap, this.getActivity(), view);
         map.searchPlaceListener(); // Enable search location listener
 
         map.getmMap().setOnMarkerClickListener(marker -> {

@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,55 +15,50 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.socialsport.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private EditText et_email, et_password;
-    private TextView tv_go_reg;
-    private Button btn_log_in;
+    private EditText etPassword;
+    private TextView tvGoReg;
+    private Button btnLogin;
+    private ImageButton btnBack;
     private int remainingTries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.log_in_activity);
-        mAuth = FirebaseAuth.getInstance();
-        et_email = findViewById(R.id.et_email);
-        et_password = findViewById(R.id.et_password);
-        btn_log_in = findViewById(R.id.btn_log_in);
-        tv_go_reg = findViewById(R.id.tv_go_reg_from_login);
-        ImageButton btn_back = findViewById(R.id.btn_back);
-        btn_log_in.setOnClickListener(view -> {
-            String email = et_email.getText().toString();
-            String password = et_password.getText().toString();
+        EditText etEmail = findViewById(R.id.et_email);
+        etPassword = findViewById(R.id.et_password);
+        btnLogin = findViewById(R.id.btn_log_in);
+        tvGoReg = findViewById(R.id.tv_go_reg_from_login);
+        btnBack = findViewById(R.id.btn_back);
+        btnLogin.setOnClickListener(view -> {
+            String email = etEmail.getText().toString();
+            String password = etPassword.getText().toString();
 
-            if (!email.isEmpty() & !password.isEmpty()) {
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, task -> {
+            if (!email.isEmpty() && !password.isEmpty()) {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("LoginPage", "signInWithEmail:success");
 
-                        //TODO
-                        //Passer les infos utilisateurs
+                        //TODO: Passer les infos utilisateurs
 
                         Intent i = new Intent(getApplicationContext(), PrincipalPageActivity.class);
                         startActivity(i);
 
                         Toast.makeText(LoginActivity.this, "Authentication succesful.",
                                 Toast.LENGTH_SHORT).show();
-                        //updateUI(user);
                     } else {
                         remainingTries--;
                         // If sign in fails, display a message to the user.
                         Log.w("LoginPage", "signInWithEmail:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "Email/password are not corrects, remaining tries : " + remainingTries,
                                 Toast.LENGTH_SHORT).show();
-                        // updateUI(null);
                         if (remainingTries == 0) {
-                            btn_log_in.setEnabled(false);
-                            btn_log_in.setBackgroundColor(Color.DKGRAY);
+                            btnLogin.setEnabled(false);
+                            btnLogin.setBackgroundColor(Color.DKGRAY);
                         }
                     }
                 });
@@ -74,32 +68,35 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        remainingTries = 3;
+        setListeners();
 
-        btn_back.setOnClickListener(view -> {
+        remainingTries = 3;
+    }
+
+    private void setListeners(){
+        btnBack.setOnClickListener(view -> {
             Intent intentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intentWelcomeActivity);
             finish();
         });
 
         //When you push enter button
-        et_password.setOnKeyListener((v, keyCode, event) -> {
+        etPassword.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 // Perform action on key press
-                btn_log_in.performClick();
+                btnLogin.performClick();
                 return true;
             }
             return false;
         });
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
-        tv_go_reg.setOnClickListener(view -> {
+        tvGoReg.setOnClickListener(view -> {
             Intent intentSignUpActivity = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivity(intentSignUpActivity);
         });

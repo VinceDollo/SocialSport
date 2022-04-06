@@ -7,13 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -64,7 +62,7 @@ public class ListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Object firstKey = nameMessage.keySet().toArray()[position];
+        String firstKey = (String) nameMessage.keySet().toArray()[position];
 
         ArrayList<String> array = nameMessage.get(firstKey);
 
@@ -83,7 +81,7 @@ public class ListAdapter extends BaseAdapter {
         } else {
             viewHolder.sender.setImageResource(R.drawable.img_message_received_2);
         }
-        viewHolder.txtName.setText(firstKey.toString());
+        viewHolder.txtName.setText(firstKey);
         viewHolder.txtMessage.setText(msg);
         viewHolder.txtTime.setText(time);
         viewHolder.txtDate.setText(date);

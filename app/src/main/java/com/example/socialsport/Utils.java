@@ -11,10 +11,12 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
@@ -35,11 +37,17 @@ public class Utils {
             if (!task.isSuccessful()) {
                 Log.e("Firebase_user", "Error getting data", task.getException());
             } else {
-                Log.d("Firebase_user1", String.valueOf(task.getResult().getValue()));
+                Log.d("Firebase_user", String.valueOf(task.getResult().getValue()));
                 userString.set(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
         });
         Log.d("Firebase_user2", userString.toString());
+    }
+
+    public static void writeActivityToDatabase(FirebaseDatabase database, String sport, String description, String date, String hour, String coords, String currentUserID) {
+        DatabaseReference myRef = database.getReference();
+        SportActivity newActivity = new SportActivity(sport, description, date, hour, currentUserID, coords);
+        myRef.child("activities").push().setValue(newActivity);
     }
 
     public static LatLng stringToLatLng(String string) {

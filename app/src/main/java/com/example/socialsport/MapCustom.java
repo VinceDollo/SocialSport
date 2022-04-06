@@ -35,9 +35,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Map {
+public class MapCustom {
 
     private final GoogleMap mMap;
     private final Activity activity;
@@ -54,13 +55,13 @@ public class Map {
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085); // Sydney
 
     AtomicReference<LatLng> currentLatLng;
-    private final HashMap<String, SportActivity> sportActivities = new HashMap<>();
+    private final Map<String, SportActivity> sportActivities = new HashMap<>();
 
-    public HashMap<String, SportActivity> getSportActivities() {
+    public Map<String, SportActivity> getSportActivities() {
         return sportActivities;
     }
 
-    public Map(GoogleMap googleMap, Activity activity, View view) {
+    public MapCustom(GoogleMap googleMap, Activity activity, View view) {
         mMap = googleMap;
         this.activity = activity;
         this.view = view;
@@ -84,17 +85,17 @@ public class Map {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    HashMap act = (HashMap) ds.getValue(); //Static types are wanky here
+                    SportActivity act = ds.getValue(SportActivity.class);
                     assert act != null;
                     Log.d("Firebase_activity", act.toString());
 
-                    String sport = (String) act.get("sport");
-                    String description = (String) act.get("description");
-                    String date = (String) act.get("date");
-                    String hour = (String) act.get("hour");
-                    String uuidOrganiser = (String) act.get("uuidOrganiser");
-                    String coords = (String) act.get("coords");
-                    ArrayList<String> uuids = (ArrayList<String>) act.get("uuids");
+                    String sport = act.getSport();
+                    String description = act.getDescription();
+                    String date = act.getDate();
+                    String hour = act.getHour();
+                    String uuidOrganiser = act.getUuidOrganiser();
+                    String coords = act.getCoords();
+                    ArrayList<String> uuids = (ArrayList<String>) act.getUuids();
 
                     SportActivity newActivity = new SportActivity(sport, description, date, hour, uuidOrganiser, coords);
                     newActivity.setUuids(uuids);
@@ -105,7 +106,9 @@ public class Map {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { //
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(view.getContext(),"database error",
+                        Toast.LENGTH_SHORT).show();
             }
         };
         activitiesRef.addValueEventListener(eventListener);

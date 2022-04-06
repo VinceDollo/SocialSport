@@ -6,12 +6,22 @@ import java.util.List;
 public class SportActivity {
 
     private String sport;
-    private String description;
-    private String date;
-    private String hour;
-    private String uuidOrganiser;
-    private String coords;
+    private final String description;
+    private final String date;
+    private final String hour;
+    private final String uuidOrganiser;
+    private final String coords;
     private ArrayList<String> uuids;
+
+    public SportActivity() {
+        this.sport = "";
+        this.description = "";
+        this.date = "";
+        this.hour = "";
+        this.uuidOrganiser = "";
+        this.coords = "";
+        uuids = new ArrayList<>();
+    }
 
     public SportActivity(String sport, String description, String date, String hour, String uuidOrganiser, String coords) {
         this.sport = sport;
@@ -22,6 +32,8 @@ public class SportActivity {
         this.coords = coords;
         uuids = new ArrayList<>();
         uuids.add(uuidOrganiser);
+
+        new SportActivity(); //Code smell
     }
 
     public String getSport() {
@@ -32,45 +44,24 @@ public class SportActivity {
         this.sport = sport;
     }
 
-
     public String getCoords() {
         return coords;
-    }
-
-    public void setCoords(String coords) {
-        this.coords = coords;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public String getHour() {
         return hour;
     }
 
-    public void setHour(String hour) {
-        this.hour = hour;
-    }
-
     public String getUuidOrganiser() {
         return uuidOrganiser;
-    }
-
-    public void setUuidOrganiser(String uuidOrganiser) {
-        this.uuidOrganiser = uuidOrganiser;
     }
 
     public List<String> getUuids() {

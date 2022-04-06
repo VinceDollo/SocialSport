@@ -1,7 +1,6 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -30,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,7 +38,7 @@ public class PersonFragment extends Fragment {
     private FirebaseAuth mAuth;
     private LinearLayout llActivities;
     private CircleImageView civProfile;
-        private final ArrayList<SportActivity> sportActivities = new ArrayList<>();
+    private final ArrayList<SportActivity> sportActivities = new ArrayList<>();
     private final ArrayList<SportActivity> myActivities = new ArrayList<>();
 
     @Override
@@ -82,13 +79,7 @@ public class PersonFragment extends Fragment {
         });
     }
 
-    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
-            new ActivityResultCallback<Uri>() {
-                @Override
-                public void onActivityResult(Uri uri) {
-                    civProfile.setImageURI(uri);
-                }
-            });
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> civProfile.setImageURI(uri));
 
     public void getAllActivities() {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -98,17 +89,17 @@ public class PersonFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    HashMap act = (HashMap) ds.getValue(); //Static types are wanky here
+                    SportActivity act = ds.getValue(SportActivity.class);
                     assert act != null;
                     Log.d("Firebase_activity", act.toString());
 
-                    String sport = (String) act.get("sport");
-                    String description = (String) act.get("description");
-                    String date = (String) act.get("date");
-                    String hour = (String) act.get("hour");
-                    String uuidOrganiser = (String) act.get("uuidOrganiser");
-                    String coords = (String) act.get("coords");
-                    ArrayList<String> uuids = (ArrayList<String>) act.get("uuids");
+                    String sport = act.getSport();
+                    String description = act.getDescription();
+                    String date = act.getDate();
+                    String hour = act.getHour();
+                    String uuidOrganiser = act.getUuidOrganiser();
+                    String coords = act.getCoords();
+                    ArrayList<String> uuids = (ArrayList<String>) act.getUuids();
 
                     SportActivity newActivity = new SportActivity(sport, description, date, hour, uuidOrganiser, coords);
                     newActivity.setUuids(uuids);

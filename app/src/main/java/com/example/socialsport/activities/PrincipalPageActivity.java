@@ -24,14 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-
 public class PrincipalPageActivity extends FragmentActivity {
 
-    private FirebaseAuth mAuth;
-    private String uid;
     private MeowBottomNavigation meowBottomNavigation;
     private User user;
-
 
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> message = new ArrayList<>();
@@ -44,13 +40,13 @@ public class PrincipalPageActivity extends FragmentActivity {
         setContentView(R.layout.principal_page_activity);
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        updateMessage();
+        updateMessages();
 
         if (currentUser != null) {
-            uid = currentUser.getUid();
+            String uid = currentUser.getUid();
             getUserFromDatabase(uid);
         } else {
             Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
@@ -121,7 +117,7 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
-    public void updateMessage() {
+    public void updateMessages() {
         map = new HashMap<>();
         FirebaseDatabase.getInstance().getReference().child("chat").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -131,21 +127,24 @@ public class PrincipalPageActivity extends FragmentActivity {
                     String contact = snapshot.getKey();
                     map.put(contact, new ArrayList<>());
                     name.add(contact);
-                    assert contact != null;
-                    FirebaseDatabase.getInstance().getReference().child("chat").child(FirebaseAuth.getInstance().getUid()).child(contact).get().addOnCompleteListener(task1 -> {
-                        if (!task1.isSuccessful()) {
-                            Log.e("firebase", "Error getting data", task1.getException());
-                        } else {
-                            for (DataSnapshot snapshot1 : task1.getResult().getChildren()) {
-                                Objects.requireNonNull(map.get(contact)).add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
-                                message.add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
-                            }
-                        }
-                    });
+                    if (contact != null)
+                        updateMessagesForContact(contact);
                 }
             }
         });
+    }
 
+    public void updateMessagesForContact(String contact) {
+        FirebaseDatabase.getInstance().getReference().child("chat").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(contact).get().addOnCompleteListener(task1 -> {
+            if (!task1.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task1.getException());
+            } else {
+                for (DataSnapshot snapshot1 : task1.getResult().getChildren()) {
+                    Objects.requireNonNull(map.get(contact)).add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
+                    message.add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
+                }
+            }
+        });
     }
 
     public Map<String, ArrayList<String>> getMap() {
