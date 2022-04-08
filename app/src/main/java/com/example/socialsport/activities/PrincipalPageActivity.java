@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
+import com.example.socialsport.Utils;
 import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.HomeFragment;
 import com.example.socialsport.fragments.MessageFragment;
@@ -16,7 +17,6 @@ import com.example.socialsport.fragments.PersonFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -46,8 +46,7 @@ public class PrincipalPageActivity extends FragmentActivity {
         updateMessages();
 
         if (currentUser != null) {
-            String uid = currentUser.getUid();
-            getUserFromDatabase(uid);
+            user = Utils.getUserFromDatabase(currentUser.getUid());
         } else {
             Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
         }
@@ -88,33 +87,6 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     private void replace(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
-    }
-
-    private void getUserFromDatabase(String uid) {
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        user = new User(null, null, null);
-        myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
-            } else {
-                user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
-            }
-        });
-        myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
-            } else {
-                user.setEmail(Objects.requireNonNull(task.getResult().getValue()).toString());
-
-            }
-        });
-        myRef.child("users").child(uid).child("age").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
-            } else {
-                user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
-            }
-        });
     }
 
     public void updateMessages() {

@@ -31,17 +31,32 @@ public class Utils {
         FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(currentUser);
     }
 
-    public static void getUserFromDatabase(String uid) {
-        AtomicReference<String> userString = new AtomicReference<>();
-        FirebaseDatabase.getInstance().getReference().child("users").child(uid).get().addOnCompleteListener(task -> {
+    public static User getUserFromDatabase(String uid) {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+        User user = new User(null, null, null);
+        myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("Firebase_user", "Error getting data", task.getException());
             } else {
-                Log.d("Firebase_user", String.valueOf(task.getResult().getValue()));
-                userString.set(Objects.requireNonNull(task.getResult().getValue()).toString());
+                user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
         });
-        Log.d("Firebase_user2", userString.toString());
+        myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("Firebase_user", "Error getting data", task.getException());
+            } else {
+                user.setEmail(Objects.requireNonNull(task.getResult().getValue()).toString());
+
+            }
+        });
+        myRef.child("users").child(uid).child("age").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("Firebase_user", "Error getting data", task.getException());
+            } else {
+                user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
+            }
+        });
+        return user;
     }
 
     public static void writeActivityToDatabase(FirebaseDatabase database, String sport, String description, String date, String hour, String coords, String currentUserID) {

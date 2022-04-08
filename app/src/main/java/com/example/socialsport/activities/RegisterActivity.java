@@ -74,7 +74,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 assert user != null;
                                 Utils.writeUserIntoDatabase(user.getEmail(), name, age, user.getUid());
-                                Utils.getUserFromDatabase(user.getUid());
                                 Toast.makeText(RegisterActivity.this, "Account successfully created.", Toast.LENGTH_SHORT).show();
                                 Log.d("USER UID", user.getUid());
 
@@ -98,9 +97,9 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         });
 
-        etPassword.setOnKeyListener((v, keyCode, event) -> {
+        etAge.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && allFieldsFill()) {
                 // Perform action on key press
                 btnLogin.performClick();
                 return true;
@@ -113,5 +112,9 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(intentSignUpActivity);
                 }
         );
+    }
+
+    private boolean allFieldsFill() {
+        return etEmail.getText().length() > 0 && etName.getText().length() > 0 && etPassword.getText().length() > 0 && etAge.getText().length() > 0;
     }
 }
