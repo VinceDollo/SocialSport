@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.socialsport.MapCustom;
+import com.example.socialsport.MyMap;
 import com.example.socialsport.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -49,7 +49,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        MapCustom map = new MapCustom(googleMap, requireActivity(), requireView());
+        MyMap map = new MyMap(googleMap, requireActivity(), requireView());
         map.searchPlaceListener();
 
         btnValidate.setOnClickListener(view12 -> {

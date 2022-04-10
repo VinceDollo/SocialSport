@@ -71,10 +71,11 @@ public class OverviewFragment extends Fragment {
                             @SuppressLint("InflateParams") TableRow row = (TableRow) LayoutInflater.from(getActivity()).inflate(R.layout.table_row, null);
                             User participant = task.getResult().getValue(User.class);
                             //TODO: add person image
-                            assert participant != null;
-                            Log.d(tag, participant.toString());
-                            ((TextView) row.findViewById(R.id.name_participant)).setText(participant.getName());
-                            tableLayout.addView(row);
+                            if (participant != null) {
+                                Log.d(tag, participant.toString());
+                                ((TextView) row.findViewById(R.id.name_participant)).setText(participant.getName());
+                                tableLayout.addView(row);
+                            }
                         }
                     });
                 }

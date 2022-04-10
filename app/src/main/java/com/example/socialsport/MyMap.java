@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MapCustom {
+public class MyMap {
 
     private final GoogleMap mMap;
     private final Activity activity;
@@ -61,7 +61,7 @@ public class MapCustom {
         return sportActivities;
     }
 
-    public MapCustom(GoogleMap googleMap, Activity activity, View view) {
+    public MyMap(GoogleMap googleMap, Activity activity, View view) {
         mMap = googleMap;
         this.activity = activity;
         this.view = view;

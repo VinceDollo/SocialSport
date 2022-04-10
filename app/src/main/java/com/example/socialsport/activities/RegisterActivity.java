@@ -47,7 +47,6 @@ public class RegisterActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btn_back);
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -57,6 +56,10 @@ public class RegisterActivity extends AppCompatActivity {
             Log.d("Start", currentUser.toString());
         }
 
+        setListeners();
+    }
+
+    private void setListeners() {
         btnLogin.setOnClickListener(view -> {
             //TODO with better way
             String email = etEmail.getText().toString();
@@ -99,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         etAge.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && allFieldsFill()) {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && allFieldsFilled()) {
                 // Perform action on key press
                 btnLogin.performClick();
                 return true;
@@ -108,13 +111,12 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         tvGoLogin.setOnClickListener(view -> {
-                    Intent intentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intentSignUpActivity);
-                }
-        );
+            Intent intentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intentSignUpActivity);
+        });
     }
 
-    private boolean allFieldsFill() {
+    private boolean allFieldsFilled() {
         return etEmail.getText().length() > 0 && etName.getText().length() > 0 && etPassword.getText().length() > 0 && etAge.getText().length() > 0;
     }
 }

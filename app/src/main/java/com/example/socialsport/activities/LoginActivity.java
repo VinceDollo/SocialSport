@@ -33,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_log_in);
         tvGoReg = findViewById(R.id.tv_go_reg_from_login);
         btnBack = findViewById(R.id.btn_back);
+
         btnLogin.setOnClickListener(view -> {
             String email = etEmail.getText().toString();
             String password = etPassword.getText().toString();

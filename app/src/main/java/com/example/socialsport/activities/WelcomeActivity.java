@@ -26,8 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnGoRegister.setOnClickListener(view -> {
             Intent intentSignUpActivity = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivity(intentSignUpActivity);
-        }
-        );
+        });
     }
 
 

@@ -1,5 +1,8 @@
 package com.example.socialsport.activities;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -8,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.example.socialsport.MyService;
 import com.example.socialsport.R;
 import com.example.socialsport.Utils;
 import com.example.socialsport.entities.User;
@@ -75,6 +79,11 @@ public class PrincipalPageActivity extends FragmentActivity {
             }
             return null;
         });
+
+        if (!isMyServiceRunning()){
+            Intent serviceIntent = new Intent(this, MyService.class);
+            this.startService(serviceIntent);
+        }
     }
 
     public MeowBottomNavigation getMeowBottomNavigation() {
@@ -87,6 +96,16 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     private void replace(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
+    }
+
+    private boolean isMyServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (MyService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void updateMessages() {
