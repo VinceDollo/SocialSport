@@ -1,7 +1,12 @@
 package com.example.socialsport.entities;
 
+import androidx.annotation.NonNull;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class SportActivity {
 
@@ -11,7 +16,8 @@ public class SportActivity {
     private final String hour;
     private final String uuidOrganiser;
     private final String coords;
-    private ArrayList<String> uuids;
+    private Date dateTime = new Date();
+    private ArrayList<String> uuids = new ArrayList<>();
 
     public SportActivity() {
         this.sport = "";
@@ -20,7 +26,6 @@ public class SportActivity {
         this.hour = "";
         this.uuidOrganiser = "";
         this.coords = "";
-        uuids = new ArrayList<>();
     }
 
     public SportActivity(String sport, String description, String date, String hour, String uuidOrganiser, String coords) {
@@ -30,8 +35,12 @@ public class SportActivity {
         this.hour = hour;
         this.uuidOrganiser = uuidOrganiser;
         this.coords = coords;
-        uuids = new ArrayList<>();
         uuids.add(uuidOrganiser);
+        try {
+            dateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE).parse(date + " " + hour);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         new SportActivity(); //Code smell
     }
@@ -72,5 +81,16 @@ public class SportActivity {
         this.uuids = (ArrayList<String>) uuids;
     }
 
+    public Date getDateTime() {
+        return dateTime;
+    }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "SportActivity{" +
+                "sport='" + sport + '\'' +
+                ", dateTime=" + dateTime +
+                '}';
+    }
 }

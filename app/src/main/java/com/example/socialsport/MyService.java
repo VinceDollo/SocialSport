@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.socialsport.activities.PrincipalPageActivity;
+import com.example.socialsport.entities.SportActivity;
 
 public class MyService extends IntentService {
 
@@ -30,10 +31,21 @@ public class MyService extends IntentService {
 
         createNotificationChannel();
 
+        //TODO: extract this string
+        SportActivity nextActivity = Utils.getNextActivity();
+        StringBuilder text = new StringBuilder();
+        text.append("You have an activity ");
+        text.append(nextActivity.getSport());
+        text.append(" at ");
+        text.append(nextActivity.getHour());
+        text.append(" the ");
+        text.append(nextActivity.getDate());
+        text.append(".");
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
+                .setContentTitle("Activity in coming")
+                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);

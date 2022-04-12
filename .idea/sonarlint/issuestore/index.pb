@@ -3,7 +3,21 @@
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 <
 build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
-d
-4app/src/main/java/com/example/socialsport/Utils.java,2/3/2307fc796eab8c99f9bc4d757c37973f956f0c70
 @
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
+z
+Japp/src/main/java/com/example/socialsport/activities/RegisterActivity.java,b/1/b1785d5c12c8c1a78cb63fd71a64e7c05682c304
+w
+Gapp/src/main/java/com/example/socialsport/activities/LoginActivity.java,b/0/b010c27799cbce44caa5b877ceb08cda57227ae5
+~
+Napp/src/main/java/com/example/socialsport/fragments/PlaceActivityFragment.java,6/4/64d2573b0880522e76c7ba638088d5120dc9a304
+y
+Iapp/src/main/java/com/example/socialsport/activities/WelcomeActivity.java,2/1/2159049aa32729e1343307a2093f8221b9c9ea59
+l
+<app/src/main/java/com/example/socialsport/entities/User.java,5/2/52d4e7e7c4196e8a71fd88562366acb09e75b23a
+u
+Eapp/src/main/java/com/example/socialsport/fragments/HomeFragment.java,b/d/bde7070e45bff9ee427f804a7d3f3c06f0b714fd
+d
+4app/src/main/java/com/example/socialsport/MyMap.java,6/2/62a802eca6001fb5e980ec914dd61f10b3faf193
+y
+Iapp/src/main/java/com/example/socialsport/fragments/OverviewFragment.java,8/6/8605517c12c56886faf5b58e29d169601a49a691
