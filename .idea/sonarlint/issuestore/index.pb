@@ -13,5 +13,3 @@ y
 Iapp/src/main/java/com/example/socialsport/activities/WelcomeActivity.java,2/1/2159049aa32729e1343307a2093f8221b9c9ea59
 d
 4app/src/main/java/com/example/socialsport/MyMap.java,6/2/62a802eca6001fb5e980ec914dd61f10b3faf193
-y
-Iapp/src/main/java/com/example/socialsport/fragments/OverviewFragment.java,8/6/8605517c12c56886faf5b58e29d169601a49a691
