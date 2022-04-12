@@ -35,6 +35,12 @@
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.PrincipalPageActivity" />
+        <service
+            android:name=".activities.MessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
