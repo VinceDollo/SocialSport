@@ -87,6 +87,7 @@ public class Utils {
         activitiesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                allActivities.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     SportActivity act = ds.getValue(SportActivity.class);
                     assert act != null;
