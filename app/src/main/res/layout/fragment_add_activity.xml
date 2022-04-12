@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,11 +34,11 @@
                 android:layout_weight="1" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_profil"
+                android:id="@+id/civ_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:contentDescription="@string/profil_picture"
+                android:contentDescription="@string/profile_picture"
                 android:src="@drawable/img_user"
                 app:tint="@color/black" />
 
@@ -50,7 +51,7 @@
             android:textSize="40sp"
             android:textColor="@color/black"
             android:layout_gravity="center"
-            android:text="Add an activity"
+            android:text="@string/add_an_activity"
             />
 
         <ScrollView
@@ -62,7 +63,7 @@
 
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp">
 

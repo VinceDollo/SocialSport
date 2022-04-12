@@ -108,7 +108,7 @@ public class Utils {
                 List<SportActivity> myActivities = getMyActivities();
                 if (!myActivities.isEmpty()) {
                     myActivities.sort(Comparator.comparing(SportActivity::getDateTime)); //Sort my activities by date
-                    removePastActivities(myActivities);
+                    myActivities = getUpcomingActivities(myActivities);
 
                     if (!myActivities.isEmpty()) {
                         nextActivity = myActivities.get(0);
@@ -130,9 +130,16 @@ public class Utils {
         });
     }
 
-    public static List<SportActivity> removePastActivities(List<SportActivity> myActivities) {
-        myActivities.removeIf(activity -> activity.getDateTime().before(new Date()));
-        return myActivities;
+    public static List<SportActivity> getUpcomingActivities(List<SportActivity> activities) {
+        ArrayList<SportActivity> activitiesToReturn= new ArrayList<>(activities);
+        activitiesToReturn.removeIf(activity -> activity.getDateTime().before(new Date()));
+        return activitiesToReturn;
+    }
+
+    public static List<SportActivity> getPastActivities(List<SportActivity> activities) {
+        ArrayList<SportActivity> activitiesToReturn= new ArrayList<>(activities);
+        activitiesToReturn.removeIf(activity -> activity.getDateTime().after(new Date()) || activity.getDateTime().equals(new Date()));
+        return activitiesToReturn;
     }
 
     public static List<SportActivity> getMyActivities() {

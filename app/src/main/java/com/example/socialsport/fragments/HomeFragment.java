@@ -66,10 +66,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void findViewById() {
-        civProfile = view.findViewById(R.id.civ_profil);
+        civProfile = view.findViewById(R.id.civ_profile);
         btnAddActivity = view.findViewById(R.id.btn_add_activity);
         scroll = view.findViewById(R.id.scrollView);
-        transparent = view.findViewById(R.id.imagetrans);
+        transparent = view.findViewById(R.id.transparent_image);
     }
 
     private boolean mapOnTouchListener(View v, MotionEvent event) {

@@ -1,115 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="80sp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.PersonFragment"
     android:layout_marginHorizontal="20dp"
-    android:layout_marginTop="20dp">
+    android:layout_marginTop="20dp"
+    tools:context=".fragments.PersonFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
+            android:layout_height="200dp"
             android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/btn_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
                 android:layout_gravity="end"
-                android:src="@drawable/img_settings"
+                android:background="@null"
                 android:contentDescription="@string/back_vector"
-                app:tint="@color/black"/>
+                android:src="@drawable/img_settings"
+                app:tint="@color/black" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_profil"
+                android:id="@+id/civ_profile"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
-                android:src="@drawable/img_user"/>
+                android:src="@drawable/img_user" />
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Me"
+                android:gravity="center"
                 android:textColor="@color/black"
-                android:textSize="40dp"
-                android:gravity="center"/>
+                android:textSize="40sp" />
 
 
         </LinearLayout>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="9"
-        android:layout_marginTop="5dp"
-        android:orientation="vertical">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/in_coming_activities"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:id="@+id/finishedactivities"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
-        <ScrollView
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/scrollView"
-            android:orientation="vertical"
-            android:background="@color/grey"
-            android:fillViewport="true">
+            android:layout_height="0dp"
+            android:layout_weight="16"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:id="@+id/llactivitiefinished"
+                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical">
 
-        </ScrollView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/upcoming_activities"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-    </LinearLayout>
+                <ScrollView
+                    android:id="@+id/scrollView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/grey"
+                    android:fillViewport="true"
+                    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/ll_upcoming_activities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_disconnect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/btn_disconnect"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
-            android:text="Disconnect"
-            android:drawablePadding="20dp"
-            android:drawableLeft="@drawable/img_log_out"
-            android:textColor="@color/white" />
+                </ScrollView>
 
-    </LinearLayout>
+            </LinearLayout>
 
-        <View
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/finished_activities"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ScrollView
+                    android:id="@+id/scrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/grey"
+                    android:fillViewport="true"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/ll_finished_activities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                </ScrollView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="63dp"
+            android:orientation="vertical">
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_disconnect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_disconnect"
+                android:drawableStart="@drawable/img_log_out"
+                android:drawablePadding="20dp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:text="@string/disconnect"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -17,10 +17,10 @@
     <string name="type_a_location">Type a location</string>
     <string name="add_an_activity">Add an activity</string>
     <string name="browse_all_activities">Browse all activities</string>
-    <string name="profil_picture">Profil picture</string>
+    <string name="profile_picture">Profile picture</string>
     <string name="fragment_container">Fragment container</string>
     <string name="go_login">Already have an account ? Login here</string>
-    <string name="go_reg">Still dont have an account ? Create a free one here</string>
+    <string name="go_reg">Still don\'t have an account ? Create a free one here</string>
     <string name="disc">Disconnect here</string>
     <string name="participate">Participate</string>
     <string name="organiser">Organiser</string>
@@ -32,11 +32,22 @@
     <string name="enter_a_number" translatable="false">Enter a number</string>
     <string name="more_details_about_your_activity" translatable="false">More details about your activity</string>
     <string name="log_in">Log in</string>
-    <string name="in_coming_activities">In-coming activities</string>
+    <string name="upcoming_activities">Upcoming activities</string>
     <string name="soccer" translatable="false">SOCCER</string>
     <string name="basketball" translatable="false">BASKETBALL</string>
     <string name="volleyball" translatable="false">VOLLEYBALL</string>
     <string name="handball" translatable="false">HANDBALL</string>
     <string name="leave">Leave</string>
     <string name="choose_the_location">Choose the location</string>
+    <string name="finished_activities">Finished activities</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="enter_you_message">Enter you message</string>
+    <string name="date_and_time">Date and Time</string>
+    <string name="enter_a_description">Enter a description</string>
+    <string name="description">Description</string>
+    <string name="soccer_image">Soccer image</string>
+    <string name="basket_image">Basket image</string>
+    <string name="volley_image">Volley image</string>
+    <string name="handball_image">Handball image</string>
+    <string name="chats">Chats</string>
 </resources>

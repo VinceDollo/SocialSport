@@ -28,7 +28,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PersonFragment extends Fragment {
 
     private Button btnDisc;
-    private LinearLayout llActivities;
+    private LinearLayout llFinishedActivities;
+    private LinearLayout llUpcomingActivities;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,8 +40,9 @@ public class PersonFragment extends Fragment {
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3, true);
 
         TextView tvName = view.findViewById(R.id.tv_name);
-        CircleImageView civProfile = view.findViewById(R.id.civ_profil);
-        llActivities = view.findViewById(R.id.llactivitiefinished);
+        CircleImageView civProfile = view.findViewById(R.id.civ_profile);
+        llFinishedActivities = view.findViewById(R.id.ll_finished_activities);
+        llUpcomingActivities = view.findViewById(R.id.ll_upcoming_activities);
 
         ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), civProfile::setImageURI);
         civProfile.setOnClickListener(view1 -> mGetContent.launch("image/*"));
@@ -67,14 +69,21 @@ public class PersonFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     public void displayMyActivities() {
-        llActivities.removeAllViews();
+        llFinishedActivities.removeAllViews();
+        llUpcomingActivities.removeAllViews();
+
         int cmp = 0;
         List<SportActivity> myActivities = Utils.getMyActivities();
-        Log.d("PersonFragment", myActivities.toString());
-        for (SportActivity currentAct : myActivities) {
+        Log.d("PersonFragment_myActivities", myActivities.toString());
+        List<SportActivity> upcomingActivities = Utils.getUpcomingActivities(myActivities);
+        Log.d("PersonFragment_upcomingActivities", upcomingActivities.toString());
+        List<SportActivity> pastActivities = Utils.getPastActivities(myActivities);
+        Log.d("PersonFragment_pastActivities", pastActivities.toString());
+
+        for (SportActivity activity : upcomingActivities) {
             TextView tv = new TextView(PersonFragment.this.getContext());
-            tv.setText(currentAct.getSport() + " : " + currentAct.getDate() + "\n"
-                    + Utils.getPrintableLocation(getActivity(), currentAct.getCoords()));
+            tv.setText(activity.getSport() + " : " + activity.getDate() + "\n"
+                    + Utils.getPrintableLocation(getActivity(), activity.getCoords()));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -89,7 +98,29 @@ public class PersonFragment extends Fragment {
             tv.setBackgroundResource(R.drawable.btn_finished_activities);
             tv.setPadding(20, 30, 20, 30);
             tv.setGravity(Gravity.CENTER);
-            llActivities.addView(tv);
+            llUpcomingActivities.addView(tv);
+        }
+
+        cmp = 0;
+        for (SportActivity activity : pastActivities) {
+            TextView tv = new TextView(PersonFragment.this.getContext());
+            tv.setText(activity.getSport() + " : " + activity.getDate() + "\n"
+                    + Utils.getPrintableLocation(getActivity(), activity.getCoords()));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            if (cmp != 0) {
+                params.setMargins(0, 30, 0, 0);
+            }
+
+            cmp++;
+
+            tv.setLayoutParams(params);
+            tv.setBackgroundResource(R.drawable.btn_finished_activities);
+            tv.setPadding(20, 30, 20, 30);
+            tv.setGravity(Gravity.CENTER);
+            llFinishedActivities.addView(tv);
         }
     }
 }

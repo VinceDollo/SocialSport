@@ -11,7 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,11 +34,11 @@
                 android:layout_weight="1" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_profil"
+                android:id="@+id/civ_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:contentDescription="@string/profil_picture"
+                android:contentDescription="@string/profile_picture"
                 android:src="@drawable/img_user"
                 app:tint="@color/black" />
 
@@ -61,14 +62,14 @@
                 android:id="@+id/tv_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/img_info"
                 android:drawablePadding="10dp"
                 android:gravity="center"
                 android:paddingTop="20dp"
-                android:text="Description"
+                android:text="@string/description"
                 android:textColor="@color/black"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:drawableRightCompat="@drawable/img_info" />
 
 
         </LinearLayout>
@@ -78,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginTop="10dp"
-            android:hint="Enter a description">
+            android:hint="@string/enter_a_description">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_description"
@@ -97,9 +98,9 @@
             android:layout_marginTop="20dp"
             android:drawablePadding="10dp"
             android:gravity="center"
-            android:text="Date and Time"
+            android:text="@string/date_and_time"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
 
@@ -157,7 +158,7 @@
             android:gravity="center"
             android:text="@string/number_of_participants_required"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -195,7 +196,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:background="@drawable/btn_validate"
-            android:text="Validate"
+            android:text="@string/validate"
             android:textColor="@color/white" />
 
 

@@ -17,7 +17,7 @@
     <string name="type_a_location">Taper une position</string>
     <string name="add_an_activity">Ajouter une activité</string>
     <string name="browse_all_activities">Rechercher parmi toutes les activités</string>
-    <string name="profil_picture">Image de profil</string>
+    <string name="profile_picture">Image de profil</string>
     <string name="fragment_container">Fragment pour le container</string>
     <string name="go_login">Vous avez déjà un compte? Connectez vous ici</string>
     <string name="go_reg">Vous n\'avez toujours pas de comptes? Créer en un ici</string>
@@ -26,8 +26,19 @@
     <string name="organiser">Organiser</string>
     <string name="message">Envoyer un message</string>
     <string name="participants">Participants</string>
-    <string name="in_coming_activities">Activitées à venir</string>
+    <string name="upcoming_activities">Activités à venir</string>
     <string name="leave">Quitter</string>
     <string name="choose_the_location">Choisissez la position</string>
+    <string name="finished_activities">Activités terminées</string>
+    <string name="disconnect">Déconnecter</string>
+    <string name="enter_you_message">Entrer un message</string>
+    <string name="date_and_time">Date et heure</string>
+    <string name="enter_a_description">Entrer une description</string>
+    <string name="description">Description</string>
+    <string name="soccer_image">Image football</string>
+    <string name="basket_image">Image basketball</string>
+    <string name="volley_image">Image volleyball</string>
+    <string name="handball_image">Image handball</string>
+    <string name="chats">Chats</string>
 
 </resources>

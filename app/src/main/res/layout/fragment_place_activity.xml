@@ -40,11 +40,11 @@
                     android:layout_weight="1" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_profil"
+                    android:id="@+id/civ_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:contentDescription="@string/profil_picture"
+                    android:contentDescription="@string/profile_picture"
                     android:src="@drawable/img_user"
                     app:tint="@color/black" />
 
@@ -99,7 +99,7 @@
                     map:liteMode="true" />
 
                 <ImageView
-                    android:id="@+id/imagetrans"
+                    android:id="@+id/transparent_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/f_maps"
