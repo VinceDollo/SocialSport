@@ -21,13 +21,15 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.paperdb.Paper;
 
 public class PersonFragment extends Fragment {
 
-    private Button btnDisc;
+    private Button btnLogout;
     private LinearLayout llFinishedActivities;
     private LinearLayout llUpcomingActivities;
 
@@ -49,7 +51,7 @@ public class PersonFragment extends Fragment {
 
         tvName.setText(((PrincipalPageActivity) requireActivity()).getUser().getName());
         Log.d("firebase", "" + ((PrincipalPageActivity) requireActivity()).getUser().getName());
-        btnDisc = view.findViewById(R.id.btn_disconnect);
+        btnLogout = view.findViewById(R.id.btn_disconnect);
 
         displayMyActivities();
 
@@ -60,7 +62,8 @@ public class PersonFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        btnDisc.setOnClickListener(view -> {
+        btnLogout.setOnClickListener(view -> {
+            Paper.book().destroy();
             FirebaseAuth.getInstance().signOut();
             requireActivity().finish();
             requireActivity().onBackPressed();
@@ -78,6 +81,7 @@ public class PersonFragment extends Fragment {
         List<SportActivity> upcomingActivities = Utils.getUpcomingActivities(myActivities);
         Log.d("PersonFragment_upcomingActivities", upcomingActivities.toString());
         List<SportActivity> pastActivities = Utils.getPastActivities(myActivities);
+        Collections.reverse(pastActivities); //To have most recent activity in first
         Log.d("PersonFragment_pastActivities", pastActivities.toString());
 
         for (SportActivity activity : upcomingActivities) {

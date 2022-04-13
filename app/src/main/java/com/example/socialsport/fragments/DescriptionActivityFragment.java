@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -78,10 +79,21 @@ public class DescriptionActivityFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DescriptionActivityFragment.this.getContext());
                 builder.setCancelable(true);
                 builder.setTitle("What should you describe ?");
-                builder.setMessage("Here, you can discribe the level required for the participants, and everything that will be useful for the people who wanted to join this activity");
+                builder.setMessage("Here, you can describe the level required for the participants, and everything that will be useful for the people who wanted to join this activity");
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 view.performClick();
+                return true;
+            }
+            return false;
+        });
+
+        etNumberOfParticipant.setOnKeyListener((v, keyCode, event) -> {
+            // If the event is a key-down event on the "enter" button
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && allFieldsFilled()) {
+                // Perform action on key press
+                btnValidate.performClick();
+                Utils.hideKeyboard(this.requireContext(), this.requireView());
                 return true;
             }
             return false;
@@ -91,9 +103,8 @@ public class DescriptionActivityFragment extends Fragment {
             date = etDate.getText().toString();
             time = etTime.getText().toString();
             description = etDescription.getText().toString();
-            String stringNumberParticipant = etNumberOfParticipant.getText().toString();
 
-            if (date.equals("") || time.equals("") || description.equals("") || stringNumberParticipant.equals("")) {
+            if (!allFieldsFilled()) {
                 Toast.makeText(getActivity(), "Empty field(s)", Toast.LENGTH_SHORT).show();
             } else {
                 mAuth = FirebaseAuth.getInstance();
@@ -114,14 +125,17 @@ public class DescriptionActivityFragment extends Fragment {
         });
     }
 
+    private boolean allFieldsFilled() {
+        return etDescription.getText().length() > 0 && etDate.getText().length() > 0 && etTime.getText().length() > 0 && etNumberOfParticipant.getText().length() > 0;
+    }
+
     @SuppressLint({"SetTextI18n", "ResourceAsColor"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_description_activity, container, false);
 
-        //recupere le sport
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");

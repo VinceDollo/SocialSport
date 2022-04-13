@@ -215,6 +215,8 @@ public class MyMap {
                 //Delete text from edit text
                 etLocalisation.setText("");
 
+                Utils.hideKeyboard(view.getContext(), view);
+
                 return true;
             }
             return false;

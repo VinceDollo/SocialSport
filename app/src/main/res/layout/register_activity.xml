@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="20dp"
-    android:gravity="center_vertical"
     tools:context=".activities.LoginActivity">
 
     <LinearLayout
@@ -20,16 +20,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:src="@drawable/img_back"
-            android:contentDescription="@string/back_vector" />
+            android:contentDescription="@string/back_vector"
+            android:src="@drawable/img_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textSize="40sp"
+            android:text="@string/register"
             android:textColor="@color/black"
-            android:text="@string/register"/>
+            android:textSize="40sp" />
 
     </LinearLayout>
 
@@ -48,11 +48,11 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_email"
-                android:singleLine="true"
-                android:background="@drawable/edit_text_border"
-                android:textColor="@color/black"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:background="@drawable/edit_text_border"
+                android:singleLine="true"
+                android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,17 +61,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="@string/enter_your_password"
-            app:passwordToggleTint="@color/black"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/edit_text_border"
-                android:textColor="@color/black"
                 android:inputType="textPassword"
                 android:singleLine="true"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,18 +79,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:singleLine="true"
             android:hint="@string/verify_your_password"
-            app:passwordToggleTint="@color/black"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_check_password"
-                android:background="@drawable/edit_text_border"
-                android:textColor="@color/black"
-                android:inputType="textPassword"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:background="@drawable/edit_text_border"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,11 +102,11 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_name"
-                android:singleLine="true"
-                android:background="@drawable/edit_text_border"
-                android:textColor="@color/black"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:background="@drawable/edit_text_border"
+                android:singleLine="true"
+                android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,11 +123,12 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_age"
-                    android:background="@drawable/edit_text_border"
-                    android:textColor="@color/black"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/edit_text_border"
                     android:inputType="number"
-                    android:layout_height="match_parent"/>
+                    android:singleLine="true"
+                    android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,12 +136,12 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
-                android:gravity="center_vertical"
                 android:layout_weight="5"
+                android:gravity="center_vertical"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/black"
-                android:text="@string/years_old"/>
+                android:text="@string/years_old"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -150,22 +151,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:paddingVertical="15dp"
+            android:background="@drawable/btn_black"
             android:paddingHorizontal="10dp"
+            android:paddingVertical="15dp"
             android:text="@string/validate"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_black"/>
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/tv_go_login_from_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textSize="11sp"
-            android:textStyle="italic"
             android:gravity="center"
             android:text="@string/go_login"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="italic" />
 
     </LinearLayout>
 

@@ -12,6 +12,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -152,6 +154,11 @@ public class Utils {
             }
         }
         return myActivities;
+    }
+
+    public static void hideKeyboard(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public static SportActivity getNextActivity() {

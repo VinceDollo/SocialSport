@@ -71,10 +71,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/edit_text_border"
+                android:singleLine="true"
                 android:inputType="textPassword"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/checkbox_remember_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remember_me"
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_log_in"
