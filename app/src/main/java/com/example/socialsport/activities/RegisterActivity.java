@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -12,11 +13,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.socialsport.Constants;
 import com.example.socialsport.Utils;
 import com.example.socialsport.R;
+import com.example.socialsport.databinding.RegisterActivityBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -31,10 +36,14 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageButton btnBack;
     private TextView tvGoLogin;
 
+    private RegisterActivityBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_activity);
+        binding = RegisterActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         mAuth = FirebaseAuth.getInstance();
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
@@ -57,40 +66,33 @@ public class RegisterActivity extends AppCompatActivity {
             Log.d("Start", currentUser.toString());
         }
 
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+
         btnLogin.setOnClickListener(view -> {
-            //TODO with better way
-            String email = etEmail.getText().toString();
-            String password = etPassword.getText().toString();
-            String checkPassword = etCheckPassword.getText().toString();
-            String name = etName.getText().toString();
-            String age = etAge.getText().toString();
+            loading(true);
+                    if (isValidInformation()) {
+                        HashMap<String, Object> userInfo = new HashMap<>();
+                        userInfo.put(Constants.KEY_NAME, binding.etName.getText().toString().trim());
+                        userInfo.put(Constants.KEY_EMAIL, binding.etEmail.getText().toString().trim());
+                        userInfo.put(Constants.KEY_AGE, binding.etAge.getText().toString().trim());
+                        userInfo.put(Constants.KEY_PASSWORD, binding.etPassword.getText().toString().trim());
+                        database.collection(Constants.KEY_COLLECTION_NAME).add(userInfo).addOnSuccessListener(documentReference -> {
+                            loading(false);
+                            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(i);
+                            Toast.makeText(RegisterActivity.this, "Account successfully created.", Toast.LENGTH_SHORT).show();
 
-            if (checkPassword.compareTo(password) == 0) {
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(RegisterActivity.this, task -> {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("Sign up page", "createUserWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                assert user != null;
-                                Utils.writeUserIntoDatabase(user.getEmail(), name, age, user.getUid());
-                                Utils.getUserFromDatabase(user.getUid());
-                                Toast.makeText(RegisterActivity.this, "Account successfully created.", Toast.LENGTH_SHORT).show();
-                                Log.d("USER UID", user.getUid());
-
-                                //TODO on complete sign up treatment
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("Sign up page", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(RegisterActivity.this, Objects.requireNonNull(task.getException()).getLocalizedMessage(),
-                                        Toast.LENGTH_SHORT).show();
-                                //TODO on failed sign up treatment
-                            }
+                        }).addOnFailureListener(exception -> {
+                            loading(false);
+                            Toast.makeText(RegisterActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
                         });
-            } else {
-                Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
-            }
+
+                    }
+
+
+
         });
+
 
         btnBack.setOnClickListener(view -> {
             Intent intentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
@@ -109,9 +111,44 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         tvGoLogin.setOnClickListener(view -> {
-                    Intent intentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intentSignUpActivity);
-                }
-        );
+            Intent intentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intentSignUpActivity);
+        });
     }
+
+    private Boolean isValidInformation() {
+        if(binding.etEmail.getText().toString().trim().isEmpty()){
+            Toast.makeText(RegisterActivity.this, "Email empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(binding.etPassword.getText().toString().trim().isEmpty()){
+            Toast.makeText(RegisterActivity.this, "Password empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(binding.etCheckPassword.getText().toString().trim().isEmpty()) {
+            Toast.makeText(RegisterActivity.this, "Password verification empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(binding.etName.getText().toString().trim().isEmpty()){
+            Toast.makeText(RegisterActivity.this, "Name empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(binding.etAge.getText().toString().trim().isEmpty()){
+            Toast.makeText(RegisterActivity.this, "Age empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!binding.etPassword.getText().toString().trim().equals(binding.etCheckPassword.getText().toString().trim())){
+            Toast.makeText(RegisterActivity.this, "Password not equals", Toast.LENGTH_SHORT).show();
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    private void loading(Boolean isLoading){
+        if(isLoading){
+            binding.btnLogIn.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.VISIBLE);
+        }else{
+            binding.progressBar.setVisibility(View.INVISIBLE);
+            binding.btnLogIn.setVisibility(View.VISIBLE);
+
+        }
+    }
+
 }
