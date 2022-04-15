@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.MapCustom;
 import com.example.socialsport.R;
+import com.example.socialsport.databinding.FragmentAddActivityBinding;
+import com.example.socialsport.databinding.FragmentPlaceActivityBinding;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -22,27 +24,27 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
     private Button btnValidate;
     private String sport;
 
+    private FragmentPlaceActivityBinding binding;
+    private View view;
+
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_place_activity, container, false);
-
-        TextView tvTitle = view.findViewById(R.id.tv_title);
-        btnValidate = view.findViewById(R.id.btn_validate);
-        ImageButton btnBack = view.findViewById(R.id.btn_back);
+        binding = FragmentPlaceActivityBinding.inflate(inflater);
+        view = binding.getRoot();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");
-            tvTitle.setText("Choose location for " + sport);
+            binding.tvTitle.setText("Choose location for " + sport);
         }
 
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
         assert mMapFragment != null;
         mMapFragment.getMapAsync(this);
 
-        btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
+        binding.btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
 
         return view;
     }
@@ -52,7 +54,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
         MapCustom map = new MapCustom(googleMap, requireActivity(), requireView());
         map.searchPlaceListener();
 
-        btnValidate.setOnClickListener(view12 -> {
+        binding.btnValidate.setOnClickListener(view12 -> {
             //Add information to next fragment
             Bundle bundle1 = new Bundle();
             bundle1.putString("sport", sport);

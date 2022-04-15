@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -30,6 +31,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,6 +85,29 @@ public class MapCustom {
     }
 
     public void getAllActivities() {
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+
+/*
+
+        database.collection(Constants.KEY_COLLECTION_ACTIVITIES_NAME).add addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d("ERROR","Listen failed: " + error);
+                    return;
+                }
+
+                for (DocumentChange dc : value.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            SportActivity act = dc.getDocument().get
+                            dc.getDocument().getData().
+
+                    }
+                }
+            }
+        });
+*/
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference activitiesRef = rootRef.child("activities");
 

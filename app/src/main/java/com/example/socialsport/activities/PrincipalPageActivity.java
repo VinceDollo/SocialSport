@@ -30,7 +30,6 @@ import java.util.Objects;
 
 public class PrincipalPageActivity extends FragmentActivity {
 
-    private MeowBottomNavigation meowBottomNavigation;
     private User user;
 
     ArrayList<String> name = new ArrayList<>();
@@ -52,27 +51,15 @@ public class PrincipalPageActivity extends FragmentActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+      //  updateMessages();
 
-        updateMessages();
+        binding.bottomAppBar.add(new MeowBottomNavigation.Model(1, R.drawable.img_home));
+        binding.bottomAppBar.add(new MeowBottomNavigation.Model(2, R.drawable.img_message));
+        binding.bottomAppBar.add(new MeowBottomNavigation.Model(3, R.drawable.img_person));
 
-        if (currentUser != null) {
-            user = getUserFromDatabase(currentUser.getUid());
-        } else {
-            Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
-        }
+        binding.bottomAppBar.show(1, true);
 
-
-        meowBottomNavigation = findViewById(R.id.bottom_app_bar);
-
-        meowBottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.img_home));
-        meowBottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.img_message));
-        meowBottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.img_person));
-
-        meowBottomNavigation.show(1, true);
-
-        meowBottomNavigation.setOnClickMenuListener(model -> {
+        binding.bottomAppBar.setOnClickMenuListener(model -> {
             switch (model.getId()) {
                 case 1:
                     replace(new HomeFragment());
@@ -91,7 +78,11 @@ public class PrincipalPageActivity extends FragmentActivity {
     }
 
     public MeowBottomNavigation getMeowBottomNavigation() {
-        return meowBottomNavigation;
+        return binding.bottomAppBar;
+    }
+
+    public PreferenceManager getPreferenceManager() {
+        return preferenceManager;
     }
 
     public User getUser() {
@@ -130,34 +121,6 @@ public class PrincipalPageActivity extends FragmentActivity {
                 }
             }
         });
-    }
-
-    public static User getUserFromDatabase(String uid) {
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        User user = new User(null, null, null);
-        myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("Firebase_user", "Error getting data", task.getException());
-            } else {
-                user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
-            }
-        });
-        myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("Firebase_user", "Error getting data", task.getException());
-            } else {
-                user.setEmail(Objects.requireNonNull(task.getResult().getValue()).toString());
-
-            }
-        });
-        myRef.child("users").child(uid).child("age").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("Firebase_user", "Error getting data", task.getException());
-            } else {
-                user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
-            }
-        });
-        return user;
     }
 
     public Map<String, ArrayList<String>> getMap() {

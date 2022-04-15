@@ -10,6 +10,7 @@ import android.widget.TableRow;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
+import com.example.socialsport.databinding.FragmentAddActivityBinding;
 
 public class AddActivityFragment extends Fragment implements View.OnClickListener {
 
@@ -22,15 +23,14 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
     private TableRow activityRunning;
     private ImageButton btnBack;
     private View view;
+    private FragmentAddActivityBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_add_activity, container, false);
-
-        findViewById();
+        binding = FragmentAddActivityBinding.inflate(inflater);
+        view = binding.getRoot();
         setOnClickListener();
-
         return view;
     }
 
@@ -43,25 +43,15 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
         getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
     }
 
-    private void findViewById() {
-        activitySoccer = view.findViewById(R.id.add_activity_soccer);
-        activityFootball = view.findViewById(R.id.add_activity_football);
-        activityVolleyball = view.findViewById(R.id.add_activity_volleyball);
-        activityBasketball = view.findViewById(R.id.add_activity_basketball);
-        activityHandball = view.findViewById(R.id.add_activity_handball);
-        activityTennis = view.findViewById(R.id.add_activity_tennis);
-        activityRunning = view.findViewById(R.id.add_activity_running);
-        btnBack = view.findViewById(R.id.btn_back);
-    }
 
     private void setOnClickListener() {
-        activitySoccer.setOnClickListener(this); // calling onClick() method
-        activityFootball.setOnClickListener(this); // calling onClick() method
-        activityVolleyball.setOnClickListener(this); // calling onClick() method
-        activityBasketball.setOnClickListener(this); // calling onClick() method
-        activityHandball.setOnClickListener(this); // calling onClick() method
-        activityTennis.setOnClickListener(this); // calling onClick() method
-        activityRunning.setOnClickListener(this); // calling onClick() method
-        btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit());
+        binding.addActivitySoccer.setOnClickListener(this); // calling onClick() method
+        binding.addActivityFootball.setOnClickListener(this); // calling onClick() method
+        binding.addActivityVolleyball.setOnClickListener(this); // calling onClick() method
+        binding.addActivityBasketball.setOnClickListener(this); // calling onClick() method
+        binding.addActivityHandball.setOnClickListener(this); // calling onClick() method
+        binding.addActivityTennis.setOnClickListener(this); // calling onClick() method
+        binding.addActivityRunning.setOnClickListener(this); // calling onClick() method
+        binding.btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit());
     }
 }

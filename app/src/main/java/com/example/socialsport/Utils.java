@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -18,8 +19,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
+import java.text.CollationKey;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -44,10 +47,10 @@ public class Utils {
         Log.d("Firebase_user2", userString.toString());
     }
 
-    public static void writeActivityToDatabase(FirebaseDatabase database, String sport, String description, String date, String hour, String coords, String currentUserID) {
-        DatabaseReference myRef = database.getReference();
+    public static void writeActivityToDatabase(FirebaseFirestore database, String sport, String description, String date, String hour, String coords, String currentUserID) {
         SportActivity newActivity = new SportActivity(sport, description, date, hour, currentUserID, coords);
-        myRef.child("activities").push().setValue(newActivity);
+        database.collection(Constants.KEY_COLLECTION_ACTIVITIES_NAME).add(newActivity).addOnSuccessListener(documentReference -> {
+        }).addOnFailureListener(exception -> Log.d("Error", exception.getMessage()));
     }
 
     public static LatLng stringToLatLng(String string) {
@@ -155,6 +158,10 @@ public class Utils {
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
         return bitmap;
+    }
+
+    public static void toast(String a, Context c){
+        Toast.makeText(c, a, Toast.LENGTH_SHORT).show();
     }
 
 }

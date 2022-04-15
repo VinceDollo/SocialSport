@@ -18,6 +18,7 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.MapCustom;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
+import com.example.socialsport.databinding.FragmentHomeBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,17 +31,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
-    private Button btnAddActivity;
     private View view;
-    private ScrollView scroll;
-    private CircleImageView civProfile;
-    private ImageView transparent;
+    private FragmentHomeBinding binding;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        binding = FragmentHomeBinding.inflate(inflater);
+        view = binding.getRoot();
 
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
@@ -50,27 +50,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // Change bottomBar when clicking on profile icon
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(1, true);
 
-        findViewById();
 
-        btnAddActivity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
-        civProfile.setOnClickListener(view1 -> {
+        binding.btnAddActivity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
+        binding.civProfil.setOnClickListener(view1 -> {
             MeowBottomNavigation meowBottomNavigation = ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation();
             meowBottomNavigation.show(3, true);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new PersonFragment()).addToBackStack(null).commit();
         });
 
         // Allow vertical scroll in map fragment
-        transparent.setOnTouchListener(this::mapOnTouchListener);
+        binding.imagetrans.setOnTouchListener(this::mapOnTouchListener);
 
         return view;
     }
 
-    private void findViewById() {
-        civProfile = view.findViewById(R.id.civ_profil);
-        btnAddActivity = view.findViewById(R.id.btn_add_activity);
-        scroll = view.findViewById(R.id.scrollView);
-        transparent = view.findViewById(R.id.imagetrans);
-    }
 
     private boolean mapOnTouchListener(View v, MotionEvent event) {
         int action = event.getAction();
@@ -78,12 +71,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
                 // Disallow ScrollView to intercept touch events.
-                scroll.requestDisallowInterceptTouchEvent(true);
+                binding.scrollView.requestDisallowInterceptTouchEvent(true);
                 // Disable touch on transparent view
                 return false;
             case MotionEvent.ACTION_UP:
                 // Allow ScrollView to intercept touch events.
-                scroll.requestDisallowInterceptTouchEvent(false);
+                binding.scrollView.requestDisallowInterceptTouchEvent(false);
                 return true;
             default:
                 return true;
