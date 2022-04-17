@@ -8,7 +8,7 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.socialsport.ListAdapter;
+import com.example.socialsport.utils.ListAdapter;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
 
@@ -28,15 +28,15 @@ public class MessageFragment extends Fragment {
 
         ListView lvChat = view.findViewById(R.id.lv_chat);
 
-        ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getMap(), images);
+        ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getMessagesMap(), images);
 
         lvChat.setAdapter(lAdapter);
 
         lvChat.setOnItemClickListener((adapterView, view1, i, l) -> {
-            Object firstKey = ((PrincipalPageActivity) requireActivity()).getMap().keySet().toArray()[i];
+            Object firstKey = ((PrincipalPageActivity) requireActivity()).getMessagesMap().keySet().toArray()[i];
             Bundle bundle = new Bundle();
             bundle.putString("name", (String) firstKey);
-            bundle.putStringArrayList("message",((PrincipalPageActivity) requireActivity()).getMap().get(firstKey));
+            bundle.putStringArrayList("message",((PrincipalPageActivity) requireActivity()).getMessagesMap().get(firstKey));
             Fragment newF = new ConversationFragment();
             newF.setArguments(bundle);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();

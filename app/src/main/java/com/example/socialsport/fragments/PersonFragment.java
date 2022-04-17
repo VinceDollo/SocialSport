@@ -1,7 +1,10 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,13 +19,17 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
-import com.example.socialsport.Utils;
+import com.example.socialsport.activities.LoginActivity;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
+import com.example.socialsport.entities.User;
+import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
@@ -32,6 +39,8 @@ public class PersonFragment extends Fragment {
     private Button btnLogout;
     private LinearLayout llFinishedActivities;
     private LinearLayout llUpcomingActivities;
+    private CircleImageView civProfile;
+    private User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,11 +51,21 @@ public class PersonFragment extends Fragment {
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3, true);
 
         TextView tvName = view.findViewById(R.id.tv_name);
-        CircleImageView civProfile = view.findViewById(R.id.civ_profile);
+        civProfile = view.findViewById(R.id.civ_profile);
         llFinishedActivities = view.findViewById(R.id.ll_finished_activities);
         llUpcomingActivities = view.findViewById(R.id.ll_upcoming_activities);
+        user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-        ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), civProfile::setImageURI);
+        ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+            civProfile.setImageURI(uri);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri);
+                user.setProfileImage(bitmap);
+                Utils.uploadImage(this.getContext(), user.getProfileImage(), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         civProfile.setOnClickListener(view1 -> mGetContent.launch("image/*"));
 
         tvName.setText(((PrincipalPageActivity) requireActivity()).getUser().getName());
@@ -66,8 +85,12 @@ public class PersonFragment extends Fragment {
             Paper.book().destroy();
             FirebaseAuth.getInstance().signOut();
             requireActivity().finish();
-            requireActivity().onBackPressed();
+            Intent i = new Intent(requireContext(), LoginActivity.class);
+            startActivity(i);
         });
+
+        if (user.getProfileImage() != null)
+            civProfile.setImageBitmap(user.getProfileImage());
     }
 
     @SuppressLint("SetTextI18n")

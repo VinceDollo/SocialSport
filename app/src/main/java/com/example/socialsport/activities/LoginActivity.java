@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.socialsport.R;
-import com.example.socialsport.TableKeys;
+import com.example.socialsport.utils.TableKeys;
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.paperdb.Paper;

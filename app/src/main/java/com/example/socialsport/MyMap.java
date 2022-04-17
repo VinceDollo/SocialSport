@@ -1,10 +1,13 @@
 package com.example.socialsport;
 
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,7 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.socialsport.entities.SportActivity;
-import com.example.socialsport.fragments.HomeFragment;
+import com.example.socialsport.utils.Utils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,29 +27,37 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.DirectionsStep;
+import com.google.maps.model.EncodedPolyline;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class MyMap {
+
+    private static final String TAG = MyMap.class.getSimpleName();
 
     private final GoogleMap mMap;
     private final Activity activity;
     private final View view;
 
     private final FusedLocationProviderClient fusedLocationClient;
-    private static final String TAG = HomeFragment.class.getSimpleName();
-
     private boolean locationPermissionGranted;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final int DEFAULT_ZOOM = 15;
@@ -54,7 +65,7 @@ public class MyMap {
     private Location lastKnownLocation;
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085); // Sydney
 
-    AtomicReference<LatLng> currentLatLng;
+    private LatLng currentLatLng;
     private final Map<String, SportActivity> sportActivities = new HashMap<>();
 
     public Map<String, SportActivity> getSportActivities() {
@@ -67,7 +78,7 @@ public class MyMap {
         this.view = view;
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(view.getContext());
-        currentLatLng = new AtomicReference<>(defaultLocation);
+        currentLatLng = defaultLocation;
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
@@ -87,7 +98,6 @@ public class MyMap {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     SportActivity act = ds.getValue(SportActivity.class);
                     assert act != null;
-                    Log.d("Firebase_activity", act.toString());
 
                     String sport = act.getSport();
                     String description = act.getDescription();
@@ -107,7 +117,7 @@ public class MyMap {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(view.getContext(),"database error",
+                Toast.makeText(view.getContext(), "database error",
                         Toast.LENGTH_SHORT).show();
             }
         };
@@ -168,9 +178,8 @@ public class MyMap {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.getResult();
                         if (lastKnownLocation != null) {
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(lastKnownLocation.getLatitude(),
-                                            lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            currentLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM));
                         } else {
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
                         }
@@ -231,19 +240,111 @@ public class MyMap {
         mMap.setOnMapClickListener(latLng -> {
             mMap.clear();
             mMap.addMarker(marker.position(latLng).title("Position you choose"));
-            currentLatLng.set(latLng);
+            currentLatLng =latLng;
         });
 
         if (icon != null) {
-            mMap.addMarker(marker.position(currentLatLng.get()).title("default").icon(icon));
+            mMap.addMarker(marker.position(currentLatLng).title("default").icon(icon));
         } else {
-            mMap.addMarker(marker.position(currentLatLng.get()).title("default"));
+            mMap.addMarker(marker.position(currentLatLng).title("default"));
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng.get()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
     }
 
-    public AtomicReference<LatLng> getCurrentLatLng() {
+    //TODO: doesn't work with current position => callback in getDeviceLocation()
+    public void drawRoute(LatLng origin, SportActivity activityDestination) {
+        LatLng destination = Utils.stringToLatLng(activityDestination.getCoords());
+
+        currentLatLng = origin;
+        BitmapDescriptor icon = Utils.getBitmapDescriptor(activity, "Start");
+        if (icon != null) {
+            mMap.addMarker(new MarkerOptions().position(currentLatLng).title("origin").icon(icon));
+        } else {
+            mMap.addMarker(new MarkerOptions().position(currentLatLng).title("origin"));
+        }
+
+        //Define list to get all LatLng for the route
+        List<LatLng> path = new ArrayList<>();
+
+        //Execute Directions API request
+        String apiKey = "";
+        try {
+            ApplicationInfo app = activity.getApplicationContext().getPackageManager().getApplicationInfo(activity.getApplicationContext().getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = app.metaData;
+            apiKey = bundle.getString("com.google.android.geo.API_KEY");
+            Log.d(TAG, "API key:" + apiKey);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey(apiKey)
+                .build();
+
+        Log.d("Test", Utils.latLngToString(origin));
+        DirectionsApiRequest req = DirectionsApi.getDirections(context, Utils.latLngToString(origin), Utils.latLngToString(destination));
+        try {
+            DirectionsResult res = req.await();
+
+            //Loop through legs and steps to get encoded polylines of each step
+            if (res.routes != null && res.routes.length > 0) {
+                DirectionsRoute route = res.routes[0];
+                if (route.legs != null) {
+                    drawRouteLegs(route, path);
+                }
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "Cannot get a route for these points");
+            Toast.makeText(activity.getApplicationContext(), "Cannot get a route for these points", Toast.LENGTH_LONG).show();
+        }
+
+        //Draw the polyline
+        if (!path.isEmpty()) {
+            PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
+            mMap.addPolyline(opts);
+        }
+    }
+
+    private void drawRouteLegs(DirectionsRoute route, List<LatLng> path){
+        for (int i = 0; i < route.legs.length; i++) {
+            DirectionsLeg leg = route.legs[i];
+            if (leg.steps != null) {
+                for (int j = 0; j < leg.steps.length; j++) {
+                    DirectionsStep step = leg.steps[j];
+                    drawRouteSteps(step, path);
+                }
+            }
+        }
+    }
+
+    private void drawRouteSteps(DirectionsStep step, List<LatLng> path){
+        if (step.steps != null && step.steps.length > 0) {
+            for (int k = 0; k < step.steps.length; k++) {
+                DirectionsStep step1 = step.steps[k];
+                EncodedPolyline points = step1.polyline;
+                if (points != null) {
+                    addPointsToRouteCoordinates(points, path);
+                }
+            }
+        } else {
+            EncodedPolyline points = step.polyline;
+            if (points != null) {
+                addPointsToRouteCoordinates(points, path);
+            }
+        }
+    }
+
+    /**
+     * Decode polyline and add points to list of route coordinates
+     */
+    private void addPointsToRouteCoordinates(EncodedPolyline points, List<LatLng> path){
+        List<com.google.maps.model.LatLng> coords = points.decodePath();
+        for (com.google.maps.model.LatLng coord : coords) {
+            path.add(new LatLng(coord.lat, coord.lng));
+        }
+    }
+
+    public LatLng getCurrentLatLng() {
         return currentLatLng;
     }
 

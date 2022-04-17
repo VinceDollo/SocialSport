@@ -19,6 +19,7 @@ import com.example.socialsport.MyMap;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
+import com.example.socialsport.entities.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,13 +31,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
+    private static final String TAG = HomeFragment.class.getSimpleName();
+
     private Button btnAddActivity;
     private View view;
     private ScrollView scroll;
     private CircleImageView civProfile;
     private ImageView transparent;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,8 +53,50 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(1, true);
 
         findViewById();
+        setListeners();
 
+        User user = ((PrincipalPageActivity) requireActivity()).getUser();
+        if (user.getProfileImage() != null)
+            civProfile.setImageBitmap(user.getProfileImage());
+
+        return view;
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        MyMap map = new MyMap(googleMap, requireActivity(), view);
+
+        map.searchPlaceListener(); // Enable search location listener
+
+        map.getmMap().setOnMarkerClickListener(marker -> {
+            Bundle result = new Bundle();
+            marker.hideInfoWindow();
+            String title = (marker.getTitle());
+
+            SportActivity clicked = map.getSportActivities().get(title);
+            if (clicked != null) {
+                Log.d(TAG, clicked.getDescription());
+                result.putString("sport", clicked.getSport());
+                result.putString("activityID", title);
+                result.putStringArrayList("participants", (ArrayList<String>) clicked.getUuids());
+                result.putString("organiserUuid", clicked.getUuidOrganiser());
+                result.putString("dateTime", clicked.getDate() + ", " + clicked.getHour());
+                result.putString("location", clicked.getCoords());
+                Fragment newF = new OverviewFragment();
+                newF.setArguments(result);
+                map.getmMap().animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+                this.getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
+            }
+            return true;
+        });
+
+        //map.drawRoute(map.getCurrentLatLng(), new SportActivity("Tennis", "", "", "", "", "(37.467078507594834,-122.03810658305883)"));
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setListeners() {
         btnAddActivity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
+
         civProfile.setOnClickListener(view1 -> {
             MeowBottomNavigation meowBottomNavigation = ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation();
             meowBottomNavigation.show(3, true);
@@ -61,8 +105,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         // Allow vertical scroll in map fragment
         transparent.setOnTouchListener(this::mapOnTouchListener);
-
-        return view;
     }
 
     private void findViewById() {
@@ -88,34 +130,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             default:
                 return true;
         }
-    }
-
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        MyMap map = new MyMap(googleMap, this.getActivity(), view);
-        map.searchPlaceListener(); // Enable search location listener
-
-        map.getmMap().setOnMarkerClickListener(marker -> {
-            Bundle result = new Bundle();
-            marker.hideInfoWindow();
-            String title = (marker.getTitle());
-
-            SportActivity clicked = map.getSportActivities().get(title);
-            if (clicked != null) {
-                Log.d("HomeFragment", clicked.getDescription());
-                result.putString("sport", clicked.getSport());
-                result.putString("activityID", title);
-                result.putStringArrayList("participants", (ArrayList<String>) clicked.getUuids());
-                result.putString("organiserUuid", clicked.getUuidOrganiser());
-                result.putString("dateTime", clicked.getDate() + ", " + clicked.getHour());
-                result.putString("location", clicked.getCoords());
-                Fragment newF = new OverviewFragment();
-                newF.setArguments(result);
-                map.getmMap().animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-                this.getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
-            }
-            return true;
-        });
     }
 
 }

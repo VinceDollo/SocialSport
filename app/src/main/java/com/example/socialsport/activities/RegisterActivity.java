@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.socialsport.Utils;
+import com.example.socialsport.utils.Utils;
 import com.example.socialsport.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 Utils.writeUserIntoDatabase(user.getEmail(), name, age, user.getUid());
                                 Toast.makeText(RegisterActivity.this, "Account successfully created.", Toast.LENGTH_SHORT).show();
                                 Log.d("USER UID", user.getUid());
-
+                                Utils.hideKeyboard(this, view);
                                 //TODO on complete sign up treatment
                             } else {
                                 // If sign in fails, display a message to the user.

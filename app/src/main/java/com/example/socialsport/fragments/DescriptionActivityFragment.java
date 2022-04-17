@@ -21,7 +21,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
-import com.example.socialsport.Utils;
+import com.example.socialsport.utils.Utils;
 import com.example.socialsport.activities.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

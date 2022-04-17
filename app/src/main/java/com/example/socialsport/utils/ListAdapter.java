@@ -1,4 +1,4 @@
-package com.example.socialsport;
+package com.example.socialsport.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.socialsport.R;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -74,7 +76,6 @@ public class ListAdapter extends BaseAdapter {
         String time = array2[1];
         String sender = array1[2];
 
-
         Log.d("SENDER", "" + sender);
         if (sender.equals("true")) {
             viewHolder.sender.setImageResource(R.drawable.img_message_send);
@@ -89,7 +90,6 @@ public class ListAdapter extends BaseAdapter {
 
         return convertView;
     }
-
 
     private static class ViewHolder {
         TextView txtName;

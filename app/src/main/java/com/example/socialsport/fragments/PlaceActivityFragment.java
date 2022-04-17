@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 public class PlaceActivityFragment extends Fragment implements OnMapReadyCallback {
+
     private Button btnValidate;
     private String sport;
 

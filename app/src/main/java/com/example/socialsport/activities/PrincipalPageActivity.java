@@ -1,5 +1,6 @@
 package com.example.socialsport.activities;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,7 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
-import com.example.socialsport.Utils;
+import com.example.socialsport.utils.Utils;
 import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.HomeFragment;
 import com.example.socialsport.fragments.MessageFragment;
@@ -32,7 +33,7 @@ public class PrincipalPageActivity extends FragmentActivity {
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> message = new ArrayList<>();
 
-    private HashMap<String, ArrayList<String>> map;
+    private HashMap<String, ArrayList<String>> messagesMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,13 @@ public class PrincipalPageActivity extends FragmentActivity {
         updateMessages();
 
         if (currentUser != null) {
-            user = Utils.getUserFromDatabase(currentUser.getUid());
+            String uid = currentUser.getUid();
+            user = Utils.getUserFromDatabase(uid);
+            Bitmap userImage = Utils.getUserImageFromDatabase(uid);
+
+            if (userImage != null) {
+                user.setProfileImage(userImage);
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
         }
@@ -79,27 +86,19 @@ public class PrincipalPageActivity extends FragmentActivity {
         Utils.setActivitiesListenerFromDatabase(this); //Listen to activities managements
     }
 
-    public MeowBottomNavigation getMeowBottomNavigation() {
-        return meowBottomNavigation;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
     private void replace(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
     }
 
     public void updateMessages() {
-        map = new HashMap<>();
+        messagesMap = new HashMap<>();
         FirebaseDatabase.getInstance().getReference().child("chat").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
                 for (DataSnapshot snapshot : task.getResult().getChildren()) {
                     String contact = snapshot.getKey();
-                    map.put(contact, new ArrayList<>());
+                    messagesMap.put(contact, new ArrayList<>());
                     name.add(contact);
                     if (contact != null)
                         updateMessagesForContact(contact);
@@ -114,15 +113,23 @@ public class PrincipalPageActivity extends FragmentActivity {
                 Log.e("firebase", "Error getting data", task1.getException());
             } else {
                 for (DataSnapshot snapshot1 : task1.getResult().getChildren()) {
-                    Objects.requireNonNull(map.get(contact)).add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
+                    Objects.requireNonNull(messagesMap.get(contact)).add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
                     message.add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
                 }
             }
         });
     }
 
-    public Map<String, ArrayList<String>> getMap() {
-        return map;
+    public Map<String, ArrayList<String>> getMessagesMap() {
+        return messagesMap;
+    }
+
+    public MeowBottomNavigation getMeowBottomNavigation() {
+        return meowBottomNavigation;
+    }
+
+    public User getUser() {
+        return user;
     }
 
 }

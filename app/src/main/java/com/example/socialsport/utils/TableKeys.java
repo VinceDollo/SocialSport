@@ -1,5 +1,4 @@
-package com.example.socialsport;
-
+package com.example.socialsport.utils;
 
 public class TableKeys {
     public static final String USER_EMAIL_KEY = "UserPhone";

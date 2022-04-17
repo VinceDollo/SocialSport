@@ -1,21 +1,26 @@
 package com.example.socialsport.entities;
 
+import android.graphics.Bitmap;
+
 public class User {
 
     private String email;
     private String name;
     private String age;
+    private Bitmap profileImage;
 
     public User(){
         email = "";
         name = "";
         age = "";
+        profileImage = null;
     }
 
-    public User(String email, String name, String age){
+    public User(String email, String name, String age, Bitmap bitmap){
         this.email = email;
         this.name = name;
         this.age = age;
+        this.profileImage = bitmap;
 
         new User(); //Code smell
     }
@@ -44,4 +49,11 @@ public class User {
         this.age = age;
     }
 
+    public Bitmap getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(Bitmap profileImage) {
+        this.profileImage = profileImage;
+    }
 }

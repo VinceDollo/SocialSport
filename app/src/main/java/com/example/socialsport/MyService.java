@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
+import com.example.socialsport.utils.Utils;
 
 public class MyService extends IntentService {
 

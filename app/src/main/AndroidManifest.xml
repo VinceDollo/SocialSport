@@ -25,7 +25,7 @@
             android:value="AIzaSyDGVKD7PXJ_oXTIP6hs1tCdb654VG6e02Y" />
 
         <activity
-            android:name=".activities.WelcomeActivity"
+            android:name=".activities.SplashActivity"
             android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>
@@ -33,11 +33,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.WelcomeActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.PrincipalPageActivity" />
 
-        <service android:name=".MyService"
+        <service
+            android:name=".MyService"
             android:exported="false">
             <intent-filter>
                 <action android:name="your.package.MyService" />
@@ -48,8 +50,7 @@
             android:name=".MyReceiver"
             android:enabled="true"
             android:exported="false"
-            android:label="MyReceiver">
-        </receiver>
+            android:label="MyReceiver" />
     </application>
 
 </manifest>
