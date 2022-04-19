@@ -40,5 +40,9 @@
     <string name="volley_image">Image volleyball</string>
     <string name="handball_image">Image handball</string>
     <string name="chats">Chats</string>
+    <string name="remember_me">Se souvenir de moi</string>
+    <string name="menu_bar">Bar de menu</string>
+    <string name="route_to_activity">Itinéraire vers l\'activité</string>
+    <string name="return_to_home_page">Retourner à la page principale</string>
 
 </resources>

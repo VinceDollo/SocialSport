@@ -10,11 +10,11 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
-import com.example.socialsport.utils.Utils;
 import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.HomeFragment;
 import com.example.socialsport.fragments.MessageFragment;
 import com.example.socialsport.fragments.PersonFragment;
+import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class PrincipalPageActivity extends FragmentActivity {
+
+    private static final String TAG = PrincipalPageActivity.class.getSimpleName();
 
     private MeowBottomNavigation meowBottomNavigation;
     private User user;

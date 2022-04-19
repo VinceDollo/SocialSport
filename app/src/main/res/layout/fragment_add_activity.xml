@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AddActivityFragment"
-    android:paddingTop="20dp">
+    tools:context=".fragments.AddActivityFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,17 +15,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp">
 
             <ImageButton
                 android:id="@+id/btn_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:src="@drawable/img_back"
                 android:contentDescription="@string/back_vector"
-                app:tint="@color/black"/>
+                android:src="@drawable/img_back"
+                app:tint="@color/black" />
 
             <View
                 android:layout_width="0dp"
@@ -48,194 +47,192 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="40sp"
-            android:textColor="@color/black"
             android:layout_gravity="center"
             android:text="@string/add_an_activity"
-            />
+            android:textColor="@color/black"
+            android:textSize="40sp" />
 
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/scrollView"
-            android:orientation="vertical"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            android:orientation="vertical">
 
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="20dp">
+                android:orientation="vertical">
 
                 <TableRow
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
+                    android:id="@+id/add_activity_soccer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
                     android:orientation="vertical"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="7dp"
-                    android:tag="Soccer"
-                    android:id="@+id/add_activity_soccer">
+                    android:tag="Soccer">
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/img_soccer"
-                            android:backgroundTint="@color/black"
-                            android:layout_gravity="center"/>
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/black"
+                        android:src="@drawable/img_soccer" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="7"
-                            android:gravity="center"
-                            android:layout_height="match_parent"
-                            android:text="SOCCER"
-                            android:textSize="17dp"
-                            android:textColor="@color/black"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:gravity="center"
+                        android:text="SOCCER"
+                        android:textColor="@color/black"
+                        android:textSize="17dp" />
 
                 </TableRow>
 
 
                 <TableRow
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
+                    android:id="@+id/add_activity_basketball"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
                     android:orientation="vertical"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="7dp"
-                    android:tag="Basketball"
-                    android:id="@+id/add_activity_basketball">
+                    android:tag="Basketball">
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/img_basket"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:backgroundTint="@color/black"
-                        android:layout_gravity="center"/>
+                        android:src="@drawable/img_basket" />
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="center"
-                        android:layout_height="match_parent"
                         android:text="BASKETBALL"
-                        android:textSize="17dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="17dp" />
 
                 </TableRow>
 
                 <TableRow
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
+                    android:id="@+id/add_activity_volleyball"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
                     android:orientation="vertical"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="7dp"
-                    android:tag="Volleyball"
-                    android:id="@+id/add_activity_volleyball">
+                    android:tag="Volleyball">
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/img_volley"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:backgroundTint="@color/black"
-                        android:layout_gravity="center"/>
+                        android:src="@drawable/img_volley" />
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="center"
-                        android:layout_height="match_parent"
                         android:text="VOLLEYBALL"
-                        android:textSize="17dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="17dp" />
 
                 </TableRow>
 
                 <TableRow
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
+                    android:id="@+id/add_activity_handball"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
                     android:orientation="vertical"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="7dp"
-                    android:tag="Handball"
-                    android:id="@+id/add_activity_handball">
+                    android:tag="Handball">
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/img_handball"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:backgroundTint="@color/black"
-                        android:layout_gravity="center"/>
+                        android:src="@drawable/img_handball" />
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="center"
-                        android:layout_height="match_parent"
                         android:text="HANDBALL"
-                        android:textSize="17dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="17dp" />
 
                 </TableRow>
 
                 <TableRow
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
+                    android:id="@+id/add_activity_running"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
                     android:orientation="vertical"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="7dp"
-                    android:tag="Running"
-                    android:id="@+id/add_activity_running">
+                    android:tag="Running">
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/img_run"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:backgroundTint="@color/black"
-                        android:layout_gravity="center"/>
+                        android:src="@drawable/img_run" />
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="center"
-                        android:layout_height="match_parent"
                         android:text="RUNNING"
-                        android:textSize="17dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="17dp" />
 
                 </TableRow>
 
                 <TableRow
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
+                    android:id="@+id/add_activity_football"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
                     android:orientation="vertical"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="7dp"
-                    android:tag="Football"
-                    android:id="@+id/add_activity_football">
+                    android:tag="Football">
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/img_football"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:backgroundTint="@color/black"
-                        android:layout_gravity="center"/>
+                        android:src="@drawable/img_football" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -249,50 +246,50 @@
                 </TableRow>
 
                 <TableRow
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
+                    android:id="@+id/add_activity_tennis"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_activity"
                     android:orientation="vertical"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="7dp"
-                    android:tag="Tennis"
-                    android:id="@+id/add_activity_tennis">
+                    android:tag="Tennis">
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/img_tennis"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
                         android:backgroundTint="@color/black"
-                        android:layout_gravity="center"/>
+                        android:src="@drawable/img_tennis" />
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="7"
                         android:gravity="center"
-                        android:layout_height="match_parent"
                         android:text="TENNIS"
-                        android:textSize="17dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="17dp" />
 
                 </TableRow>
 
                 <TextView
-                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_add_activity"
                     android:gravity="center"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="10dp"
                     android:text="OTHER ACTIVITIES"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:background="@drawable/btn_add_activity"/>
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"/>
+                    android:layout_height="100dp" />
 
             </TableLayout>
 

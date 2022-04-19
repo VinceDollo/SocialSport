@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,7 +36,6 @@ import io.paperdb.Paper;
 
 public class PersonFragment extends Fragment {
 
-    private Button btnLogout;
     private User user;
     private FragmentPersonBinding binding;
 
@@ -67,7 +65,6 @@ public class PersonFragment extends Fragment {
 
         binding.tvName.setText(((PrincipalPageActivity) requireActivity()).getUser().getName());
         Log.d("firebase", "" + ((PrincipalPageActivity) requireActivity()).getUser().getName());
-        btnLogout = view.findViewById(R.id.btn_disconnect);
 
         displayMyActivities();
 
@@ -78,7 +75,7 @@ public class PersonFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        btnLogout.setOnClickListener(view -> {
+        binding.btnDisconnect.setOnClickListener(view -> {
             Paper.book().destroy();
             FirebaseAuth.getInstance().signOut();
             requireActivity().finish();

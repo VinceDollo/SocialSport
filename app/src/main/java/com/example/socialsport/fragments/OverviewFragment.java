@@ -140,6 +140,9 @@ public class OverviewFragment extends Fragment {
             binding.nameSport.setText(sport);
             binding.tvDateAndTime.setText(bundle.getString("dateTime"));
             binding.tvLocation.setText(Utils.getPrintableLocation(getActivity(), bundle.getString("location")));
+            Fragment newFragment = new RouteActivityFragment();
+            newFragment.setArguments(bundle);
+            binding.tvLocation.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newFragment).commit());
         }
     }
 

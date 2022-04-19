@@ -39,6 +39,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -144,19 +146,20 @@ public class Utils {
                     String sport = act.getSport();
                     String description = act.getDescription();
                     String date = act.getDate();
-                    String hour = act.getHour();
+                    String time = act.getTime();
                     String uuidOrganiser = act.getUuidOrganiser();
                     String coords = act.getCoords();
                     ArrayList<String> uuids = (ArrayList<String>) act.getUuids();
 
-                    SportActivity newActivity = new SportActivity(sport, description, date, hour, uuidOrganiser, coords);
+                    SportActivity newActivity = new SportActivity(sport, description, date, time, uuidOrganiser, coords);
                     newActivity.setUuids(uuids);
                     allActivities.add(newActivity);
                 }
 
                 List<SportActivity> myActivities = getMyActivities();
                 if (!myActivities.isEmpty()) {
-                    myActivities.sort(Comparator.comparing(SportActivity::getDateTime)); //Sort my activities by date
+                    Log.d(TAG, myActivities.toString());
+                    myActivities.sort(Comparator.comparing((SportActivity activity) -> stringToDateTime(activity.getDate(), activity.getTime()))); //Sort my activities by date
                     myActivities = getUpcomingActivities(myActivities);
 
                     if (!myActivities.isEmpty()) {
@@ -167,7 +170,7 @@ public class Utils {
                         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         //Set an alarm one hour before the next activity
                         int oneHour = 3600 * 1000;
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, nextActivity.getDateTime().getTime() - oneHour, pendingIntent);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, Objects.requireNonNull(stringToDateTime(nextActivity.getDate(), nextActivity.getTime())).getTime() - oneHour, pendingIntent);
                     }
                 }
             }
@@ -179,15 +182,25 @@ public class Utils {
         });
     }
 
+    public static Date stringToDateTime(String date, String time) {
+        try {
+            return new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE).parse(date + " " + time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static List<SportActivity> getUpcomingActivities(List<SportActivity> activities) {
         ArrayList<SportActivity> activitiesToReturn = new ArrayList<>(activities);
-        activitiesToReturn.removeIf(activity -> activity.getDateTime().before(new Date()));
+        activitiesToReturn.removeIf(activity -> Objects.requireNonNull(stringToDateTime(activity.getDate(), activity.getTime())).before(new Date()));
         return activitiesToReturn;
     }
 
     public static List<SportActivity> getPastActivities(List<SportActivity> activities) {
         ArrayList<SportActivity> activitiesToReturn = new ArrayList<>(activities);
-        activitiesToReturn.removeIf(activity -> activity.getDateTime().after(new Date()) || activity.getDateTime().equals(new Date()));
+        activitiesToReturn.removeIf(activity -> Objects.requireNonNull(stringToDateTime(activity.getDate(), activity.getTime())).after(new Date())
+                || Objects.requireNonNull(stringToDateTime(activity.getDate(), activity.getTime())).equals(new Date()));
         return activitiesToReturn;
     }
 

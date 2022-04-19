@@ -38,7 +38,7 @@ public class MyService extends IntentService {
         text.append("You have an activity ");
         text.append(nextActivity.getSport());
         text.append(" at ");
-        text.append(nextActivity.getHour());
+        text.append(nextActivity.getTime());
         text.append(" the ");
         text.append(nextActivity.getDate());
         text.append(".");

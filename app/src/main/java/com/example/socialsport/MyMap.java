@@ -76,6 +76,7 @@ public class MyMap {
         mMap = googleMap;
         this.activity = activity;
         this.view = view;
+        Log.d(TAG, view.toString());
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(view.getContext());
         currentLatLng = defaultLocation;
@@ -102,7 +103,7 @@ public class MyMap {
                     String sport = act.getSport();
                     String description = act.getDescription();
                     String date = act.getDate();
-                    String hour = act.getHour();
+                    String hour = act.getTime();
                     String uuidOrganiser = act.getUuidOrganiser();
                     String coords = act.getCoords();
                     ArrayList<String> uuids = (ArrayList<String>) act.getUuids();
@@ -179,6 +180,7 @@ public class MyMap {
                         lastKnownLocation = task.getResult();
                         if (lastKnownLocation != null) {
                             currentLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                            Log.d(TAG, "Location inside device location: " + currentLatLng);
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM));
                         } else {
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
@@ -273,7 +275,6 @@ public class MyMap {
             ApplicationInfo app = activity.getApplicationContext().getPackageManager().getApplicationInfo(activity.getApplicationContext().getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = app.metaData;
             apiKey = bundle.getString("com.google.android.geo.API_KEY");
-            Log.d(TAG, "API key:" + apiKey);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -281,7 +282,8 @@ public class MyMap {
                 .apiKey(apiKey)
                 .build();
 
-        Log.d("Test", Utils.latLngToString(origin));
+        Log.d(TAG, Utils.latLngToString(origin));
+        Log.d(TAG, Utils.latLngToString(destination));
         DirectionsApiRequest req = DirectionsApi.getDirections(context, Utils.latLngToString(origin), Utils.latLngToString(destination));
         try {
             DirectionsResult res = req.await();

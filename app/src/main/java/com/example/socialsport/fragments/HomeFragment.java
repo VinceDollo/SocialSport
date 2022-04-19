@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 result.putString("activityID", title);
                 result.putStringArrayList("participants", (ArrayList<String>) clicked.getUuids());
                 result.putString("organiserUuid", clicked.getUuidOrganiser());
-                result.putString("dateTime", clicked.getDate() + ", " + clicked.getHour());
+                result.putString("dateTime", clicked.getDate() + ", " + clicked.getTime());
                 result.putString("location", clicked.getCoords());
                 Fragment newF = new OverviewFragment();
                 newF.setArguments(result);
@@ -81,8 +81,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
             return true;
         });
-
-        //map.drawRoute(map.getCurrentLatLng(), new SportActivity("Tennis", "", "", "", "", "(37.467078507594834,-122.03810658305883)"));
     }
 
     @SuppressLint("ClickableViewAccessibility")
