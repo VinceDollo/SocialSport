@@ -16,11 +16,13 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
 import com.example.socialsport.activities.LoginActivity;
 import com.example.socialsport.activities.PrincipalPageActivity;
+import com.example.socialsport.databinding.FragmentPersonBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
 import com.example.socialsport.utils.Utils;
@@ -31,33 +33,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 
 public class PersonFragment extends Fragment {
 
     private Button btnLogout;
-    private LinearLayout llFinishedActivities;
-    private LinearLayout llUpcomingActivities;
-    private CircleImageView civProfile;
     private User user;
+    private FragmentPersonBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        binding = FragmentPersonBinding.inflate(inflater);
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_person, container, false);
+        View view = binding.getRoot();
 
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3, true);
 
-        TextView tvName = view.findViewById(R.id.tv_name);
-        civProfile = view.findViewById(R.id.civ_profile);
-        llFinishedActivities = view.findViewById(R.id.ll_finished_activities);
-        llUpcomingActivities = view.findViewById(R.id.ll_upcoming_activities);
+
         user = ((PrincipalPageActivity) requireActivity()).getUser();
 
         ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-            civProfile.setImageURI(uri);
+            binding.civProfile.setImageURI(uri);
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri);
                 user.setProfileImage(bitmap);
@@ -66,9 +63,9 @@ public class PersonFragment extends Fragment {
                 e.printStackTrace();
             }
         });
-        civProfile.setOnClickListener(view1 -> mGetContent.launch("image/*"));
+        binding.civProfile.setOnClickListener(view1 -> mGetContent.launch("image/*"));
 
-        tvName.setText(((PrincipalPageActivity) requireActivity()).getUser().getName());
+        binding.tvName.setText(((PrincipalPageActivity) requireActivity()).getUser().getName());
         Log.d("firebase", "" + ((PrincipalPageActivity) requireActivity()).getUser().getName());
         btnLogout = view.findViewById(R.id.btn_disconnect);
 
@@ -90,13 +87,13 @@ public class PersonFragment extends Fragment {
         });
 
         if (user.getProfileImage() != null)
-            civProfile.setImageBitmap(user.getProfileImage());
+            binding.civProfile.setImageBitmap(user.getProfileImage());
     }
 
     @SuppressLint("SetTextI18n")
     public void displayMyActivities() {
-        llFinishedActivities.removeAllViews();
-        llUpcomingActivities.removeAllViews();
+        binding.llFinishedActivities.removeAllViews();
+        binding.llUpcomingActivities.removeAllViews();
 
         int cmp = 0;
         List<SportActivity> myActivities = Utils.getMyActivities();
@@ -125,7 +122,7 @@ public class PersonFragment extends Fragment {
             tv.setBackgroundResource(R.drawable.btn_finished_activities);
             tv.setPadding(20, 30, 20, 30);
             tv.setGravity(Gravity.CENTER);
-            llUpcomingActivities.addView(tv);
+            binding.llUpcomingActivities.addView(tv);
         }
 
         cmp = 0;
@@ -147,7 +144,7 @@ public class PersonFragment extends Fragment {
             tv.setBackgroundResource(R.drawable.btn_finished_activities);
             tv.setPadding(20, 30, 20, 30);
             tv.setGravity(Gravity.CENTER);
-            llFinishedActivities.addView(tv);
+            binding.llFinishedActivities.addView(tv);
         }
     }
 }

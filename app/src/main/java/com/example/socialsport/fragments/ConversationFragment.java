@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
+import com.example.socialsport.databinding.FragmentConversationBinding;
 
 import java.util.ArrayList;
 
@@ -19,18 +21,17 @@ public class ConversationFragment extends Fragment {
     private ArrayList<String> message;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_conversation, container, false);
+        com.example.socialsport.databinding.FragmentConversationBinding binding = FragmentConversationBinding.inflate(inflater);
+        View view = binding.getRoot();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             name = bundle.getString("name");
             message = bundle.getStringArrayList("message");
         }
-
-        LinearLayout llConversation = view.findViewById(R.id.ll_conversation);
-        TextView tvName = view.findViewById(R.id.name);
 
         String messages;
         String sender;
@@ -57,10 +58,10 @@ public class ConversationFragment extends Fragment {
             }
             textView.setLayoutParams(params);
 
-            llConversation.addView(textView);
+            binding.llConversation.addView(textView);
         }
 
-        tvName.setText(name);
+        binding.name.setText(name);
 
         return view;
     }

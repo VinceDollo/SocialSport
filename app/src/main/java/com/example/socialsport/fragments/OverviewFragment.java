@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
+import com.example.socialsport.databinding.FragmentOverviewActivityBinding;
 import com.example.socialsport.utils.Utils;
 import com.example.socialsport.entities.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,42 +37,30 @@ public class OverviewFragment extends Fragment {
     private static final String TAG = OverviewFragment.class.getSimpleName();
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    private TableLayout tableLayout;
-    private Button btnParticipate;
-    private CircleImageView imgSport;
-    private TextView nameSport;
-    private TextView nameOrganiser;
-    private TextView dateTime;
-    private TextView location;
-    private CircleImageView imgOrganiser;
     private ArrayList<String> participantsUuids = new ArrayList<>();
+    private FragmentOverviewActivityBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_overview_activity, container, false);
-        tableLayout = view.findViewById(R.id.tableLayout);
-        ImageButton btnBack = view.findViewById(R.id.btn_back);
-        btnParticipate = view.findViewById(R.id.btn_participate);
-        imgSport = view.findViewById(R.id.img_sport);
-        nameSport = view.findViewById(R.id.name_sport);
-        nameOrganiser = view.findViewById(R.id.name_organiser);
-        dateTime = view.findViewById(R.id.tv_date_and_time);
-        location = view.findViewById(R.id.tv_location);
-        imgOrganiser = view.findViewById(R.id.img_organiser);
-
-        btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit());
+        binding = FragmentOverviewActivityBinding.inflate(inflater);
+        View view = binding.getRoot();
 
         setViewContent();
+        setListener();
 
         return view;
     }
 
+    private void setListener(){
+        binding.btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit());
+    }
+
     private void stateButton() {
         if (participantsUuids.contains(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()))
-            btnParticipate.setText(R.string.leave);
+            binding.btnParticipate.setText(R.string.leave);
         else
-            btnParticipate.setText(R.string.participate);
+            binding.btnParticipate.setText(R.string.participate);
     }
 
     private void queryDbUsers() {
@@ -80,10 +69,10 @@ public class OverviewFragment extends Fragment {
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                tableLayout.removeAllViews();
+                binding.tableLayout.removeAllViews();
                 if (!participantsUuids.isEmpty()) {
-                    imgOrganiser.setImageResource(R.drawable.img_person);
-                    nameOrganiser.setText(R.string.app_name); //TODO: get organiser's name
+                    binding.imgOrganiser.setImageResource(R.drawable.img_person);
+                    binding.nameOrganiser.setText(R.string.app_name); //TODO: get organiser's name
                     for (String participantUuid : participantsUuids) {
                         addParticipantView(participantUuid);
                     }
@@ -109,7 +98,7 @@ public class OverviewFragment extends Fragment {
                     Log.d(TAG, participant.toString());
                     ((CircleImageView) row.findViewById(R.id.img_participant)).setImageResource(R.drawable.img_person); //TODO: add person image
                     ((TextView) row.findViewById(R.id.name_participant)).setText(participant.getName());
-                    tableLayout.addView(row);
+                    binding.tableLayout.addView(row);
                 }
             }
         });
@@ -144,13 +133,13 @@ public class OverviewFragment extends Fragment {
             stateButton();
             queryDbUsers();
 
-            btnParticipate.setOnClickListener(view -> handleParticipate(bundle.getString("activityID")));
+            binding.btnParticipate.setOnClickListener(view -> handleParticipate(bundle.getString("activityID")));
 
             String sport = bundle.getString("sport");
-            imgSport.setImageBitmap(Utils.getBitmap(getActivity(), sport));
-            nameSport.setText(sport);
-            dateTime.setText(bundle.getString("dateTime"));
-            location.setText(Utils.getPrintableLocation(getActivity(), bundle.getString("location")));
+            binding.imgSport.setImageBitmap(Utils.getBitmap(getActivity(), sport));
+            binding.nameSport.setText(sport);
+            binding.tvDateAndTime.setText(bundle.getString("dateTime"));
+            binding.tvLocation.setText(Utils.getPrintableLocation(getActivity(), bundle.getString("location")));
         }
     }
 
