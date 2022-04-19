@@ -12,29 +12,20 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
-import com.example.socialsport.utils.Utils;
 import com.example.socialsport.activities.LoginActivity;
+import com.example.socialsport.databinding.FragmentDescriptionActivityBinding;
+import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class DescriptionActivityFragment extends Fragment {
-    private EditText etDescription;
-    private EditText etTime;
-    private EditText etDate;
-    private EditText etNumberOfParticipant;
-    private TextView tvDescription;
-    private ImageButton btnBack;
-    private Button btnValidate;
     private String sport;
     private String coordinates;
     private String description;
@@ -43,10 +34,30 @@ public class DescriptionActivityFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatePickerDialog datePicker;
     private TimePickerDialog timePicker;
+    private FragmentDescriptionActivityBinding binding;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentDescriptionActivityBinding.inflate(inflater);
+        View view = binding.getRoot();
+
+        //recupere le sport
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            sport = bundle.getString("sport");
+            coordinates = bundle.getString("location");
+        }
+
+        setListeners();
+
+        return view;
+    }
+
 
     @SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
     private void setListeners() {
-        btnBack.setOnClickListener(view12 -> {
+        binding.btnBack.setOnClickListener(view12 -> {
             Bundle bundle1 = new Bundle();
             bundle1.putString("sport", sport);
             Fragment newF = new PlaceActivityFragment();
@@ -54,28 +65,28 @@ public class DescriptionActivityFragment extends Fragment {
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
         });
 
-        etDate.setOnClickListener(v -> {
+        binding.etDate.setOnClickListener(v -> {
             final Calendar cldr = Calendar.getInstance();
             int day = cldr.get(Calendar.DAY_OF_MONTH);
             int month = cldr.get(Calendar.MONTH);
             int year = cldr.get(Calendar.YEAR);
             datePicker = new DatePickerDialog(getActivity(), (view2, year1, monthOfYear, dayOfMonth) ->
-                    etDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1), year, month, day);
+                    binding.etDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1), year, month, day);
             datePicker.show();
         });
 
-        etTime.setOnClickListener(v -> {
+        binding.etTime.setOnClickListener(v -> {
             final Calendar cldr = Calendar.getInstance();
             int hour = cldr.get(Calendar.HOUR_OF_DAY);
             int minutes = cldr.get(Calendar.MINUTE);
             timePicker = new TimePickerDialog(getActivity(), (tp, sHour, sMinute) ->
-                    etTime.setText(sHour + ":" + sMinute), hour, minutes, true);
+                    binding.etTime.setText(sHour + ":" + sMinute), hour, minutes, true);
             timePicker.show();
         });
 
-        tvDescription.setOnTouchListener((view, motionEvent) -> {
+        binding.tvDescription.setOnTouchListener((view, motionEvent) -> {
             final int DRAWABLE_RIGHT = 2;
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && motionEvent.getRawX() >= (tvDescription.getRight() - tvDescription.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && motionEvent.getRawX() >= (binding.tvDescription.getRight() - binding.tvDescription.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DescriptionActivityFragment.this.getContext());
                 builder.setCancelable(true);
                 builder.setTitle("What should you describe ?");
@@ -88,25 +99,25 @@ public class DescriptionActivityFragment extends Fragment {
             return false;
         });
 
-        etNumberOfParticipant.setOnKeyListener((v, keyCode, event) -> {
+        binding.etNumberParticipantRequired.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && allFieldsFilled()) {
                 // Perform action on key press
-                btnValidate.performClick();
+                binding.btnValidate.performClick();
                 Utils.hideKeyboard(this.requireContext(), this.requireView());
                 return true;
             }
             return false;
         });
 
-        btnValidate.setOnClickListener(view1 -> {
-            date = etDate.getText().toString();
-            time = etTime.getText().toString();
-            description = etDescription.getText().toString();
+        binding.btnValidate.setOnClickListener(view1 -> {
 
             if (!allFieldsFilled()) {
                 Toast.makeText(getActivity(), "Empty field(s)", Toast.LENGTH_SHORT).show();
             } else {
+                date = binding.etDate.getText().toString();
+                time = binding.etTime.getText().toString();
+                description = binding.etDescription.getText().toString();
                 mAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -126,32 +137,7 @@ public class DescriptionActivityFragment extends Fragment {
     }
 
     private boolean allFieldsFilled() {
-        return etDescription.getText().length() > 0 && etDate.getText().length() > 0 && etTime.getText().length() > 0 && etNumberOfParticipant.getText().length() > 0;
+        return binding.etDescription.getText().length() > 0 && binding.etDate.getText().length() > 0 && binding.etTime.getText().length() > 0 && binding.etNumberParticipantRequired.getText().length() > 0;
     }
 
-    @SuppressLint({"SetTextI18n", "ResourceAsColor"})
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        //Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_description_activity, container, false);
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            sport = bundle.getString("sport");
-            coordinates = bundle.getString("location");
-        }
-
-        btnBack = view.findViewById(R.id.btn_back);
-        btnValidate = view.findViewById(R.id.btn_validate);
-        etTime = view.findViewById(R.id.et_time);
-        etDate = view.findViewById(R.id.et_date);
-        etDescription = view.findViewById(R.id.et_description);
-        etNumberOfParticipant = view.findViewById(R.id.et_number_participant_required);
-        tvDescription = view.findViewById(R.id.tv_description);
-
-        setListeners();
-
-        return view;
-    }
 }

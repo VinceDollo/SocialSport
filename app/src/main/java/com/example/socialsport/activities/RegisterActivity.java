@@ -5,17 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.socialsport.databinding.RegisterActivityBinding;
 import com.example.socialsport.utils.Utils;
-import com.example.socialsport.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -24,14 +18,6 @@ import java.util.Objects;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private EditText etEmail;
-    private EditText etPassword;
-    private EditText etCheckPassword;
-    private EditText etName;
-    private EditText etAge;
-    private Button btnLogin;
-    private ImageButton btnBack;
-    private TextView tvGoLogin;
     private RegisterActivityBinding binding;
 
 
@@ -40,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = RegisterActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -55,14 +42,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        btnLogin.setOnClickListener(view -> {
+       binding.btnLogIn.setOnClickListener(view -> {
             loading(true);
             if(isValidInformation()){
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
-                String checkPassword = etCheckPassword.getText().toString();
-                String name = etName.getText().toString();
-                String age = etAge.getText().toString();
+                String email = binding.etEmail.getText().toString();
+                String password = binding.etPassword.getText().toString();
+                String name = binding.etName.getText().toString();
+                String age = binding.etAge.getText().toString();
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(RegisterActivity.this, task -> {
                             if (task.isSuccessful()) {
@@ -87,23 +73,23 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        btnBack.setOnClickListener(view -> {
+        binding.btnBack.setOnClickListener(view -> {
             Intent intentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intentWelcomeActivity);
             finish();
         });
 
-        etAge.setOnKeyListener((v, keyCode, event) -> {
+        binding.etAge.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && isValidInformation()) {
                 // Perform action on key press
-                btnLogin.performClick();
+                binding.btnLogIn.performClick();
                 return true;
             }
             return false;
         });
 
-        tvGoLogin.setOnClickListener(view -> {
+        binding.tvGoLoginFromReg.setOnClickListener(view -> {
             Intent intentSignUpActivity = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intentSignUpActivity);
         });

@@ -3,7 +3,6 @@ package com.example.socialsport.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
@@ -23,8 +22,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private int remainingTries;
     private LogInActivityBinding binding;
-    private PreferenceManager preferenceManager;
-
 
 
     @Override
@@ -107,7 +104,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
-
 
     private void loading(Boolean isLoading){
         if(isLoading){

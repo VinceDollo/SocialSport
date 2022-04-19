@@ -7,9 +7,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +15,7 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.MyMap;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
+import com.example.socialsport.databinding.FragmentHomeBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,37 +25,31 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
-    private Button btnAddActivity;
     private View view;
-    private ScrollView scroll;
-    private CircleImageView civProfile;
-    private ImageView transparent;
+    private FragmentHomeBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home, container, false);
+        binding = FragmentHomeBinding.inflate(inflater);
+        view = binding.getRoot();
 
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
         assert mMapFragment != null;
         mMapFragment.getMapAsync(this);
 
-        // Change bottomBar when clicking on profile icon
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(1, true);
 
-        findViewById();
         setListeners();
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
         if (user.getProfileImage() != null)
-            civProfile.setImageBitmap(user.getProfileImage());
+            binding.civProfile.setImageBitmap(user.getProfileImage());
 
         return view;
     }
@@ -95,23 +87,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setListeners() {
-        btnAddActivity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
+        binding.btnAddActivity.setOnClickListener(view -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
 
-        civProfile.setOnClickListener(view1 -> {
+        binding.civProfile.setOnClickListener(view1 -> {
             MeowBottomNavigation meowBottomNavigation = ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation();
             meowBottomNavigation.show(3, true);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new PersonFragment()).addToBackStack(null).commit();
         });
 
         // Allow vertical scroll in map fragment
-        transparent.setOnTouchListener(this::mapOnTouchListener);
-    }
-
-    private void findViewById() {
-        civProfile = view.findViewById(R.id.civ_profile);
-        btnAddActivity = view.findViewById(R.id.btn_add_activity);
-        scroll = view.findViewById(R.id.scrollView);
-        transparent = view.findViewById(R.id.transparent_image);
+        binding.transparentImage.setOnTouchListener(this::mapOnTouchListener);
     }
 
     private boolean mapOnTouchListener(View v, MotionEvent event) {
@@ -120,12 +105,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
                 // Disallow ScrollView to intercept touch events.
-                scroll.requestDisallowInterceptTouchEvent(true);
+                binding.scrollView.requestDisallowInterceptTouchEvent(true);
                 // Disable touch on transparent view
                 return false;
             case MotionEvent.ACTION_UP:
                 // Allow ScrollView to intercept touch events.
-                scroll.requestDisallowInterceptTouchEvent(false);
+                binding.scrollView.requestDisallowInterceptTouchEvent(false);
                 return true;
             default:
                 return true;
