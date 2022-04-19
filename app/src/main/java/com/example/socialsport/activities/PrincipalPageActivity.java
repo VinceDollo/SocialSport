@@ -22,6 +22,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +52,8 @@ public class PrincipalPageActivity extends FragmentActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
 
         loadUserInformation();
+
+        getToken();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
@@ -129,6 +135,21 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     private void loadUserInformation(){
         user = new User(preferenceManager.getString(Constants.KEY_EMAIL), preferenceManager.getString(Constants.KEY_NAME), preferenceManager.getString(Constants.KEY_AGE));
+    }
+
+    private void getToken(){
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::updateToken);
+    }
+
+    private void updateToken(String token){
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        DocumentReference documentReference = database.collection(Constants.KEY_COLLECTION_USER_NAME)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID));
+
+        documentReference.update(Constants.KEY_FCM_TOKEN, token).addOnSuccessListener(unused -> {
+            Utils.toast("token update succesfully", getApplicationContext());
+        }).addOnFailureListener(e -> Utils.toast("Unable to update token", getApplicationContext()
+        ));
     }
 
 }
