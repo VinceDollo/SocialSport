@@ -3,84 +3,78 @@ package com.example.socialsport.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.socialsport.R;
+import com.example.socialsport.databinding.LogInActivityBinding;
 import com.example.socialsport.utils.TableKeys;
+import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.paperdb.Paper;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etPassword;
-    private TextView tvGoReg;
-    private Button btnLogin;
-    private ImageButton btnBack;
-    private EditText etEmail;
-    private CheckBox cbRememberMe;
     private int remainingTries;
+    private LogInActivityBinding binding;
+    private PreferenceManager preferenceManager;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.log_in_activity);
-        etEmail = findViewById(R.id.et_email);
-        etPassword = findViewById(R.id.et_password);
-        btnLogin = findViewById(R.id.btn_log_in);
-        tvGoReg = findViewById(R.id.tv_go_reg_from_login);
-        btnBack = findViewById(R.id.btn_back);
-        cbRememberMe = findViewById(R.id.checkbox_remember_me);
-
+        binding = LogInActivityBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         Paper.init(this);
-
         setListeners();
-
         remainingTries = 3;
     }
 
     private void setListeners() {
-        btnBack.setOnClickListener(view -> {
+        binding.btnBack.setOnClickListener(view -> {
             Intent intentWelcomeActivity = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intentWelcomeActivity);
             finish();
         });
 
         //When you push enter button
-        etPassword.setOnKeyListener((v, keyCode, event) -> {
+        binding.etPassword.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 // Perform action on key press
-                btnLogin.performClick();
+                binding.btnLogIn.performClick();
                 return true;
             }
             return false;
         });
 
-        btnLogin.setOnClickListener(view -> tryToLoginUser());
+        binding.btnLogIn.setOnClickListener(view -> {
+            if(isValidInformation()) {
+                tryToLoginUser();
+            }
+        });
 
-        tvGoReg.setOnClickListener(view -> {
+        binding.tvGoRegFromLogin.setOnClickListener(view -> {
             Intent intentSignUpActivity = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivity(intentSignUpActivity);
         });
     }
 
     private void tryToLoginUser() {
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
+        loading(true);
+        String email = binding.etEmail.getText().toString();
+        String password = binding.etPassword.getText().toString();
 
         if (!email.isEmpty() && !password.isEmpty()) {
-            if (cbRememberMe.isChecked()) {
+            if (binding.checkboxRememberMe.isChecked()) {
                 Paper.book().write(TableKeys.USER_EMAIL_KEY, email);
                 Paper.book().write(TableKeys.USER_PASSWORD_KEY, password);
             }
@@ -89,11 +83,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("LoginPage", "signInWithEmail:success");
+                    loading(false);
                     Intent i = new Intent(getApplicationContext(), PrincipalPageActivity.class);
                     startActivity(i);
 
-                    Toast.makeText(LoginActivity.this, "Authentication successful.",
-                            Toast.LENGTH_SHORT).show();
                 } else {
                     remainingTries--;
                     // If sign in fails, display a message to the user.
@@ -101,14 +94,44 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Email/password are not corrects, remaining tries : " + remainingTries,
                             Toast.LENGTH_SHORT).show();
                     if (remainingTries == 0) {
-                        btnLogin.setEnabled(false);
-                        btnLogin.setBackgroundColor(Color.DKGRAY);
+                        binding.btnLogIn.setEnabled(false);
+                        binding.btnLogIn.setBackgroundColor(Color.DKGRAY);
                     }
+                    loading(false);
+
                 }
             });
         } else {
+            loading(false);
             Toast.makeText(LoginActivity.this, "Email and/or password is empty",
                     Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void loading(Boolean isLoading){
+        if(isLoading){
+            binding.btnLogIn.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.VISIBLE);
+        }else{
+            binding.progressBar.setVisibility(View.INVISIBLE);
+            binding.btnLogIn.setVisibility(View.VISIBLE);
+
+        }
+    }
+
+    private Boolean isValidInformation() {
+        if(binding.etEmail.getText().toString().trim().isEmpty()) {
+            Utils.toast(LoginActivity.this, "Enter email");
+            return false;
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(binding.etEmail.getText().toString()).matches()){
+            Utils.toast( LoginActivity.this,"Enter valid email");
+            return false;
+        }else if(binding.etPassword.getText().toString().trim().isEmpty()){
+            Utils.toast(LoginActivity.this,"Enter password");
+            return false;
+        }else {
+            return true;
         }
     }
 

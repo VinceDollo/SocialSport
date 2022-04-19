@@ -330,4 +330,8 @@ public class Utils {
         return bitmap;
     }
 
+    public static void toast(Context c,String a){
+        Toast.makeText(c, a, Toast.LENGTH_SHORT).show();
+    }
+
 }
