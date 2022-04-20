@@ -53,6 +53,11 @@ public class Utils {
     private static final String TAG = Utils.class.getSimpleName();
 
     private static final List<SportActivity> allActivities = new ArrayList<>();
+
+    //ajout mez
+    private static final List<SportActivity>socceractivities = new ArrayList<>(), basketactivities = new ArrayList<>(), volleyactivities = new ArrayList<>(), handactivities = new ArrayList<>();
+
+
     private static SportActivity nextActivity = new SportActivity();
 
     public static void uploadImage(Context context, Bitmap bitmap, String uid) {
@@ -138,6 +143,14 @@ public class Utils {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 allActivities.clear();
+
+                //ajout mez
+                basketactivities.clear();
+                socceractivities.clear();
+                volleyactivities.clear();
+                handactivities.clear();
+
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     SportActivity act = ds.getValue(SportActivity.class);
                     assert act != null;
@@ -154,6 +167,20 @@ public class Utils {
                     SportActivity newActivity = new SportActivity(sport, description, date, time, uuidOrganiser, coords);
                     newActivity.setUuids(uuids);
                     allActivities.add(newActivity);
+
+                    //ajout mez
+                    if(sport.equals("Soccer")){
+                        socceractivities.add(newActivity);
+                    }
+                    else if(sport.equals("Volley")){
+                        volleyactivities.add(newActivity);
+                    }
+                    else if(sport.equals("Basket")){
+                        basketactivities.add(newActivity);
+                    }
+                    else if(sport.equals("Handball")){
+                        handactivities.add(newActivity);
+                    }
                 }
 
                 List<SportActivity> myActivities = getMyActivities();
@@ -203,6 +230,31 @@ public class Utils {
                 || Objects.requireNonNull(stringToDateTime(activity.getDate(), activity.getTime())).equals(new Date()));
         return activitiesToReturn;
     }
+
+
+    public static List<SportActivity> getAllActivities() {
+        return allActivities;
+    }
+
+    //ajout mez
+    public static List<SportActivity> getSocceractivities() {
+        return socceractivities;
+    }
+
+    public static List<SportActivity> getBasketactivities() {
+        return basketactivities;
+    }
+
+    public static List<SportActivity> getVolleyactivities() {
+        return volleyactivities;
+    }
+
+    public static List<SportActivity> getHandactivities() {
+        return handactivities;
+    }
+
+
+
 
     public static List<SportActivity> getMyActivities() {
         ArrayList<SportActivity> myActivities = new ArrayList<>();

@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,12 +22,14 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentHomeBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
+import com.example.socialsport.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
@@ -32,11 +38,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private View view;
     private FragmentHomeBinding binding;
 
+    //ajout mez
+    private TableRow trsoccer,trhand,trbasket,trvolley;
+    private TextView tvact;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
         view = binding.getRoot();
+        //ajout mez
+        trsoccer = binding.activity1;
+        trbasket = binding.activity2;
+        trvolley = binding.activity3;
+        trhand = binding.activity4;
+        tvact= binding.activities;
 
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
@@ -95,6 +111,43 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         // Allow vertical scroll in map fragment
         binding.transparentImage.setOnTouchListener(this::mapOnTouchListener);
+
+        //ajout mez
+        trsoccer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<SportActivity> activities = Utils.getSocceractivities();
+                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        trbasket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<SportActivity> activities = Utils.getBasketactivities();
+                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        trhand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<SportActivity> activities = Utils.getHandactivities();
+                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        trvolley.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<SportActivity> activities = Utils.getVolleyactivities();
+                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        tvact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<SportActivity> activities = Utils.getAllActivities();
+                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private boolean mapOnTouchListener(View v, MotionEvent event) {
