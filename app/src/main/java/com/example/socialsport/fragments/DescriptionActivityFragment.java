@@ -25,7 +25,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 public class DescriptionActivityFragment extends Fragment {
+
     private String sport;
     private String coordinates;
     private String description;
@@ -42,7 +45,6 @@ public class DescriptionActivityFragment extends Fragment {
         binding = FragmentDescriptionActivityBinding.inflate(inflater);
         View view = binding.getRoot();
 
-        //recupere le sport
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             sport = bundle.getString("sport");
@@ -115,9 +117,9 @@ public class DescriptionActivityFragment extends Fragment {
             if (!allFieldsFilled()) {
                 Toast.makeText(getActivity(), "Empty field(s)", Toast.LENGTH_SHORT).show();
             } else {
-                date = binding.etDate.getText().toString();
-                time = binding.etTime.getText().toString();
-                description = binding.etDescription.getText().toString();
+                date = Objects.requireNonNull(binding.etDate.getText()).toString();
+                time = Objects.requireNonNull(binding.etTime.getText()).toString();
+                description = Objects.requireNonNull(binding.etDescription.getText()).toString();
                 mAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -137,7 +139,10 @@ public class DescriptionActivityFragment extends Fragment {
     }
 
     private boolean allFieldsFilled() {
-        return binding.etDescription.getText().length() > 0 && binding.etDate.getText().length() > 0 && binding.etTime.getText().length() > 0 && binding.etNumberParticipantRequired.getText().length() > 0;
+        return Objects.requireNonNull(binding.etDescription.getText()).length() > 0
+                && Objects.requireNonNull(binding.etDate.getText()).length() > 0
+                && Objects.requireNonNull(binding.etTime.getText()).length() > 0
+                && Objects.requireNonNull(binding.etNumberParticipantRequired.getText()).length() > 0;
     }
 
 }

@@ -3,7 +3,6 @@ package com.example.socialsport.activities;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -57,7 +56,7 @@ public class PrincipalPageActivity extends FragmentActivity {
                 user.setProfileImage(userImage);
             }
         } else {
-            Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Current user is null");
         }
 
         meowBottomNavigation = findViewById(R.id.bottom_app_bar);
@@ -94,7 +93,9 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     public void updateMessages() {
         messagesMap = new HashMap<>();
-        FirebaseDatabase.getInstance().getReference().child("chat").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).get().addOnCompleteListener(task -> {
+        FirebaseDatabase.getInstance().getReference().child("chat")
+                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
+                .get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
@@ -110,13 +111,22 @@ public class PrincipalPageActivity extends FragmentActivity {
     }
 
     public void updateMessagesForContact(String contact) {
-        FirebaseDatabase.getInstance().getReference().child("chat").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(contact).get().addOnCompleteListener(task1 -> {
+        FirebaseDatabase.getInstance().getReference().child("chat")
+                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(contact)
+                .get().addOnCompleteListener(task1 -> {
             if (!task1.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task1.getException());
             } else {
                 for (DataSnapshot snapshot1 : task1.getResult().getChildren()) {
-                    Objects.requireNonNull(messagesMap.get(contact)).add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
-                    message.add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
+                    Objects.requireNonNull(messagesMap.get(contact))
+                            .add(Objects.requireNonNull(snapshot1.child("message").getValue())
+                                    + "//"
+                                    + Objects.requireNonNull(snapshot1.child("date").getValue())
+                                    + "//"
+                                    + Objects.requireNonNull(snapshot1.child("sender").getValue()));
+                    message.add(Objects.requireNonNull(snapshot1.child("message").getValue())
+                            + "//" + Objects.requireNonNull(snapshot1.child("date").getValue())
+                            + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
                 }
             }
         });

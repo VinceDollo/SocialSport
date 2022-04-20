@@ -9,12 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.socialsport.MyMap;
+import com.example.socialsport.utils.MyMap;
 import com.example.socialsport.R;
 import com.example.socialsport.databinding.FragmentPlaceActivityBinding;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 
 public class PlaceActivityFragment extends Fragment implements OnMapReadyCallback {
 
@@ -34,9 +33,7 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
             binding.tvTitle.setText("Choose location for " + sport);
         }
 
-        SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
-        assert mMapFragment != null;
-        mMapFragment.getMapAsync(this);
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.f_maps, new MapsFragment()).addToBackStack(null).commit();
 
         binding.btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
 

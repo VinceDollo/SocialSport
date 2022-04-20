@@ -21,8 +21,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="20dp">
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/btn_back"
@@ -54,27 +53,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingHorizontal="20dp"
                 android:text="@string/choose_the_location"
                 android:textColor="@color/black"
                 android:textSize="30sp" />
-
-            <EditText
-                android:id="@+id/et_search_city"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="20dp"
-                android:autofillHints=""
-                android:background="@drawable/edit_text_border_search_bar"
-                android:drawableStart="@drawable/img_search"
-                android:gravity="center"
-                android:hint="@string/type_a_location"
-                android:imeOptions="actionGo"
-                android:inputType="text"
-                android:maxLines="1"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="5dp"
-                android:textColor="@color/dark_grey" />
 
         </LinearLayout>
 
@@ -94,7 +75,6 @@
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginHorizontal="15dp"
                     map:liteMode="true" />
 
                 <ImageView
@@ -127,11 +107,6 @@
 
         </LinearLayout>
 
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="100dp" />
-
-
     </LinearLayout>
+
 </FrameLayout>

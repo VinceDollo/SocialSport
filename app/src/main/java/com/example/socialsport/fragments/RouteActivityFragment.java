@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.socialsport.MyMap;
+import com.example.socialsport.utils.MyMap;
 import com.example.socialsport.R;
 import com.example.socialsport.entities.SportActivity;
 import com.google.android.gms.maps.GoogleMap;

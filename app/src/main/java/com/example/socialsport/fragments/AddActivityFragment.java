@@ -1,6 +1,7 @@
 package com.example.socialsport.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
         binding = FragmentAddActivityBinding.inflate(inflater);
         View view = binding.getRoot();
         setOnClickListener();
+
         return view;
     }
 

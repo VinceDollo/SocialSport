@@ -1,4 +1,4 @@
-package com.example.socialsport;
+package com.example.socialsport.utils;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
@@ -18,8 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.socialsport.R;
 import com.example.socialsport.entities.SportActivity;
-import com.example.socialsport.utils.Utils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -216,7 +216,7 @@ public class MyMap {
                         double latitude = addresses.get(0).getLatitude();
                         double longitude = addresses.get(0).getLongitude();
                         LatLng placeToFind = new LatLng(latitude, longitude);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeToFind, 15));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeToFind, 14));
                     }
                 } catch (IOException e) {
                     Log.d(TAG, e.toString());
