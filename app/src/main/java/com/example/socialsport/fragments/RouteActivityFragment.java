@@ -2,6 +2,7 @@ package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,8 @@ public class RouteActivityFragment extends Fragment implements OnMapReadyCallbac
                 getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
             });
 
-            map.drawRoute(new LatLng(37.422326839978844, -122.08420782746508), activity); //TODO: need to wait map entirely created before calling it, currentLatLng is updated in a Listener
+            Handler handler = new Handler();
+            handler.postDelayed(() -> map.drawRoute(map.getCurrentLatLng(), activity), 1000); //TODO: try a better way
         }
     }
 }
