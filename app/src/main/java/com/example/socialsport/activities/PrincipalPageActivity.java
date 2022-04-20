@@ -1,7 +1,6 @@
 package com.example.socialsport.activities;
 
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,8 +14,6 @@ import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.HomeFragment;
 import com.example.socialsport.fragments.MessageFragment;
 import com.example.socialsport.fragments.PersonFragment;
-import com.example.socialsport.utils.PreferenceManager;
-import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,27 +33,22 @@ public class PrincipalPageActivity extends FragmentActivity {
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> message = new ArrayList<>();
 
-    private PreferenceManager preferenceManager;
     private HashMap<String, ArrayList<String>> messagesMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_page_activity);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
-
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        preferenceManager= new PreferenceManager(getApplicationContext());
+        user =  (User) getIntent().getSerializableExtra("user");
+        //Log.d("DEBUGCA", " "+ user.getName());
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
+
+
         updateMessages();
 
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            user = Utils.getUserFromDatabase(uid);
-
-        } else {
-            Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
-        }
 
         meowBottomNavigation = findViewById(R.id.bottom_app_bar);
 

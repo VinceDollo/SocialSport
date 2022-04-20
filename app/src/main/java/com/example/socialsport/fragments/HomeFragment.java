@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,8 +22,6 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentHomeBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
-import com.example.socialsport.utils.PreferenceManager;
-import com.example.socialsport.utils.TableKeys;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,14 +35,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private View view;
     private FragmentHomeBinding binding;
-    private PreferenceManager preferenceManager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
         view = binding.getRoot();
-        preferenceManager= new PreferenceManager(getActivity());
 
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
@@ -56,11 +53,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-        //TODO - refactorer
-        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
-            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
+        if(user.getProfileImage() != null){
+            Toast.makeText(getActivity(), "WORK", Toast.LENGTH_SHORT).show();
+            byte[] bytes = Base64.decode(user.getProfileImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
+        }else {
+            Toast.makeText(getActivity(), "Image == null", Toast.LENGTH_SHORT).show();
         }
 
         return view;

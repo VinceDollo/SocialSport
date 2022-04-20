@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
+import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentAddActivityBinding;
-import com.example.socialsport.utils.PreferenceManager;
-import com.example.socialsport.utils.TableKeys;
+import com.example.socialsport.entities.User;
 
 public class AddActivityFragment extends Fragment implements View.OnClickListener {
 
@@ -27,10 +27,10 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
         View view = binding.getRoot();
         setOnClickListener();
 
-        //TODO - refactorer
-        PreferenceManager preferenceManager= new PreferenceManager(getActivity());
-        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
-            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
+        User user = ((PrincipalPageActivity) requireActivity()).getUser();
+
+        if(user.getProfileImage() != null){
+            byte[] bytes = Base64.decode(user.getProfileImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }

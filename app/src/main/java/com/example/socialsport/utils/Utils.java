@@ -73,9 +73,10 @@ public class Utils {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
-
                 user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
+        }).addOnFailureListener(e -> {
+            Log.e("GROSTAG", " "  + e.getMessage());
         });
         myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -90,6 +91,19 @@ public class Utils {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
                 user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
+            }
+        });
+        myRef.child("users").child(uid).child("image").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Error getting data", task.getException());
+            } else {
+                if(task.getResult().getValue()!=null){
+                    user.setProfileImage(Objects.requireNonNull(task.getResult().getValue()).toString());
+                    Log.d("QUOI ?", user.getProfileImage());
+
+                }else{
+                    Log.d("QUOI ?", "null");
+                }
             }
         });
         return user;
