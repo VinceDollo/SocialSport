@@ -242,7 +242,7 @@ public class MyMap {
         mMap.setOnMapClickListener(latLng -> {
             mMap.clear();
             mMap.addMarker(marker.position(latLng).title("Position you choose"));
-            currentLatLng =latLng;
+            currentLatLng = latLng;
         });
 
         if (icon != null) {
@@ -282,8 +282,6 @@ public class MyMap {
                 .apiKey(apiKey)
                 .build();
 
-        Log.d(TAG, Utils.latLngToString(origin));
-        Log.d(TAG, Utils.latLngToString(destination));
         DirectionsApiRequest req = DirectionsApi.getDirections(context, Utils.latLngToString(origin), Utils.latLngToString(destination));
         try {
             DirectionsResult res = req.await();
@@ -307,7 +305,7 @@ public class MyMap {
         }
     }
 
-    private void drawRouteLegs(DirectionsRoute route, List<LatLng> path){
+    private void drawRouteLegs(DirectionsRoute route, List<LatLng> path) {
         for (int i = 0; i < route.legs.length; i++) {
             DirectionsLeg leg = route.legs[i];
             if (leg.steps != null) {
@@ -319,7 +317,7 @@ public class MyMap {
         }
     }
 
-    private void drawRouteSteps(DirectionsStep step, List<LatLng> path){
+    private void drawRouteSteps(DirectionsStep step, List<LatLng> path) {
         if (step.steps != null && step.steps.length > 0) {
             for (int k = 0; k < step.steps.length; k++) {
                 DirectionsStep step1 = step.steps[k];
@@ -339,7 +337,7 @@ public class MyMap {
     /**
      * Decode polyline and add points to list of route coordinates
      */
-    private void addPointsToRouteCoordinates(EncodedPolyline points, List<LatLng> path){
+    private void addPointsToRouteCoordinates(EncodedPolyline points, List<LatLng> path) {
         List<com.google.maps.model.LatLng> coords = points.decodePath();
         for (com.google.maps.model.LatLng coord : coords) {
             path.add(new LatLng(coord.lat, coord.lng));
