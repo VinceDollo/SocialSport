@@ -1,7 +1,10 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +21,8 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentHomeBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
+import com.example.socialsport.utils.PreferenceManager;
+import com.example.socialsport.utils.TableKeys;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,12 +36,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private View view;
     private FragmentHomeBinding binding;
+    private PreferenceManager preferenceManager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
         view = binding.getRoot();
+        preferenceManager= new PreferenceManager(getActivity());
 
         // Get the SupportMapFragment and request notification when the map is ready to be used.
         SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
@@ -48,8 +55,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         setListeners();
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
-        if (user.getProfileImage() != null)
-            binding.civProfile.setImageBitmap(user.getProfileImage());
+
+        //TODO - refactorer
+        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
+            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+            binding.civProfile.setImageBitmap(bitmap);
+        }
 
         return view;
     }

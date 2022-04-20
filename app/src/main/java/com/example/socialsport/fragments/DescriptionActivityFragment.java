@@ -5,8 +5,11 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.LoginActivity;
 import com.example.socialsport.databinding.FragmentDescriptionActivityBinding;
+import com.example.socialsport.utils.PreferenceManager;
+import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,6 +52,14 @@ public class DescriptionActivityFragment extends Fragment {
         if (bundle != null) {
             sport = bundle.getString("sport");
             coordinates = bundle.getString("location");
+        }
+
+        //TODO - refactorer
+        PreferenceManager preferenceManager= new PreferenceManager(getActivity());
+        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
+            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+            binding.civProfile.setImageBitmap(bitmap);
         }
 
         setListeners();

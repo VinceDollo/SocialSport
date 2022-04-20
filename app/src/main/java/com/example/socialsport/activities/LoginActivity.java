@@ -12,9 +12,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.socialsport.databinding.LogInActivityBinding;
+import com.example.socialsport.entities.User;
+import com.example.socialsport.utils.PreferenceManager;
 import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 import io.paperdb.Paper;
 
@@ -22,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private int remainingTries;
     private LogInActivityBinding binding;
+    private PreferenceManager preferenceManager;
 
 
     @Override
@@ -29,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = LogInActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        preferenceManager = new PreferenceManager(getApplicationContext());
         Paper.init(this);
         setListeners();
         remainingTries = 3;
@@ -78,6 +86,50 @@ public class LoginActivity extends AppCompatActivity {
 
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, task -> {
                 if (task.isSuccessful()) {
+                    preferenceManager.putString(TableKeys.USER_UUID_KEY, task.getResult().getUser().toString());
+
+                    FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(task.getResult().getUser().getUid()).child(TableKeys.USER_NAME_KEY).get().addOnCompleteListener(task2 -> {
+                        if (!task2.isSuccessful()) {
+                            Log.e("TAG", "Error getting data", task2.getException());
+                        } else {
+                            Log.e("TAG", task2.getResult().getValue().toString());
+                            preferenceManager.putString(TableKeys.USER_NAME_KEY, (String) task2.getResult().getValue());
+                        }
+                    });
+                    FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(task.getResult().getUser().getUid()).child(TableKeys.USER_REAL_EMAIL_KEY).get().addOnCompleteListener(task2 -> {
+                        if (!task2.isSuccessful()) {
+                            Log.e("TAG", "Error getting data", task2.getException());
+                        } else {
+                            Log.e("TAG", task2.getResult().getValue().toString());
+                            preferenceManager.putString(TableKeys.USER_REAL_EMAIL_KEY, (String) task2.getResult().getValue());
+                        }
+                    });
+                    FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(task.getResult().getUser().getUid()).child(TableKeys.USER_AGE_KEY).get().addOnCompleteListener(task2 -> {
+                        if (!task2.isSuccessful()) {
+                            Log.e("TAG", "Error getting data", task2.getException());
+                        } else {
+                            Log.e("TAG", task2.getResult().getValue().toString());
+                            preferenceManager.putString(TableKeys.USER_AGE_KEY, (String) task2.getResult().getValue());
+                        }
+                    });
+
+                    FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(task.getResult().getUser().getUid()).child(TableKeys.USERS_IMAGE).get().addOnCompleteListener(task2 -> {
+                        if (!task2.isSuccessful()) {
+                            preferenceManager.putString(TableKeys.USERS_IMAGE, "");
+                            Log.e("TAG", "Error getting data", task2.getException());
+                        } else if(task2.getResult().getValue()==null) {
+                            Log.e("TAG", "Pas d'image");
+
+                        }else{
+                            Log.e("TAG", task2.getResult().getValue().toString());
+                            preferenceManager.putString(TableKeys.USER_AGE_KEY, (String) task2.getResult().getValue());
+                        }
+                    });
+
+                    Utils.getUserFromDatabase(task.getResult().getUser().getUid());
+                    //preferenceManager.putString(TableKeys.USER_NAME_KEY, task.getResult().);
+                    Log.d("LoginPage", task.getResult().getUser().toString());
+
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("LoginPage", "signInWithEmail:success");
                     loading(false);

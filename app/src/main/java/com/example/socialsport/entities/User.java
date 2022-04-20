@@ -7,7 +7,7 @@ public class User {
     private String email;
     private String name;
     private String age;
-    private Bitmap profileImage;
+    private String profileImage;
 
     public User(){
         email = "";
@@ -16,7 +16,7 @@ public class User {
         profileImage = null;
     }
 
-    public User(String email, String name, String age, Bitmap bitmap){
+    public User(String email, String name, String age, String bitmap){
         this.email = email;
         this.name = name;
         this.age = age;
@@ -49,11 +49,11 @@ public class User {
         this.age = age;
     }
 
-    public Bitmap getProfileImage() {
+    public String getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(Bitmap profileImage) {
+    public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.socialsport.activities;
 
+
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +11,13 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
-import com.example.socialsport.utils.Utils;
 import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.HomeFragment;
 import com.example.socialsport.fragments.MessageFragment;
 import com.example.socialsport.fragments.PersonFragment;
+import com.example.socialsport.utils.PreferenceManager;
+import com.example.socialsport.utils.TableKeys;
+import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +36,7 @@ public class PrincipalPageActivity extends FragmentActivity {
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> message = new ArrayList<>();
 
+    private PreferenceManager preferenceManager;
     private HashMap<String, ArrayList<String>> messagesMap;
 
     @Override
@@ -43,17 +47,13 @@ public class PrincipalPageActivity extends FragmentActivity {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
+        preferenceManager= new PreferenceManager(getApplicationContext());
         updateMessages();
 
         if (currentUser != null) {
             String uid = currentUser.getUid();
             user = Utils.getUserFromDatabase(uid);
-            Bitmap userImage = Utils.getUserImageFromDatabase(uid);
 
-            if (userImage != null) {
-                user.setProfileImage(userImage);
-            }
         } else {
             Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
         }
@@ -131,5 +131,6 @@ public class PrincipalPageActivity extends FragmentActivity {
     public User getUser() {
         return user;
     }
+
 
 }
