@@ -13,10 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
+import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentPlaceActivityBinding;
-import com.example.socialsport.utils.PreferenceManager;
+import com.example.socialsport.entities.User;
 import com.example.socialsport.utils.TableKeys;
-import com.google.android.gms.maps.GoogleMap;
 import com.example.socialsport.utils.MyMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
@@ -50,10 +50,12 @@ public class PlaceActivityFragment extends Fragment {
         binding = FragmentPlaceActivityBinding.inflate(inflater);
         View view = binding.getRoot();
 
-        PreferenceManager preferenceManager= new PreferenceManager(getActivity());
+        User user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
-            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
+
+        //TODO - refactorer
+        if(user.getProfileImage() != null){
+            byte[] bytes = Base64.decode(user.getProfileImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }

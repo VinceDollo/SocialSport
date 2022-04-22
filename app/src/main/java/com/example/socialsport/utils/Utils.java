@@ -68,7 +68,6 @@ public class Utils {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
-                Log.d(TAG, Objects.requireNonNull(task.getResult().getValue()).toString());
                 user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
         });

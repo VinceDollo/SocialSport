@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,14 +19,6 @@ import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentHomeBinding;
 import com.example.socialsport.entities.User;
-import com.example.socialsport.utils.PreferenceManager;
-import com.example.socialsport.utils.TableKeys;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-
-import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
@@ -52,6 +43,8 @@ public class HomeFragment extends Fragment {
             byte[] bytes = Base64.decode(user.getProfileImage() , Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
+        }else {
+            Log.d("Home", "image null");
         }
 
         return view;

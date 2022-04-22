@@ -22,8 +22,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
 import com.example.socialsport.activities.LoginActivity;
+import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentDescriptionActivityBinding;
-import com.example.socialsport.utils.PreferenceManager;
+import com.example.socialsport.entities.User;
 import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,10 +57,12 @@ public class DescriptionActivityFragment extends Fragment {
             coordinates = bundle.getString("location");
         }
 
+        User user = ((PrincipalPageActivity) requireActivity()).getUser();
+
+
         //TODO - refactorer
-        PreferenceManager preferenceManager= new PreferenceManager(getActivity());
-        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
-            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
+        if(user.getProfileImage() != null){
+            byte[] bytes = Base64.decode(user.getProfileImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }

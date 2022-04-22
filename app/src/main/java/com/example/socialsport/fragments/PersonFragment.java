@@ -26,8 +26,6 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentPersonBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
-import com.example.socialsport.utils.PreferenceManager;
-import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 

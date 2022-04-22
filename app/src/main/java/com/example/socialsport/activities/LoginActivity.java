@@ -79,13 +79,10 @@ public class LoginActivity extends AppCompatActivity {
 
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, task -> {
                 if (task.isSuccessful()) {
-                    Utils.getUserFromDatabase(Objects.requireNonNull(task.getResult().getUser()).getUid());
-
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("LoginPage", "signInWithEmail:success");
                     loading(false);
                     Intent i = new Intent(getApplicationContext(), PrincipalPageActivity.class);
-                    i.putExtra("user", Utils.getUserFromDatabase(task.getResult().getUser().getUid()));
                     startActivity(i);
 
                 } else {

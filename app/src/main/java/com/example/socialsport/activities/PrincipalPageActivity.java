@@ -1,6 +1,7 @@
 package com.example.socialsport.activities;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,7 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
 import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.HomeFragment;
+import com.example.socialsport.fragments.LoadFragment;
 import com.example.socialsport.fragments.MessageFragment;
 import com.example.socialsport.fragments.PersonFragment;
 import com.example.socialsport.utils.Utils;
@@ -46,8 +48,8 @@ public class PrincipalPageActivity extends FragmentActivity {
         updateMessages();
 
         if (currentUser != null) {
-            user = Utils.getUserFromDatabase(currentUser.getUid());
-            //user = (User) getIntent().getSerializableExtra("user");
+            String uid = currentUser.getUid();
+            user = (User) Utils.getUserFromDatabase(uid);
         } else {
             Log.e(TAG, "Current user is null");
         }
@@ -77,9 +79,11 @@ public class PrincipalPageActivity extends FragmentActivity {
             return null;
         });
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new LoadFragment()).addToBackStack(null).commit();
         Utils.setActivitiesListenerFromDatabase(this); //Listen to activities managements
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
+        Handler handler = new Handler();
+        handler.postDelayed(() -> getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit(), 1000);
     }
 
     private void replace(Fragment fragment) {
