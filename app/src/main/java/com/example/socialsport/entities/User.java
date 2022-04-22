@@ -23,6 +23,7 @@ public class User implements Serializable {
         this.name = name;
         this.age = age;
         this.profileImage = bitmap;
+        new User(); //Code smell
     }
 
     public String getEmail() {

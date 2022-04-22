@@ -39,7 +39,6 @@ public class PrincipalPageActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_page_activity);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -79,6 +78,8 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
 
         Utils.setActivitiesListenerFromDatabase(this); //Listen to activities managements
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
     }
 
     private void replace(Fragment fragment) {
