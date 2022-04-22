@@ -39,7 +39,6 @@ import io.paperdb.Paper;
 
 public class PersonFragment extends Fragment {
 
-    private User user;
     private FragmentPersonBinding binding;
 
     @Override
@@ -50,11 +49,10 @@ public class PersonFragment extends Fragment {
         View view = binding.getRoot();
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3, true);
 
+        User user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-        user = ((PrincipalPageActivity) requireActivity()).getUser();
-
-        if (user.getProfileImage() != null) {
-            byte[] bytes = Base64.decode(user.getProfileImage() , Base64.DEFAULT);
+        if (user.getImage() != null) {
+            byte[] bytes = Base64.decode(user.getImage() , Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }

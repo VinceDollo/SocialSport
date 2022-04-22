@@ -30,8 +30,8 @@ public class AddActivityFragment extends Fragment implements View.OnClickListene
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-        if(user.getProfileImage() != null){
-            byte[] bytes = Base64.decode(user.getProfileImage(), Base64.DEFAULT);
+        if(user.getImage() != null){
+            byte[] bytes = Base64.decode(user.getImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }

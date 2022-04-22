@@ -17,9 +17,5 @@ u
 Eapp/src/main/java/com/example/socialsport/entities/SportActivity.java,b/1/b197e3c08f6936da118d456e84014e577fd8691e
 }
 Mapp/src/main/java/com/example/socialsport/fragments/ConversationFragment.java,1/e/1e5beb280af384ca8e23d1b80e2c2c21e01b7448
-|
-Lapp/src/main/java/com/example/socialsport/fragments/AddActivityFragment.java,f/d/fd9c74387ec9a372b45607f87da380ebb23ea91a
-„
-Tapp/src/main/java/com/example/socialsport/fragments/DescriptionActivityFragment.java,7/c/7c972601cf4185e360ac87d0340d5f9c0f680cb0
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e

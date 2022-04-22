@@ -38,11 +38,13 @@ public class HomeFragment extends Fragment {
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-        if (user.getProfileImage() != null) {
-            Log.d("Home", user.getProfileImage());
-            byte[] bytes = Base64.decode(user.getProfileImage() , Base64.DEFAULT);
+        if (user.getImage() != null) {
+            Log.d("Home", user.getImage());
+            byte[] bytes = Base64.decode(user.getImage() , Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
+        }else {
+            Log.d("Home", "Image null for this user");
         }
 
         return view;
