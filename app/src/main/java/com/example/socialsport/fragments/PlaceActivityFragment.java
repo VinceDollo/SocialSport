@@ -16,7 +16,6 @@ import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentPlaceActivityBinding;
 import com.example.socialsport.entities.User;
-import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.MyMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
@@ -54,8 +53,8 @@ public class PlaceActivityFragment extends Fragment {
 
 
         //TODO - refactorer
-        if(user.getProfileImage() != null){
-            byte[] bytes = Base64.decode(user.getProfileImage(), Base64.DEFAULT);
+        if(user.getImage() != null){
+            byte[] bytes = Base64.decode(user.getImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }

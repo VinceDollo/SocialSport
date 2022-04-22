@@ -63,6 +63,7 @@ public class OverviewFragment extends Fragment {
             binding.btnParticipate.setText(R.string.participate);
     }
 
+    //TODO: lot of refactoring to do
     private void queryDbUsers() {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference activitiesRef = rootRef.child("activities");
@@ -71,8 +72,20 @@ public class OverviewFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 binding.tableLayout.removeAllViews();
                 if (!participantsUuids.isEmpty()) {
-                    binding.imgOrganiser.setImageResource(R.drawable.img_person);
-                    binding.nameOrganiser.setText(R.string.app_name); //TODO: get organiser's name
+                    FirebaseDatabase.getInstance().getReference().child("users").child(participantsUuids.get(0)).get().addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Log.e(TAG, "Error getting data", task.getException());
+                            binding.nameOrganiser.setText(R.string.app_name);
+                        } else {
+                            User organiser = task.getResult().getValue(User.class);
+                            if (organiser != null) {
+                                binding.nameOrganiser.setText(organiser.getName());
+                                byte[] bytes = Base64.decode(organiser.getImage(), Base64.DEFAULT);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                binding.imgOrganiser.setImageBitmap(bitmap);
+                            }
+                        }
+                    });
                     for (String participantUuid : participantsUuids) {
                         addParticipantView(participantUuid);
                     }
@@ -95,8 +108,8 @@ public class OverviewFragment extends Fragment {
                 User participant = task.getResult().getValue(User.class);
                 if (participant != null) {
                     Log.d(TAG, participant.toString());
-                    if (participant.getProfileImage() != null) {
-                        byte[] bytes = Base64.decode(participant.getProfileImage(), Base64.DEFAULT);
+                    if (participant.getImage() != null) {
+                        byte[] bytes = Base64.decode(participant.getImage(), Base64.DEFAULT);
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         ((CircleImageView) row.findViewById(R.id.img_participant)).setImageBitmap(bitmap);
                     } else {

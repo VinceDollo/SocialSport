@@ -49,7 +49,7 @@ public class User implements Serializable {
         this.age = age;
     }
 
-    public String getProfileImage() {
+    public String getImage() {
         return image;
     }
 
@@ -63,8 +63,8 @@ public class User implements Serializable {
         result.append(getName()).append(" - email : ").append(getEmail())
                 .append(" - age : ").append(getAge())
                 .append(" - image : ");
-        if (getProfileImage() != null) {
-            result.append(getProfileImage());
+        if (getImage() != null) {
+            result.append(getImage());
         } else {
             result.append("null");
         }
