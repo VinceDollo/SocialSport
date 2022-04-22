@@ -1,4 +1,4 @@
-package com.example.socialsport;
+package com.example.socialsport.utils;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
@@ -18,8 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.socialsport.R;
 import com.example.socialsport.entities.SportActivity;
-import com.example.socialsport.utils.Utils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -216,7 +216,7 @@ public class MyMap {
                         double latitude = addresses.get(0).getLatitude();
                         double longitude = addresses.get(0).getLongitude();
                         LatLng placeToFind = new LatLng(latitude, longitude);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeToFind, 15));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeToFind, 14));
                     }
                 } catch (IOException e) {
                     Log.d(TAG, e.toString());
@@ -242,7 +242,7 @@ public class MyMap {
         mMap.setOnMapClickListener(latLng -> {
             mMap.clear();
             mMap.addMarker(marker.position(latLng).title("Position you choose"));
-            currentLatLng =latLng;
+            currentLatLng = latLng;
         });
 
         if (icon != null) {
@@ -282,8 +282,6 @@ public class MyMap {
                 .apiKey(apiKey)
                 .build();
 
-        Log.d(TAG, Utils.latLngToString(origin));
-        Log.d(TAG, Utils.latLngToString(destination));
         DirectionsApiRequest req = DirectionsApi.getDirections(context, Utils.latLngToString(origin), Utils.latLngToString(destination));
         try {
             DirectionsResult res = req.await();
@@ -307,7 +305,7 @@ public class MyMap {
         }
     }
 
-    private void drawRouteLegs(DirectionsRoute route, List<LatLng> path){
+    private void drawRouteLegs(DirectionsRoute route, List<LatLng> path) {
         for (int i = 0; i < route.legs.length; i++) {
             DirectionsLeg leg = route.legs[i];
             if (leg.steps != null) {
@@ -319,7 +317,7 @@ public class MyMap {
         }
     }
 
-    private void drawRouteSteps(DirectionsStep step, List<LatLng> path){
+    private void drawRouteSteps(DirectionsStep step, List<LatLng> path) {
         if (step.steps != null && step.steps.length > 0) {
             for (int k = 0; k < step.steps.length; k++) {
                 DirectionsStep step1 = step.steps[k];
@@ -339,7 +337,7 @@ public class MyMap {
     /**
      * Decode polyline and add points to list of route coordinates
      */
-    private void addPointsToRouteCoordinates(EncodedPolyline points, List<LatLng> path){
+    private void addPointsToRouteCoordinates(EncodedPolyline points, List<LatLng> path) {
         List<com.google.maps.model.LatLng> coords = points.decodePath();
         for (com.google.maps.model.LatLng coord : coords) {
             path.add(new LatLng(coord.lat, coord.lng));

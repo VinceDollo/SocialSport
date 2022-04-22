@@ -8,11 +8,11 @@ import java.util.List;
 public class SportActivity {
 
     private String sport;
-    private final String description;
-    private final String date;
-    private final String time;
-    private final String uuidOrganiser;
-    private final String coords;
+    private String description;
+    private String date;
+    private String time;
+    private String uuidOrganiser;
+    private String coords;
     private ArrayList<String> uuids = new ArrayList<>();
 
     public SportActivity() {
@@ -32,8 +32,6 @@ public class SportActivity {
         this.uuidOrganiser = uuidOrganiser;
         this.coords = coords;
         uuids.add(uuidOrganiser);
-
-        new SportActivity(); //Code smell
     }
 
     public String getSport() {
@@ -46,6 +44,26 @@ public class SportActivity {
 
     public String getCoords() {
         return coords;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setUuidOrganiser(String uuidOrganiser) {
+        this.uuidOrganiser = uuidOrganiser;
+    }
+
+    public void setCoords(String coords) {
+        this.coords = coords;
     }
 
     public String getDescription() {

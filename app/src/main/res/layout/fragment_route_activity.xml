@@ -66,11 +66,6 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="UselessParent">
-
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/f_maps"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -87,9 +82,9 @@
                     android:layout_alignEnd="@+id/f_maps"
                     android:layout_alignBottom="@+id/f_maps"
                     android:contentDescription="@string/fragment_container"
-                    android:src="@android:color/transparent" />
+                    android:src="@android:color/transparent"
+                    map:ignore="ObsoleteLayoutParam" />
 
-            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout

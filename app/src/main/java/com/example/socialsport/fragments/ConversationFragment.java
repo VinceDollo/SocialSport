@@ -1,6 +1,7 @@
 package com.example.socialsport.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,6 +20,7 @@ import com.example.socialsport.databinding.FragmentConversationBinding;
 import java.util.ArrayList;
 
 public class ConversationFragment extends Fragment {
+
     private String name;
 
     private ArrayList<String> message;

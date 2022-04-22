@@ -21,7 +21,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.example.socialsport.MyReceiver;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
@@ -71,7 +70,7 @@ public class Utils {
     public static User getUserFromDatabase(String uid) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
         Log.d("TEST", myRef.child(TableKeys.USERS).get().toString());
-        User user = new User(null, null, null, null);
+        User user = new User();
         myRef.child(TableKeys.USERS).child(uid).child(TableKeys.USER_NAME_KEY).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
@@ -132,16 +131,16 @@ public class Utils {
                     assert act != null;
                     Log.d(TAG, act.toString());
 
-                    String sport = act.getSport();
-                    String description = act.getDescription();
-                    String date = act.getDate();
-                    String time = act.getTime();
-                    String uuidOrganiser = act.getUuidOrganiser();
-                    String coords = act.getCoords();
-                    ArrayList<String> uuids = (ArrayList<String>) act.getUuids();
+                    SportActivity newActivity = new SportActivity();
 
-                    SportActivity newActivity = new SportActivity(sport, description, date, time, uuidOrganiser, coords);
-                    newActivity.setUuids(uuids);
+                    newActivity.setSport(act.getSport());
+                    newActivity.setDescription(act.getDescription());
+                    newActivity.setDate(act.getDate());
+                    newActivity.setTime(act.getTime());
+                    newActivity.setUuidOrganiser(act.getUuidOrganiser());
+                    newActivity.setCoords(act.getCoords());
+                    newActivity.setUuids(act.getUuids());
+
                     allActivities.add(newActivity);
                 }
 
@@ -335,7 +334,5 @@ public class Utils {
     public static void toast(Context c,String a){
         Toast.makeText(c, a, Toast.LENGTH_SHORT).show();
     }
-
-
 
 }

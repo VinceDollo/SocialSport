@@ -1,4 +1,4 @@
-package com.example.socialsport;
+package com.example.socialsport.utils;
 
 import android.app.IntentService;
 import android.app.NotificationChannel;
@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.utils.Utils;
