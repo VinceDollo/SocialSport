@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -22,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.example.socialsport.R;
-import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -34,10 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -67,13 +61,14 @@ public class Utils {
     }
 
     public static User getUserFromDatabase(String uid) {
+        Log.d(TAG, uid);
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
         User user = new User();
+
         myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
-                Log.d(TAG, Objects.requireNonNull(task.getResult().getValue()).toString());
                 user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
         });
@@ -98,12 +93,11 @@ public class Utils {
             } else {
                 if (task.getResult().getValue() != null) {
                     user.setProfileImage(Objects.requireNonNull(task.getResult().getValue()).toString());
-                    Log.e(TAG, user.getProfileImage());
-                } else {
-                    Log.e(TAG, "null");
                 }
             }
         });
+
+
         return user;
     }
 
