@@ -254,7 +254,6 @@ public class MyMap {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
     }
 
-    //TODO: doesn't work with current position => callback in getDeviceLocation()
     public void drawRoute(LatLng origin, SportActivity activityDestination) {
         LatLng destination = Utils.stringToLatLng(activityDestination.getCoords());
 

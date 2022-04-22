@@ -1,6 +1,5 @@
 package com.example.socialsport.activities;
 
-
 import android.os.Bundle;
 import android.util.Log;
 
@@ -40,16 +39,19 @@ public class PrincipalPageActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_page_activity);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        user =  (User) getIntent().getSerializableExtra("user");
-        //Log.d("DEBUGCA", " "+ user.getName());
-
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
         updateMessages();
 
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            user = Utils.getUserFromDatabase(uid);
+        } else {
+            Log.e(TAG, "Current user is null");
+        }
 
         meowBottomNavigation = findViewById(R.id.bottom_app_bar);
 

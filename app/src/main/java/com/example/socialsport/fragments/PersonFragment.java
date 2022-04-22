@@ -43,8 +43,6 @@ public class PersonFragment extends Fragment {
 
     private User user;
     private FragmentPersonBinding binding;
-    private PreferenceManager preferenceManager;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -52,16 +50,14 @@ public class PersonFragment extends Fragment {
         binding = FragmentPersonBinding.inflate(inflater);
         // Inflate the layout for this fragment
         View view = binding.getRoot();
-        preferenceManager = new PreferenceManager(getActivity());
-
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3, true);
 
 
         user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
-            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+        if (user.getProfileImage() != null) {
+            byte[] bytes = Base64.decode(user.getProfileImage() , Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }
 
@@ -71,7 +67,6 @@ public class PersonFragment extends Fragment {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri);
                 Utils.uploadImage(encodeImage(bitmap), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
                 user.setProfileImage(encodeImage(bitmap));
-                preferenceManager.putString(TableKeys.USERS_IMAGE,encodeImage(bitmap));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -97,9 +92,6 @@ public class PersonFragment extends Fragment {
             Intent i = new Intent(requireContext(), LoginActivity.class);
             startActivity(i);
         });
-
-        //if (user.getProfileImage() != null)
-           // binding.civProfile.setI
     }
 
     @SuppressLint("SetTextI18n")
@@ -160,13 +152,13 @@ public class PersonFragment extends Fragment {
         }
     }
 
-    private String encodeImage(Bitmap image){
-        int previewWidht = 150;
-        int previewHeight = image.getHeight()*previewWidht/image.getHeight();
-        Bitmap previewBitmap = Bitmap.createScaledBitmap(image,previewWidht,previewHeight, false);
+    private String encodeImage(Bitmap image) {
+        int previewWidth = 150;
+        int previewHeight = image.getHeight() * previewWidth / image.getHeight();
+        Bitmap previewBitmap = Bitmap.createScaledBitmap(image, previewWidth, previewHeight, false);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-        byte[] bytes= byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(bytes,Base64.DEFAULT);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 }

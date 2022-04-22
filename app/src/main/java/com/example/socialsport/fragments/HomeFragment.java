@@ -47,14 +47,11 @@ public class HomeFragment extends Fragment {
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-        //TODO - refactorer
-        PreferenceManager preferenceManager= new PreferenceManager(getActivity());
-        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
-            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+        if (user.getProfileImage() != null) {
+            Log.d("Home", user.getProfileImage());
+            byte[] bytes = Base64.decode(user.getProfileImage() , Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
-        }else {
-            Toast.makeText(getActivity(), "Image == null", Toast.LENGTH_SHORT).show();
         }
 
         return view;

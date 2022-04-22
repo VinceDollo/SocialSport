@@ -26,7 +26,7 @@ public class RouteActivityFragment extends Fragment {
     private final OnMapReadyCallback callback = googleMap -> {
         MyMap myMap = new MyMap(googleMap, requireActivity(), requireView());
         Handler handler = new Handler();
-        handler.postDelayed(() -> myMap.drawRoute(myMap.getCurrentLatLng(), destinationActivity), 1000); //TODO: try a better way
+        handler.postDelayed(() -> myMap.drawRoute(myMap.getCurrentLatLng(), destinationActivity), 1000); //TODO: try a better way => callback
     };
 
     private void btnBackListener() {

@@ -61,7 +61,6 @@ public class Utils {
         }
     }
 
-
     public static void writeUserIntoDatabase(String email, String name, String age, String uid) {
         User currentUser = new User(email, name, age, null);
         FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(currentUser);
@@ -69,16 +68,14 @@ public class Utils {
 
     public static User getUserFromDatabase(String uid) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        Log.d("TEST", myRef.child(TableKeys.USERS).get().toString());
         User user = new User();
-        myRef.child(TableKeys.USERS).child(uid).child(TableKeys.USER_NAME_KEY).get().addOnCompleteListener(task -> {
+        myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
+                Log.d(TAG, Objects.requireNonNull(task.getResult().getValue()).toString());
                 user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
-        }).addOnFailureListener(e -> {
-            Log.e("GROSTAG", " "  + e.getMessage());
         });
         myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -99,12 +96,11 @@ public class Utils {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
-                if(task.getResult().getValue()!=null){
+                if (task.getResult().getValue() != null) {
                     user.setProfileImage(Objects.requireNonNull(task.getResult().getValue()).toString());
-                    Log.d("QUOI ?", user.getProfileImage());
-
-                }else{
-                    Log.d("QUOI ?", "null");
+                    Log.e(TAG, user.getProfileImage());
+                } else {
+                    Log.e(TAG, "null");
                 }
             }
         });
@@ -331,7 +327,7 @@ public class Utils {
         return bitmap;
     }
 
-    public static void toast(Context c,String a){
+    public static void toast(Context c, String a) {
         Toast.makeText(c, a, Toast.LENGTH_SHORT).show();
     }
 
