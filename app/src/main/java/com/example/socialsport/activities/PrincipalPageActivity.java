@@ -50,6 +50,7 @@ public class PrincipalPageActivity extends FragmentActivity {
         if (currentUser != null) {
             String uid = currentUser.getUid();
             user = (User) Utils.getUserFromDatabase(uid);
+
         } else {
             Log.e(TAG, "Current user is null");
         }

@@ -15,7 +15,7 @@ public class User implements Serializable {
         email = "";
         name = "";
         age = "";
-        image = "";
+        image = null;
     }
 
     public User(String email, String name, String age, String image) {

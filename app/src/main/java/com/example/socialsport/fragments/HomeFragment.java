@@ -43,8 +43,6 @@ public class HomeFragment extends Fragment {
             byte[] bytes = Base64.decode(user.getProfileImage() , Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
-        }else {
-            Log.d("Home", "image null");
         }
 
         return view;
