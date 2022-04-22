@@ -1,6 +1,6 @@
 package com.example.socialsport.entities;
 
-import android.graphics.Bitmap;
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
@@ -9,21 +9,20 @@ public class User implements Serializable {
     private String email;
     private String name;
     private String age;
-    private String profileImage;
+    private String image;
 
-    public User(){
+    public User() {
         email = "";
         name = "";
         age = "";
-        profileImage = null;
+        image = "";
     }
 
-    public User(String email, String name, String age, String bitmap){
+    public User(String email, String name, String age, String image) {
         this.email = email;
         this.name = name;
         this.age = age;
-        this.profileImage = bitmap;
-        new User(); //Code smell
+        this.image = image;
     }
 
     public String getEmail() {
@@ -51,18 +50,24 @@ public class User implements Serializable {
     }
 
     public String getProfileImage() {
-        return profileImage;
+        return image;
     }
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public String toString(){
-        String fin = "name : " + getName() + " - email : "+ getEmail() + " - age : "+ getAge();
-        if(getProfileImage()!=null){
-            fin+= " - image : "+getProfileImage();
+    @NonNull
+    public String toString() {
+        StringBuilder result = new StringBuilder("name : ");
+        result.append(getName()).append(" - email : ").append(getEmail())
+                .append(" - age : ").append(getAge())
+                .append(" - image : ");
+        if (getProfileImage() != null) {
+            result.append(getProfileImage());
+        } else {
+            result.append("null");
         }
-        return fin;
+        return result.toString();
     }
 }

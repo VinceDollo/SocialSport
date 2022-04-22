@@ -12,14 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.socialsport.databinding.LogInActivityBinding;
-import com.example.socialsport.entities.User;
-import com.example.socialsport.utils.PreferenceManager;
 import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
@@ -29,19 +24,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private int remainingTries;
     private LogInActivityBinding binding;
-    private User infoUser;
-    private PreferenceManager preferenceManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = LogInActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        preferenceManager = new PreferenceManager(getApplicationContext());
         Paper.init(this);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         setListeners();
         remainingTries = 3;
     }
@@ -66,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.btnLogIn.setOnClickListener(view -> {
-            if(isValidInformation()) {
+            if (Boolean.TRUE.equals(isValidInformation())) {
                 tryToLoginUser();
             }
         });
@@ -79,8 +68,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void tryToLoginUser() {
         loading(true);
-        String email = binding.etEmail.getText().toString();
-        String password = binding.etPassword.getText().toString();
+        String email = Objects.requireNonNull(binding.etEmail.getText()).toString();
+        String password = Objects.requireNonNull(binding.etPassword.getText()).toString();
 
         if (!email.isEmpty() && !password.isEmpty()) {
             if (binding.checkboxRememberMe.isChecked()) {
@@ -90,58 +79,13 @@ public class LoginActivity extends AppCompatActivity {
 
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, task -> {
                 if (task.isSuccessful()) {
-                    preferenceManager.putString(TableKeys.USER_UUID_KEY, task.getResult().getUser().toString());
-
-                    FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(task.getResult().getUser().getUid()).child(TableKeys.USER_NAME_KEY).get().addOnCompleteListener(task2 -> {
-                        if (!task2.isSuccessful()) {
-                            Log.e("TAG", "Error getting data", task2.getException());
-                        } else {
-                            Log.e("TAG", task2.getResult().getValue().toString());
-                            preferenceManager.putString(TableKeys.USER_NAME_KEY, (String) task2.getResult().getValue());
-                        }
-                    });
-                    FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(task.getResult().getUser().getUid()).child(TableKeys.USER_REAL_EMAIL_KEY).get().addOnCompleteListener(task2 -> {
-                        if (!task2.isSuccessful()) {
-                            Log.e("TAG", "Error getting data", task2.getException());
-                        } else {
-                            Log.e("TAG", task2.getResult().getValue().toString());
-                            preferenceManager.putString(TableKeys.USER_REAL_EMAIL_KEY, (String) task2.getResult().getValue());
-                        }
-                    });
-                    FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(task.getResult().getUser().getUid()).child(TableKeys.USER_AGE_KEY).get().addOnCompleteListener(task2 -> {
-                        if (!task2.isSuccessful()) {
-                            Log.e("TAG", "Error getting data", task2.getException());
-                        } else {
-                            Log.e("TAG", task2.getResult().getValue().toString());
-                            preferenceManager.putString(TableKeys.USER_AGE_KEY, (String) task2.getResult().getValue());
-                        }
-                    });
-
-                    FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(task.getResult().getUser().getUid()).child(TableKeys.USERS_IMAGE).get().addOnCompleteListener(task2 -> {
-                        if (!task2.isSuccessful()) {
-                            preferenceManager.putString(TableKeys.USERS_IMAGE, "");
-                            Log.e("TAG", "Error getting data", task2.getException());
-                        } else if(task2.getResult().getValue()==null) {
-                            Log.e("TAG", "Pas d'image");
-
-                        }else{
-                            Log.e("TAG", task2.getResult().getValue().toString());
-                            preferenceManager.putString(TableKeys.USERS_IMAGE, (String) task2.getResult().getValue());
-                        }
-                    });
-
-                    Utils.getUserFromDatabase(task.getResult().getUser().getUid());
-                    //preferenceManager.putString(TableKeys.USER_NAME_KEY, task.getResult().);
-                   // infoUser = Utils.getUserFromDatabase(task.getResult().getUser().getUid());
-                    //preferenceManager.putString(TableKeys.USER_NAME_KEY, task.getResult().);
-                  //  Log.d("DEBUGCA", "Name " +Utils.getUserFromDatabase(task.getResult().getUser().getUid()).getName());
-                  //  Log.d("DEBUGCA", " Image : " +Utils.getUserFromDatabase(task.getResult().getUser().getUid()).getProfileImage());
+                    Utils.getUserFromDatabase(Objects.requireNonNull(task.getResult().getUser()).getUid());
 
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("LoginPage", "signInWithEmail:success");
                     loading(false);
                     Intent i = new Intent(getApplicationContext(), PrincipalPageActivity.class);
-                    i.putExtra("user",Utils.getUserFromDatabase(task.getResult().getUser().getUid()));
+                    i.putExtra("user", Utils.getUserFromDatabase(task.getResult().getUser().getUid()));
                     startActivity(i);
 
                 } else {
@@ -155,7 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                         binding.btnLogIn.setBackgroundColor(Color.DKGRAY);
                     }
                     loading(false);
-
                 }
             });
         } else {
@@ -165,28 +108,27 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void loading(Boolean isLoading){
-        if(isLoading){
+    private void loading(Boolean isLoading) {
+        if (Boolean.TRUE.equals(isLoading)) {
             binding.btnLogIn.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             binding.progressBar.setVisibility(View.INVISIBLE);
             binding.btnLogIn.setVisibility(View.VISIBLE);
-
         }
     }
 
     private Boolean isValidInformation() {
-        if(binding.etEmail.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(binding.etEmail.getText()).toString().trim().isEmpty()) {
             Utils.toast(LoginActivity.this, "Enter email");
             return false;
-        }else if(!Patterns.EMAIL_ADDRESS.matcher(binding.etEmail.getText().toString()).matches()){
-            Utils.toast( LoginActivity.this,"Enter valid email");
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.etEmail.getText().toString()).matches()) {
+            Utils.toast(LoginActivity.this, "Enter valid email");
             return false;
-        }else if(binding.etPassword.getText().toString().trim().isEmpty()){
-            Utils.toast(LoginActivity.this,"Enter password");
+        } else if (Objects.requireNonNull(binding.etPassword.getText()).toString().trim().isEmpty()) {
+            Utils.toast(LoginActivity.this, "Enter password");
             return false;
-        }else {
+        } else {
             return true;
         }
     }

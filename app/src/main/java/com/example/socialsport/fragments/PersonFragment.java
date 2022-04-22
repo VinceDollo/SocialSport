@@ -66,7 +66,7 @@ public class PersonFragment extends Fragment {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri);
                 Utils.uploadImage(encodeImage(bitmap), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
-                user.setProfileImage(encodeImage(bitmap));
+                user.setImage(encodeImage(bitmap));
             } catch (IOException e) {
                 e.printStackTrace();
             }
