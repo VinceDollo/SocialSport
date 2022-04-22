@@ -20,34 +20,42 @@ import java.util.ArrayList;
 
 public class MapsFragment extends Fragment {
 
-    private final OnMapReadyCallback callback = googleMap -> {
-        MyMap myMap = new MyMap(googleMap, requireActivity(), requireView());
+    private final OnMapReadyCallback callback;
 
-        myMap.searchPlaceListener(); // Enable search location listener
+    public MapsFragment() {
+        this.callback = googleMap -> {
+            MyMap myMap = new MyMap(googleMap, requireActivity(), requireView());
 
-        myMap.getmMap().setOnMarkerClickListener(marker -> {
-            marker.hideInfoWindow();
-            myMap.getmMap().animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+            myMap.searchPlaceListener(); // Enable search location listener
 
-            String title = (marker.getTitle());
-            SportActivity clicked = myMap.getSportActivities().get(title);
+            myMap.getmMap().setOnMarkerClickListener(marker -> {
+                marker.hideInfoWindow();
+                myMap.getmMap().animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
-            Bundle result = new Bundle();
-            if (clicked != null) {
-                result.putString("sport", clicked.getSport());
-                result.putString("activityID", title);
-                result.putStringArrayList("participants", (ArrayList<String>) clicked.getUuids());
-                result.putString("organiserUuid", clicked.getUuidOrganiser());
-                result.putString("dateTime", clicked.getDate() + ", " + clicked.getTime());
-                result.putString("location", clicked.getCoords());
+                String title = (marker.getTitle());
+                SportActivity clicked = myMap.getSportActivities().get(title);
 
-                Fragment newF = new OverviewFragment();
-                newF.setArguments(result);
-                this.getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
-            }
-            return true;
-        });
-    };
+                Bundle result = new Bundle();
+                if (clicked != null) {
+                    result.putString("sport", clicked.getSport());
+                    result.putString("activityID", title);
+                    result.putStringArrayList("participants", (ArrayList<String>) clicked.getUuids());
+                    result.putString("organiserUuid", clicked.getUuidOrganiser());
+                    result.putString("dateTime", clicked.getDate() + ", " + clicked.getTime());
+                    result.putString("location", clicked.getCoords());
+
+                    Fragment newF = new OverviewFragment();
+                    newF.setArguments(result);
+                    this.getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
+                }
+                return true;
+            });
+        };
+    }
+
+    public MapsFragment(OnMapReadyCallback callback) {
+        this.callback = callback;
+    }
 
     @Nullable
     @Override
@@ -60,10 +68,10 @@ public class MapsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
     }
+
 }

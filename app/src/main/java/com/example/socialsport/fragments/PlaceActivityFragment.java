@@ -9,16 +9,33 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.socialsport.utils.MyMap;
 import com.example.socialsport.R;
 import com.example.socialsport.databinding.FragmentPlaceActivityBinding;
-import com.google.android.gms.maps.GoogleMap;
+import com.example.socialsport.utils.MyMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
-public class PlaceActivityFragment extends Fragment implements OnMapReadyCallback {
+public class PlaceActivityFragment extends Fragment {
 
     private String sport;
     private FragmentPlaceActivityBinding binding;
+
+    private final OnMapReadyCallback callback = googleMap -> {
+        MyMap myMap = new MyMap(googleMap, requireActivity(), requireView());
+
+        myMap.addActivityMarker(sport);
+
+        binding.btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
+
+        binding.btnValidate.setOnClickListener(view1 -> {
+            //Add information to next fragment
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("sport", sport);
+            bundle1.putString("location", String.valueOf(myMap.getCurrentLatLng()));
+            Fragment newF = new DescriptionActivityFragment();
+            newF.setArguments(bundle1);
+            getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
+        });
+    };
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -33,29 +50,9 @@ public class PlaceActivityFragment extends Fragment implements OnMapReadyCallbac
             binding.tvTitle.setText("Choose location for " + sport);
         }
 
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.f_maps, new MapsFragment()).addToBackStack(null).commit();
-
-        binding.btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new AddActivityFragment()).addToBackStack(null).commit());
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.f_maps, new MapsFragment(callback)).addToBackStack(null).commit();
 
         return view;
-    }
-
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        MyMap map = new MyMap(googleMap, requireActivity(), requireView());
-        map.searchPlaceListener();
-
-        binding.btnValidate.setOnClickListener(view12 -> {
-            //Add information to next fragment
-            Bundle bundle1 = new Bundle();
-            bundle1.putString("sport", sport);
-            bundle1.putString("location", String.valueOf(map.getCurrentLatLng()));
-            Fragment newF = new DescriptionActivityFragment();
-            newF.setArguments(bundle1);
-            getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
-        });
-
-        map.addActivityMarker(sport);
     }
 
 }
