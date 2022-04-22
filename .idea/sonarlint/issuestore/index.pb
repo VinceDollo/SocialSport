@@ -15,8 +15,6 @@ x
 Happ/src/main/java/com/example/socialsport/fragments/MessageFragment.java,b/1/b1ed71d04a82a96b16520aecc9f92c17ce9e6464
 @
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
-w
-Gapp/src/main/java/com/example/socialsport/fragments/PersonFragment.java,8/1/8191a7f9b51f69639cb6062519b579b0ea367ecc
 y
 Iapp/src/main/java/com/example/socialsport/fragments/OverviewFragment.java,8/6/8605517c12c56886faf5b58e29d169601a49a691
 u
@@ -29,9 +27,3 @@ Lapp/src/main/java/com/example/socialsport/fragments/AddActivityFragment.java,f
 Tapp/src/main/java/com/example/socialsport/fragments/DescriptionActivityFragment.java,7/c/7c972601cf4185e360ac87d0340d5f9c0f680cb0
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
-l
-<app/src/main/java/com/example/socialsport/entities/User.java,5/2/52d4e7e7c4196e8a71fd88562366acb09e75b23a
-
-Oapp/src/main/java/com/example/socialsport/activities/PrincipalPageActivity.java,5/e/5e5bca5e824150b3171303d3dc685fa9b00f71ff
-j
-:app/src/main/java/com/example/socialsport/utils/Utils.java,e/4/e45832301246f9960478a21c7f7af5984e3031de

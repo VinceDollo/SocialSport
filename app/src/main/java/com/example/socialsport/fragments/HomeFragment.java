@@ -1,7 +1,11 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,8 +37,13 @@ public class HomeFragment extends Fragment {
         setListeners();
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
-        if (user.getProfileImage() != null)
-            binding.civProfile.setImageBitmap(user.getProfileImage());
+
+        if (user.getProfileImage() != null) {
+            Log.d("Home", user.getProfileImage());
+            byte[] bytes = Base64.decode(user.getProfileImage() , Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            binding.civProfile.setImageBitmap(bitmap);
+        }
 
         return view;
     }

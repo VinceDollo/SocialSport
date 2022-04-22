@@ -1,6 +1,5 @@
 package com.example.socialsport.activities;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -40,7 +39,6 @@ public class PrincipalPageActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_page_activity);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -50,11 +48,6 @@ public class PrincipalPageActivity extends FragmentActivity {
         if (currentUser != null) {
             String uid = currentUser.getUid();
             user = Utils.getUserFromDatabase(uid);
-            Bitmap userImage = Utils.getUserImageFromDatabase(uid);
-
-            if (userImage != null) {
-                user.setProfileImage(userImage);
-            }
         } else {
             Log.e(TAG, "Current user is null");
         }
@@ -85,6 +78,8 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
 
         Utils.setActivitiesListenerFromDatabase(this); //Listen to activities managements
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
     }
 
     private void replace(Fragment fragment) {

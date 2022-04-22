@@ -54,29 +54,9 @@ public class Utils {
     private static final List<SportActivity> allActivities = new ArrayList<>();
     private static SportActivity nextActivity = new SportActivity();
 
-    public static void uploadImage(Context context, Bitmap bitmap, String uid) {
-        if (bitmap != null) {
-            // Code for showing progressDialog while uploading
-            ProgressDialog progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-
-            StorageReference ref = FirebaseStorage.getInstance().getReference().child("images/" + uid);
-
-            ref.putBytes(byteArray).addOnSuccessListener(taskSnapshot -> {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Image uploaded", Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(e -> {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Failed " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }).addOnProgressListener(taskSnapshot -> {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                progressDialog.setMessage("Uploaded " + (int) progress + "%");
-            });
+    public static void uploadImage(String image, String uid) {
+        if (image != null) {
+            FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(uid).child(TableKeys.USERS_IMAGE).setValue(image);
         }
     }
 
@@ -101,6 +81,7 @@ public class Utils {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
+                Log.d(TAG, Objects.requireNonNull(task.getResult().getValue()).toString());
                 user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
         });
@@ -117,6 +98,18 @@ public class Utils {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
                 user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
+            }
+        });
+        myRef.child("users").child(uid).child("image").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Error getting data", task.getException());
+            } else {
+                if (task.getResult().getValue() != null) {
+                    user.setProfileImage(Objects.requireNonNull(task.getResult().getValue()).toString());
+                    Log.e(TAG, user.getProfileImage());
+                } else {
+                    Log.e(TAG, "null");
+                }
             }
         });
         return user;
@@ -342,7 +335,7 @@ public class Utils {
         return bitmap;
     }
 
-    public static void toast(Context c,String a){
+    public static void toast(Context c, String a) {
         Toast.makeText(c, a, Toast.LENGTH_SHORT).show();
     }
 
