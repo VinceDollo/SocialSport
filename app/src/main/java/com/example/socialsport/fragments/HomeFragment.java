@@ -1,12 +1,16 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +22,8 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentHomeBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
+import com.example.socialsport.utils.PreferenceManager;
+import com.example.socialsport.utils.TableKeys;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,8 +54,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         setListeners();
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
-        if (user.getProfileImage() != null)
-            binding.civProfile.setImageBitmap(user.getProfileImage());
+
+        //TODO - refactorer
+        PreferenceManager preferenceManager= new PreferenceManager(getActivity());
+        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
+            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+            binding.civProfile.setImageBitmap(bitmap);
+        }else {
+            Toast.makeText(getActivity(), "Image == null", Toast.LENGTH_SHORT).show();
+        }
 
         return view;
     }

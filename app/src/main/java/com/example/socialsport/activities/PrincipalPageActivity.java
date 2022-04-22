@@ -1,6 +1,6 @@
 package com.example.socialsport.activities;
 
-import android.graphics.Bitmap;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -41,24 +41,16 @@ public class PrincipalPageActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_page_activity);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
-
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        user =  (User) getIntent().getSerializableExtra("user");
+        //Log.d("DEBUGCA", " "+ user.getName());
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
+
 
         updateMessages();
 
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
-            user = Utils.getUserFromDatabase(uid);
-            Bitmap userImage = Utils.getUserImageFromDatabase(uid);
-
-            if (userImage != null) {
-                user.setProfileImage(userImage);
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
-        }
 
         meowBottomNavigation = findViewById(R.id.bottom_app_bar);
 
@@ -133,5 +125,6 @@ public class PrincipalPageActivity extends FragmentActivity {
     public User getUser() {
         return user;
     }
+
 
 }

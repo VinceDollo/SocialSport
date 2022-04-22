@@ -2,12 +2,14 @@ package com.example.socialsport.entities;
 
 import android.graphics.Bitmap;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String email;
     private String name;
     private String age;
-    private Bitmap profileImage;
+    private String profileImage;
 
     public User(){
         email = "";
@@ -16,12 +18,11 @@ public class User {
         profileImage = null;
     }
 
-    public User(String email, String name, String age, Bitmap bitmap){
+    public User(String email, String name, String age, String bitmap){
         this.email = email;
         this.name = name;
         this.age = age;
         this.profileImage = bitmap;
-
         new User(); //Code smell
     }
 
@@ -49,11 +50,19 @@ public class User {
         this.age = age;
     }
 
-    public Bitmap getProfileImage() {
+    public String getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(Bitmap profileImage) {
+    public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public String toString(){
+        String fin = "name : " + getName() + " - email : "+ getEmail() + " - age : "+ getAge();
+        if(getProfileImage()!=null){
+            fin+= " - image : "+getProfileImage();
+        }
+        return fin;
     }
 }

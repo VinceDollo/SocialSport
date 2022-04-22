@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.socialsport.MyReceiver;
 import com.example.socialsport.R;
+import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -55,40 +56,12 @@ public class Utils {
     private static final List<SportActivity> allActivities = new ArrayList<>();
     private static SportActivity nextActivity = new SportActivity();
 
-    public static void uploadImage(Context context, Bitmap bitmap, String uid) {
-        if (bitmap != null) {
-            // Code for showing progressDialog while uploading
-            ProgressDialog progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-
-            StorageReference ref = FirebaseStorage.getInstance().getReference().child("images/" + uid);
-
-            ref.putBytes(byteArray).addOnSuccessListener(taskSnapshot -> {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Image uploaded", Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(e -> {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Failed " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }).addOnProgressListener(taskSnapshot -> {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                progressDialog.setMessage("Uploaded " + (int) progress + "%");
-            });
+    public static void uploadImage(String image, String uid) {
+        if (image != null) {
+            FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(uid).child(TableKeys.USERS_IMAGE).setValue(image);
         }
     }
 
-    public static Bitmap getUserImageFromDatabase(String uid) {
-        StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("images/" + uid);
-        final Bitmap[] userImage = {null};
-        imageRef.getBytes(Long.MAX_VALUE)
-                .addOnSuccessListener(bytes -> userImage[0] = BitmapFactory.decodeByteArray(bytes, 0, bytes.length))
-                .addOnFailureListener(exception -> Log.e(TAG, exception.getMessage()));
-        return userImage[0];
-    }
 
     public static void writeUserIntoDatabase(String email, String name, String age, String uid) {
         User currentUser = new User(email, name, age, null);
@@ -97,13 +70,16 @@ public class Utils {
 
     public static User getUserFromDatabase(String uid) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+        Log.d("TEST", myRef.child(TableKeys.USERS).get().toString());
         User user = new User(null, null, null, null);
-        myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
+        myRef.child(TableKeys.USERS).child(uid).child(TableKeys.USER_NAME_KEY).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
                 user.setName(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
+        }).addOnFailureListener(e -> {
+            Log.e("GROSTAG", " "  + e.getMessage());
         });
         myRef.child("users").child(uid).child("email").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -118,6 +94,19 @@ public class Utils {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
                 user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
+            }
+        });
+        myRef.child("users").child(uid).child("image").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Error getting data", task.getException());
+            } else {
+                if(task.getResult().getValue()!=null){
+                    user.setProfileImage(Objects.requireNonNull(task.getResult().getValue()).toString());
+                    Log.d("QUOI ?", user.getProfileImage());
+
+                }else{
+                    Log.d("QUOI ?", "null");
+                }
             }
         });
         return user;
@@ -346,5 +335,7 @@ public class Utils {
     public static void toast(Context c,String a){
         Toast.makeText(c, a, Toast.LENGTH_SHORT).show();
     }
+
+
 
 }

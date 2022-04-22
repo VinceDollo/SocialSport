@@ -36,10 +36,8 @@
         <activity android:name=".activities.WelcomeActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.RegisterActivity" />
-        <activity
-            android:name=".activities.PrincipalPageActivity"
-            android:windowSoftInputMode="adjustPan|adjustResize" />
 
+        <activity android:name=".activities.PrincipalPageActivity"          android:windowSoftInputMode="adjustPan" />
         <service
             android:name=".MyService"
             android:exported="false">

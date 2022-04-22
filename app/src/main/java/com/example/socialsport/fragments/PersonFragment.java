@@ -3,8 +3,10 @@ package com.example.socialsport.fragments;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,9 +26,12 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentPersonBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
+import com.example.socialsport.utils.PreferenceManager;
+import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +43,8 @@ public class PersonFragment extends Fragment {
 
     private User user;
     private FragmentPersonBinding binding;
+    private PreferenceManager preferenceManager;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -45,18 +52,26 @@ public class PersonFragment extends Fragment {
         binding = FragmentPersonBinding.inflate(inflater);
         // Inflate the layout for this fragment
         View view = binding.getRoot();
+        preferenceManager = new PreferenceManager(getActivity());
 
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3, true);
 
 
         user = ((PrincipalPageActivity) requireActivity()).getUser();
 
+        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
+            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+            binding.civProfile.setImageBitmap(bitmap);
+        }
+
         ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
             binding.civProfile.setImageURI(uri);
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri);
-                user.setProfileImage(bitmap);
-                Utils.uploadImage(this.getContext(), user.getProfileImage(), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+                Utils.uploadImage(encodeImage(bitmap), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+                user.setProfileImage(encodeImage(bitmap));
+                preferenceManager.putString(TableKeys.USERS_IMAGE,encodeImage(bitmap));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -83,8 +98,8 @@ public class PersonFragment extends Fragment {
             startActivity(i);
         });
 
-        if (user.getProfileImage() != null)
-            binding.civProfile.setImageBitmap(user.getProfileImage());
+        //if (user.getProfileImage() != null)
+           // binding.civProfile.setI
     }
 
     @SuppressLint("SetTextI18n")
@@ -143,5 +158,15 @@ public class PersonFragment extends Fragment {
             tv.setGravity(Gravity.CENTER);
             binding.llFinishedActivities.addView(tv);
         }
+    }
+
+    private String encodeImage(Bitmap image){
+        int previewWidht = 150;
+        int previewHeight = image.getHeight()*previewWidht/image.getHeight();
+        Bitmap previewBitmap = Bitmap.createScaledBitmap(image,previewWidht,previewHeight, false);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        byte[] bytes= byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes,Base64.DEFAULT);
     }
 }
