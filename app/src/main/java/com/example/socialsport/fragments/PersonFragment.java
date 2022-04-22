@@ -26,6 +26,8 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentPersonBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
+import com.example.socialsport.utils.PreferenceManager;
+import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -41,6 +43,8 @@ public class PersonFragment extends Fragment {
 
     private User user;
     private FragmentPersonBinding binding;
+    private PreferenceManager preferenceManager;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -48,14 +52,15 @@ public class PersonFragment extends Fragment {
         binding = FragmentPersonBinding.inflate(inflater);
         // Inflate the layout for this fragment
         View view = binding.getRoot();
+        preferenceManager = new PreferenceManager(getActivity());
 
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(3, true);
 
 
         user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-        if(user.getProfileImage() != null){
-            byte[] bytes = Base64.decode(user.getProfileImage(), Base64.DEFAULT);
+        if(preferenceManager.getString(TableKeys.USERS_IMAGE) != null){
+            byte[] bytes = Base64.decode(preferenceManager.getString(TableKeys.USERS_IMAGE), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }
@@ -66,6 +71,7 @@ public class PersonFragment extends Fragment {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uri);
                 Utils.uploadImage(encodeImage(bitmap), Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
                 user.setProfileImage(encodeImage(bitmap));
+                preferenceManager.putString(TableKeys.USERS_IMAGE,encodeImage(bitmap));
             } catch (IOException e) {
                 e.printStackTrace();
             }

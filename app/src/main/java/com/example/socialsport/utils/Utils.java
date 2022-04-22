@@ -68,6 +68,7 @@ public class Utils {
 
     public static User getUserFromDatabase(String uid) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+        Log.d("TEST", myRef.child(TableKeys.USERS).get().toString());
         User user = new User(null, null, null, null);
         myRef.child(TableKeys.USERS).child(uid).child(TableKeys.USER_NAME_KEY).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
