@@ -1,6 +1,8 @@
 
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+w
+Gapp/src/main/java/com/example/socialsport/activities/LoginActivity.java,b/0/b010c27799cbce44caa5b877ceb08cda57227ae5
 <
 build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
 z
@@ -13,6 +15,8 @@ x
 Happ/src/main/java/com/example/socialsport/fragments/MessageFragment.java,b/1/b1ed71d04a82a96b16520aecc9f92c17ce9e6464
 @
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
+y
+Iapp/src/main/java/com/example/socialsport/fragments/OverviewFragment.java,8/6/8605517c12c56886faf5b58e29d169601a49a691
 u
 Eapp/src/main/java/com/example/socialsport/entities/SportActivity.java,b/1/b197e3c08f6936da118d456e84014e577fd8691e
 }
@@ -21,11 +25,11 @@ Mapp/src/main/java/com/example/socialsport/fragments/ConversationFragment.java,
 Lapp/src/main/java/com/example/socialsport/fragments/AddActivityFragment.java,f/d/fd9c74387ec9a372b45607f87da380ebb23ea91a
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
-n
->app/src/main/java/com/example/socialsport/utils/TableKeys.java,8/d/8dbfd825d8445b8376c1c1e060f31e9c47b8ec63
-j
-:app/src/main/java/com/example/socialsport/utils/MyMap.java,7/a/7af3d1329a88bbf094b748c033d99bc4ff28ff60
-j
-:app/src/main/java/com/example/socialsport/utils/Utils.java,e/4/e45832301246f9960478a21c7f7af5984e3031de
+
+Oapp/src/main/java/com/example/socialsport/activities/PrincipalPageActivity.java,5/e/5e5bca5e824150b3171303d3dc685fa9b00f71ff
 w
-Gapp/src/main/java/com/example/socialsport/activities/LoginActivity.java,b/0/b010c27799cbce44caa5b877ceb08cda57227ae5
+Gapp/src/main/java/com/example/socialsport/fragments/PersonFragment.java,8/1/8191a7f9b51f69639cb6062519b579b0ea367ecc
+u
+Eapp/src/main/java/com/example/socialsport/fragments/MapsFragment.java,e/e/eeea703d4c1d196bf852f581ff9d1e2dfbec1705
+~
+Napp/src/main/java/com/example/socialsport/fragments/PlaceActivityFragment.java,6/4/64d2573b0880522e76c7ba638088d5120dc9a304

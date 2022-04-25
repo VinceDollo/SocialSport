@@ -99,14 +99,15 @@
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:gravity="center"
-                        android:text="@string/browse_all_activities"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/activities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/browse_all_activities"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
 
                     <TableLayout
