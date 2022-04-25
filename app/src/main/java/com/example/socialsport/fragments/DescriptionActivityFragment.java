@@ -25,7 +25,6 @@ import com.example.socialsport.activities.LoginActivity;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentDescriptionActivityBinding;
 import com.example.socialsport.entities.User;
-import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,8 +40,6 @@ public class DescriptionActivityFragment extends Fragment {
     private String date;
     private String time;
     private FirebaseAuth mAuth;
-    private DatePickerDialog datePicker;
-    private TimePickerDialog timePicker;
     private FragmentDescriptionActivityBinding binding;
 
     @Override
@@ -59,11 +56,10 @@ public class DescriptionActivityFragment extends Fragment {
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
 
-
-        //TODO - refactorer
-        if(user.getImage() != null){
+        //TODO - refactoring
+        if (user.getImage() != null) {
             byte[] bytes = Base64.decode(user.getImage(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }
 
@@ -72,8 +68,7 @@ public class DescriptionActivityFragment extends Fragment {
         return view;
     }
 
-
-    @SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
+    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private void setListeners() {
         binding.btnBack.setOnClickListener(view12 -> {
             Bundle bundle1 = new Bundle();
@@ -88,7 +83,7 @@ public class DescriptionActivityFragment extends Fragment {
             int day = cldr.get(Calendar.DAY_OF_MONTH);
             int month = cldr.get(Calendar.MONTH);
             int year = cldr.get(Calendar.YEAR);
-            datePicker = new DatePickerDialog(getActivity(), (view2, year1, monthOfYear, dayOfMonth) ->
+            DatePickerDialog datePicker = new DatePickerDialog(getActivity(), (view2, year1, monthOfYear, dayOfMonth) ->
                     binding.etDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1), year, month, day);
             datePicker.show();
         });
@@ -97,7 +92,7 @@ public class DescriptionActivityFragment extends Fragment {
             final Calendar cldr = Calendar.getInstance();
             int hour = cldr.get(Calendar.HOUR_OF_DAY);
             int minutes = cldr.get(Calendar.MINUTE);
-            timePicker = new TimePickerDialog(getActivity(), (tp, sHour, sMinute) ->
+            TimePickerDialog timePicker = new TimePickerDialog(getActivity(), (tp, sHour, sMinute) ->
                     binding.etTime.setText(sHour + ":" + sMinute), hour, minutes, true);
             timePicker.show();
         });

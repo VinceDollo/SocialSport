@@ -42,7 +42,6 @@
 
         </LinearLayout>
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,9 +68,7 @@
                 android:textStyle="bold"
                 app:drawableRightCompat="@drawable/img_info" />
 
-
         </LinearLayout>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -88,7 +85,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <TextView
             android:id="@+id/tv_date_and_time"
             android:layout_width="wrap_content"
@@ -101,13 +97,13 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -119,6 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/edit_text_border"
+                    android:focusable="false"
                     android:inputType="date"
                     android:textColor="@color/black" />
 
@@ -130,6 +127,7 @@
                 android:layout_weight="1" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -141,6 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/edit_text_border"
+                    android:focusable="false"
                     android:inputType="time"
                     android:textColor="@color/black" />
 
@@ -197,8 +196,6 @@
             android:text="@string/validate"
             android:textColor="@color/white" />
 
-
     </LinearLayout>
-
 
 </FrameLayout>
