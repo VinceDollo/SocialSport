@@ -44,8 +44,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class Utils {
@@ -55,7 +57,8 @@ public class Utils {
     private static final List<SportActivity> allActivities = new ArrayList<>();
 
     //ajout mez
-    private static final List<SportActivity>socceractivities = new ArrayList<>(), basketactivities = new ArrayList<>(), volleyactivities = new ArrayList<>(), handactivities = new ArrayList<>();
+    private static final Map<String, SportActivity> socceractivities = new HashMap<>(), basketactivities = new HashMap<>(), volleyactivities = new HashMap<>(), handactivities = new HashMap<>();
+
 
 
     private static SportActivity nextActivity = new SportActivity();
@@ -170,16 +173,16 @@ public class Utils {
 
                     //ajout mez
                     if(sport.equals("Soccer")){
-                        socceractivities.add(newActivity);
+                        socceractivities.put(ds.getKey(),newActivity);
                     }
                     else if(sport.equals("Volley")){
-                        volleyactivities.add(newActivity);
+                        volleyactivities.put(ds.getKey(),newActivity);
                     }
                     else if(sport.equals("Basket")){
-                        basketactivities.add(newActivity);
+                        basketactivities.put(ds.getKey(),newActivity);
                     }
                     else if(sport.equals("Handball")){
-                        handactivities.add(newActivity);
+                        handactivities.put(ds.getKey(),newActivity);
                     }
                 }
 
@@ -237,19 +240,19 @@ public class Utils {
     }
 
     //ajout mez
-    public static List<SportActivity> getSocceractivities() {
+    public static Map<String, SportActivity> getSocceractivities() {
         return socceractivities;
     }
 
-    public static List<SportActivity> getBasketactivities() {
+    public static Map<String, SportActivity> getBasketactivities() {
         return basketactivities;
     }
 
-    public static List<SportActivity> getVolleyactivities() {
+    public static Map<String, SportActivity> getVolleyactivities() {
         return volleyactivities;
     }
 
-    public static List<SportActivity> getHandactivities() {
+    public static Map<String, SportActivity> getHandactivities() {
         return handactivities;
     }
 

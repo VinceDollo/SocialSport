@@ -30,12 +30,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
     private View view;
+    //ajout mez
+    private MyMap map;
     private FragmentHomeBinding binding;
 
     //ajout mez
@@ -72,7 +75,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        MyMap map = new MyMap(googleMap, requireActivity(), view);
+        //Ajout mez
+        map = new MyMap(googleMap, requireActivity(), view);
 
         map.searchPlaceListener(); // Enable search location listener
 
@@ -116,36 +120,43 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         trsoccer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<SportActivity> activities = Utils.getSocceractivities();
+                Map<String, SportActivity> activities = Utils.getSocceractivities();
                 Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+                map.clearMap();
+                map.setLocationPoints(activities);
             }
         });
         trbasket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<SportActivity> activities = Utils.getBasketactivities();
+                Map<String, SportActivity> activities = Utils.getBasketactivities();
                 Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+                map.clearMap();
+                map.setLocationPoints(activities);
             }
         });
         trhand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<SportActivity> activities = Utils.getHandactivities();
+                Map<String, SportActivity> activities = Utils.getHandactivities();
                 Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+                map.clearMap();
+                map.setLocationPoints(activities);
             }
         });
         trvolley.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<SportActivity> activities = Utils.getVolleyactivities();
+                Map<String, SportActivity> activities = Utils.getVolleyactivities();
                 Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+                map.clearMap();
+                map.setLocationPoints(activities);
             }
         });
         tvact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<SportActivity> activities = Utils.getAllActivities();
-                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
+                map.getAllActivities();
             }
         });
     }

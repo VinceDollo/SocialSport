@@ -113,7 +113,7 @@ public class MyMap {
 
                     sportActivities.put(ds.getKey(), newActivity);
                 }
-                setLocationPoints();
+                setLocationPoints(sportActivities);
             }
 
             @Override
@@ -125,8 +125,9 @@ public class MyMap {
         activitiesRef.addValueEventListener(eventListener);
     }
 
-    private void setLocationPoints() {
-        for (java.util.Map.Entry<String, SportActivity> currentActivity : sportActivities.entrySet()) {
+    //MEZ
+    public void setLocationPoints(Map<String, SportActivity> act) {
+        for (java.util.Map.Entry<String, SportActivity> currentActivity : act.entrySet()) {
             MarkerOptions marker = new MarkerOptions();
             assert currentActivity != null;
             BitmapDescriptor icon = Utils.getBitmapDescriptor(activity, currentActivity.getValue().getSport());
@@ -232,6 +233,11 @@ public class MyMap {
             }
             return false;
         });
+    }
+
+    //ajout mez
+    public void clearMap() {
+        mMap.clear();
     }
 
     public void addActivityMarker(String sport) {
