@@ -19,12 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
-import com.example.socialsport.MyMap;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentHomeBinding;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
+import com.example.socialsport.utils.MyMap;
 import com.example.socialsport.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,7 +60,8 @@ public class HomeFragment extends Fragment {
         trhand = binding.activity4;
         tvact= binding.activities;
 
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.f_maps, new MapsFragment()).addToBackStack(null).commit();
+        MapsFragment mapsFragment = new MapsFragment(callback);
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.f_maps, mapsFragment).addToBackStack(null).commit();
 
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(1, true);
 
@@ -80,8 +81,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
+    private final OnMapReadyCallback callback = googleMap -> {
         //Ajout mez
         map = new MyMap(googleMap, requireActivity(), view);
 
@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment {
             }
             return true;
         });
-    }
+    };
 
     @SuppressLint("ClickableViewAccessibility")
     private void setListeners() {

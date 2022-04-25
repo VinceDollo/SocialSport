@@ -139,7 +139,8 @@ public class Utils {
 
                     SportActivity newActivity = new SportActivity();
 
-                    newActivity.setSport(act.getSport());
+                    String sport = act.getSport();
+                    newActivity.setSport(sport);
                     newActivity.setDescription(act.getDescription());
                     newActivity.setDate(act.getDate());
                     newActivity.setTime(act.getTime());
