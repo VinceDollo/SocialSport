@@ -1,6 +1,7 @@
 package com.example.socialsport.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class MapsFragment extends Fragment {
             myMap.searchPlaceListener(); // Enable search location listener
 
             myMap.getmMap().setOnMarkerClickListener(marker -> {
+                Log.d("CLIQUER","CLIQUE1");
                 marker.hideInfoWindow();
                 myMap.getmMap().animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
@@ -37,6 +39,7 @@ public class MapsFragment extends Fragment {
 
                 Bundle result = new Bundle();
                 if (clicked != null) {
+                    Log.d("CLIQUER","CLIQUE2");
                     result.putString("sport", clicked.getSport());
                     result.putString("activityID", title);
                     result.putStringArrayList("participants", (ArrayList<String>) clicked.getUuids());

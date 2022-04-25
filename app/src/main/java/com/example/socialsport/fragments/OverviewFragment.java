@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
+import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentOverviewActivityBinding;
 import com.example.socialsport.utils.Utils;
 import com.example.socialsport.entities.User;
@@ -39,20 +40,36 @@ public class OverviewFragment extends Fragment {
 
     private ArrayList<String> participantsUuids = new ArrayList<>();
     private FragmentOverviewActivityBinding binding;
+    private User organiser;
+    private User user;
+    private String uuidOrga;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOverviewActivityBinding.inflate(inflater);
         View view = binding.getRoot();
+        user = ((PrincipalPageActivity) requireActivity()).getUser();
 
         setViewContent();
         setListener();
+
+
 
         return view;
     }
 
     private void setListener() {
+        binding.btnMessage.setOnClickListener(v->{
+            ConversationFragment newF = new ConversationFragment();
+            if(organiser!=null){
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("organiser", organiser);
+                bundle.putString("uidorganiser", uuidOrga);
+                newF.setArguments(bundle);
+            }
+            getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).commit();
+        });
         binding.btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit());
     }
 
@@ -77,12 +94,15 @@ public class OverviewFragment extends Fragment {
                             Log.e(TAG, "Error getting data", task.getException());
                             binding.nameOrganiser.setText(R.string.app_name);
                         } else {
-                            User organiser = task.getResult().getValue(User.class);
-                            if (organiser != null) {
+                            uuidOrga = participantsUuids.get(0);
+                            organiser = task.getResult().getValue(User.class);
+                            if (organiser != null && organiser.getName()!=user.getName()) {
                                 binding.nameOrganiser.setText(organiser.getName());
                                 byte[] bytes = Base64.decode(organiser.getImage(), Base64.DEFAULT);
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                 binding.imgOrganiser.setImageBitmap(bitmap);
+                            }else{
+                                binding.btnMessage.setEnabled(false);
                             }
                         }
                     });

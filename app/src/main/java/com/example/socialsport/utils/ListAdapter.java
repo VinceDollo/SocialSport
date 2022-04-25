@@ -3,6 +3,9 @@ package com.example.socialsport.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,26 +14,38 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.example.socialsport.R;
+import com.example.socialsport.activities.PrincipalPageActivity;
+import com.example.socialsport.entities.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class ListAdapter extends BaseAdapter {
     Context context;
-    private final Map<String, ArrayList<String>> nameMessage;
+    private ArrayList<String> idConv;
     private final int[] images;
+    private String currentUser;
 
-    public ListAdapter(Context context, Map<String, ArrayList<String>> nameMessage, int[] images) {
+    public ListAdapter(Context context, ArrayList<String> idConv, int[] images, String currentUser) {
         this.context = context;
-        this.nameMessage = nameMessage;
+        this.idConv = idConv;
         this.images = images;
+        this.currentUser=currentUser;
     }
 
     @Override
     public int getCount() {
-        return nameMessage.size();
+        return idConv.size();
     }
 
     @Override
@@ -64,9 +79,52 @@ public class ListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        String firstKey = (String) nameMessage.keySet().toArray()[position];
+        String firstKey = (String) idConv.get(position);
+        Log.d("DEBUG123",  idConv.toString());
 
-        ArrayList<String> array = nameMessage.get(firstKey);
+        final String[] name = {""};
+        final String[] image = {""};
+
+        FirebaseDatabase.getInstance().getReference().child("conversation").child(firstKey).child("participants").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String data = snapshot.getValue(String.class);
+                    if(!data.equals(currentUser)){
+                        /*
+                        User a = Utils.getUserFromDatabase(data);
+                        viewHolder.txtName.setText(a.getName());
+                        if(a.getImage()!=null){
+                            byte[] bytes = Base64.decode(a.getImage() , Base64.DEFAULT);
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            viewHolder.icon.setImageBitmap(bitmap);
+                        }*/
+
+                        FirebaseDatabase.getInstance().getReference().child("users").child(data).child("name").get().addOnCompleteListener(task ->{
+                            name[0] = task.getResult().getValue().toString();
+                            viewHolder.txtName.setText(name[0]);
+
+                        }) ;
+                        FirebaseDatabase.getInstance().getReference().child("users").child(data).child("image").get().addOnCompleteListener(task ->{
+                            if(task.getResult().getValue()!=null){
+                                image[0] = task.getResult().getValue().toString();
+                                byte[] bytes = Base64.decode(image[0] , Base64.DEFAULT);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                viewHolder.icon.setImageBitmap(bitmap);
+                            }
+                        }) ;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            };
+
+        });
+       /* ArrayList<String> array = nameMessage.get(firstKey);
 
         assert array != null;
         String[] array1 = array.get(array.size() - 1).split("//");
@@ -81,12 +139,12 @@ public class ListAdapter extends BaseAdapter {
             viewHolder.sender.setImageResource(R.drawable.img_message_send);
         } else {
             viewHolder.sender.setImageResource(R.drawable.img_message_received_2);
-        }
-        viewHolder.txtName.setText(firstKey);
-        viewHolder.txtMessage.setText(msg);
-        viewHolder.txtTime.setText(time);
-        viewHolder.txtDate.setText(date);
-        viewHolder.icon.setImageResource(images[position]);
+        }*/
+       // viewHolder.txtName.setText(firstKey);
+       // viewHolder.txtMessage.setText(msg);
+      //  viewHolder.txtTime.setText(time);
+      //  viewHolder.txtDate.setText(date);
+     //   viewHolder.icon.setImageResource(images[position]);
 
         return convertView;
     }

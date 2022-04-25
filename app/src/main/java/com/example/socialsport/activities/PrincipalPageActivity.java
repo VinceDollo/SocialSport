@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -18,7 +19,9 @@ import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,10 +35,11 @@ public class PrincipalPageActivity extends FragmentActivity {
     private MeowBottomNavigation meowBottomNavigation;
     private User user;
 
-    ArrayList<String> name = new ArrayList<>();
+    ArrayList<String> idconv = new ArrayList<>();
     ArrayList<String> message = new ArrayList<>();
 
     private HashMap<String, ArrayList<String>> messagesMap;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +47,14 @@ public class PrincipalPageActivity extends FragmentActivity {
         setContentView(R.layout.principal_page_activity);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
 
-        updateMessages();
+        //updateMessages();
 
         if (currentUser != null) {
             user = Utils.getUserFromDatabase(currentUser.getUid());
+            addConvId(currentUser.getUid());
+            Log.d("TEST123", idconv.toString());
 
         } else {
             Log.e(TAG, "Current user is null");
@@ -89,7 +95,7 @@ public class PrincipalPageActivity extends FragmentActivity {
     private void replace(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
     }
-
+/*
     public void updateMessages() {
         messagesMap = new HashMap<>();
         FirebaseDatabase.getInstance().getReference().child("chat")
@@ -108,7 +114,7 @@ public class PrincipalPageActivity extends FragmentActivity {
             }
         });
     }
-
+*/
     public void updateMessagesForContact(String contact) {
         FirebaseDatabase.getInstance().getReference().child("chat")
                 .child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(contact)
@@ -131,8 +137,8 @@ public class PrincipalPageActivity extends FragmentActivity {
         });
     }
 
-    public Map<String, ArrayList<String>> getMessagesMap() {
-        return messagesMap;
+    public ArrayList<String> getIdconv() {
+        return idconv;
     }
 
     public MeowBottomNavigation getMeowBottomNavigation() {
@@ -141,6 +147,30 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     public User getUser() {
         return user;
+    }
+
+    public String getUidUser() {
+        return currentUser.getUid();
+    }
+
+
+    private void addConvId(String uuid){
+        FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("conversation").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String data = snapshot.getValue(String.class);
+                    Log.d("TEST456", data);
+                    idconv.add(data);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            };
+
+        });
     }
 
 }
