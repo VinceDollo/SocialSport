@@ -38,8 +38,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class Utils {
@@ -47,6 +49,12 @@ public class Utils {
     private static final String TAG = Utils.class.getSimpleName();
 
     private static final List<SportActivity> allActivities = new ArrayList<>();
+
+    private static final Map<String, SportActivity> soccerActivities = new HashMap<>();
+    private static final Map<String, SportActivity> basketActivities = new HashMap<>();
+    private static final Map<String, SportActivity> volleyActivities = new HashMap<>();
+    private static final Map<String, SportActivity> handActivities = new HashMap<>();
+
     private static SportActivity nextActivity = new SportActivity();
 
     public static void uploadImage(String image, String uid) {
@@ -116,6 +124,11 @@ public class Utils {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 allActivities.clear();
+                basketActivities.clear();
+                soccerActivities.clear();
+                volleyActivities.clear();
+                handActivities.clear();
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     SportActivity act = ds.getValue(SportActivity.class);
                     assert act != null;
@@ -123,7 +136,8 @@ public class Utils {
 
                     SportActivity newActivity = new SportActivity();
 
-                    newActivity.setSport(act.getSport());
+                    String sport = act.getSport();
+                    newActivity.setSport(sport);
                     newActivity.setDescription(act.getDescription());
                     newActivity.setDate(act.getDate());
                     newActivity.setTime(act.getTime());
@@ -132,6 +146,23 @@ public class Utils {
                     newActivity.setUuids(act.getUuids());
 
                     allActivities.add(newActivity);
+
+                    switch (sport) {
+                        case "Soccer":
+                            soccerActivities.put(ds.getKey(), newActivity);
+                            break;
+                        case "Volley":
+                            volleyActivities.put(ds.getKey(), newActivity);
+                            break;
+                        case "Basket":
+                            basketActivities.put(ds.getKey(), newActivity);
+                            break;
+                        case "Handball":
+                            handActivities.put(ds.getKey(), newActivity);
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 List<SportActivity> myActivities = getMyActivities();
@@ -181,6 +212,23 @@ public class Utils {
                 || Objects.requireNonNull(stringToDateTime(activity.getDate(), activity.getTime())).equals(new Date()));
         return activitiesToReturn;
     }
+
+    public static Map<String, SportActivity> getSoccerActivities() {
+        return soccerActivities;
+    }
+
+    public static Map<String, SportActivity> getBasketActivities() {
+        return basketActivities;
+    }
+
+    public static Map<String, SportActivity> getVolleyActivities() {
+        return volleyActivities;
+    }
+
+    public static Map<String, SportActivity> getHandActivities() {
+        return handActivities;
+    }
+
 
     public static List<SportActivity> getMyActivities() {
         ArrayList<SportActivity> myActivities = new ArrayList<>();
