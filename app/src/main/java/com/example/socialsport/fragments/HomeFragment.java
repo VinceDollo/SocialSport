@@ -10,10 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,12 +25,10 @@ import com.example.socialsport.entities.User;
 import com.example.socialsport.utils.MyMap;
 import com.example.socialsport.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
@@ -40,25 +36,27 @@ public class HomeFragment extends Fragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
 
     private View view;
-    //ajout mez
+
     private MyMap map;
     private FragmentHomeBinding binding;
 
-    //ajout mez
-    private TableRow trsoccer,trhand,trbasket,trvolley;
-    private TextView tvact;
+    private TableRow trSoccer;
+    private TableRow trHand;
+    private TableRow trBasket;
+    private TableRow trVolley;
+    private TextView tvAct;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
         view = binding.getRoot();
-        //ajout mez
-        trsoccer = binding.activity1;
-        trbasket = binding.activity2;
-        trvolley = binding.activity3;
-        trhand = binding.activity4;
-        tvact= binding.activities;
+
+        trSoccer = binding.activity1;
+        trBasket = binding.activity2;
+        trVolley = binding.activity3;
+        trHand = binding.activity4;
+        tvAct = binding.activities;
 
         MapsFragment mapsFragment = new MapsFragment(callback);
         requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.f_maps, mapsFragment).addToBackStack(null).commit();
@@ -71,10 +69,10 @@ public class HomeFragment extends Fragment {
 
         if (user.getImage() != null) {
             Log.d("Home", user.getImage());
-            byte[] bytes = Base64.decode(user.getImage() , Base64.DEFAULT);
+            byte[] bytes = Base64.decode(user.getImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
-        }else {
+        } else {
             Log.d("Home", "Image null for this user");
         }
 
@@ -82,7 +80,6 @@ public class HomeFragment extends Fragment {
     }
 
     private final OnMapReadyCallback callback = googleMap -> {
-        //Ajout mez
         map = new MyMap(googleMap, requireActivity(), view);
 
         map.searchPlaceListener(); // Enable search location listener
@@ -123,49 +120,36 @@ public class HomeFragment extends Fragment {
         // Allow vertical scroll in map fragment
         binding.transparentImage.setOnTouchListener(this::mapOnTouchListener);
 
-        //ajout mez
-        trsoccer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Map<String, SportActivity> activities = Utils.getSocceractivities();
-                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
-                map.clearMap();
-                map.setLocationPoints(activities);
-            }
-        });
-        trbasket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Map<String, SportActivity> activities = Utils.getBasketactivities();
-                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
-                map.clearMap();
-                map.setLocationPoints(activities);
-            }
-        });
-        trhand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Map<String, SportActivity> activities = Utils.getHandactivities();
-                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
-                map.clearMap();
-                map.setLocationPoints(activities);
-            }
-        });
-        trvolley.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Map<String, SportActivity> activities = Utils.getVolleyactivities();
-                Toast.makeText(view.getContext(), activities.toString(), Toast.LENGTH_SHORT).show();
-                map.clearMap();
-                map.setLocationPoints(activities);
-            }
-        });
-        tvact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                map.getAllActivities();
-            }
-        });
+        trSoccer.setOnClickListener(view -> getSpecificActivities("Soccer"));
+        trBasket.setOnClickListener(view -> getSpecificActivities("Basket"));
+        trHand.setOnClickListener(view -> getSpecificActivities("Hand"));
+        trVolley.setOnClickListener(view -> getSpecificActivities("Volley"));
+
+        tvAct.setOnClickListener(view -> map.getAllActivities());
+    }
+
+    private void getSpecificActivities(String sport){
+        Map<String, SportActivity> activities = new HashMap<>();
+
+        switch (sport){
+            case "Soccer":
+                activities = Utils.getSoccerActivities();
+                break;
+            case "Basket":
+                activities = Utils.getBasketActivities();
+                break;
+            case "Hand":
+                activities = Utils.getHandActivities();
+                break;
+            case "Volley":
+                activities = Utils.getVolleyActivities();
+                break;
+            default:
+                break;
+        }
+
+        map.getmMap().clear();
+        map.setLocationPoints(activities);
     }
 
     private boolean mapOnTouchListener(View v, MotionEvent event) {

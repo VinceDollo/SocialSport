@@ -125,7 +125,6 @@ public class MyMap {
         activitiesRef.addValueEventListener(eventListener);
     }
 
-    //MEZ
     public void setLocationPoints(Map<String, SportActivity> act) {
         for (java.util.Map.Entry<String, SportActivity> currentActivity : act.entrySet()) {
             MarkerOptions marker = new MarkerOptions();
@@ -233,11 +232,6 @@ public class MyMap {
             }
             return false;
         });
-    }
-
-    //ajout mez
-    public void clearMap() {
-        mMap.clear();
     }
 
     public void addActivityMarker(String sport) {

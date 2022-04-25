@@ -50,10 +50,10 @@ public class Utils {
 
     private static final List<SportActivity> allActivities = new ArrayList<>();
 
-    //ajout mez
-    private static final Map<String, SportActivity> socceractivities = new HashMap<>(), basketactivities = new HashMap<>(), volleyactivities = new HashMap<>(), handactivities = new HashMap<>();
-
-
+    private static final Map<String, SportActivity> soccerActivities = new HashMap<>();
+    private static final Map<String, SportActivity> basketActivities = new HashMap<>();
+    private static final Map<String, SportActivity> volleyActivities = new HashMap<>();
+    private static final Map<String, SportActivity> handActivities = new HashMap<>();
 
     private static SportActivity nextActivity = new SportActivity();
 
@@ -124,13 +124,10 @@ public class Utils {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 allActivities.clear();
-
-                //ajout mez
-                basketactivities.clear();
-                socceractivities.clear();
-                volleyactivities.clear();
-                handactivities.clear();
-
+                basketActivities.clear();
+                soccerActivities.clear();
+                volleyActivities.clear();
+                handActivities.clear();
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     SportActivity act = ds.getValue(SportActivity.class);
@@ -150,18 +147,21 @@ public class Utils {
 
                     allActivities.add(newActivity);
 
-                    //ajout mez
-                    if(sport.equals("Soccer")){
-                        socceractivities.put(ds.getKey(),newActivity);
-                    }
-                    else if(sport.equals("Volley")){
-                        volleyactivities.put(ds.getKey(),newActivity);
-                    }
-                    else if(sport.equals("Basket")){
-                        basketactivities.put(ds.getKey(),newActivity);
-                    }
-                    else if(sport.equals("Handball")){
-                        handactivities.put(ds.getKey(),newActivity);
+                    switch (sport) {
+                        case "Soccer":
+                            soccerActivities.put(ds.getKey(), newActivity);
+                            break;
+                        case "Volley":
+                            volleyActivities.put(ds.getKey(), newActivity);
+                            break;
+                        case "Basket":
+                            basketActivities.put(ds.getKey(), newActivity);
+                            break;
+                        case "Handball":
+                            handActivities.put(ds.getKey(), newActivity);
+                            break;
+                        default:
+                            break;
                     }
                 }
 
@@ -213,29 +213,21 @@ public class Utils {
         return activitiesToReturn;
     }
 
-
-    public static List<SportActivity> getAllActivities() {
-        return allActivities;
+    public static Map<String, SportActivity> getSoccerActivities() {
+        return soccerActivities;
     }
 
-    //ajout mez
-    public static Map<String, SportActivity> getSocceractivities() {
-        return socceractivities;
+    public static Map<String, SportActivity> getBasketActivities() {
+        return basketActivities;
     }
 
-    public static Map<String, SportActivity> getBasketactivities() {
-        return basketactivities;
+    public static Map<String, SportActivity> getVolleyActivities() {
+        return volleyActivities;
     }
 
-    public static Map<String, SportActivity> getVolleyactivities() {
-        return volleyactivities;
+    public static Map<String, SportActivity> getHandActivities() {
+        return handActivities;
     }
-
-    public static Map<String, SportActivity> getHandactivities() {
-        return handactivities;
-    }
-
-
 
 
     public static List<SportActivity> getMyActivities() {
