@@ -52,10 +52,10 @@ public class PlaceActivityFragment extends Fragment {
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
 
 
-        //TODO - refactorer
-        if(user.getImage() != null){
+        //TODO - refactoring
+        if (user.getImage() != null) {
             byte[] bytes = Base64.decode(user.getImage(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             binding.civProfile.setImageBitmap(bitmap);
         }
 
