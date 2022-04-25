@@ -1,14 +1,14 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -52,7 +52,7 @@ public class OverviewFragment extends Fragment {
         return view;
     }
 
-    private void setListener(){
+    private void setListener() {
         binding.btnBack.setOnClickListener(view1 -> getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).commit());
     }
 
@@ -63,16 +63,29 @@ public class OverviewFragment extends Fragment {
             binding.btnParticipate.setText(R.string.participate);
     }
 
+    //TODO: lot of refactoring to do
     private void queryDbUsers() {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference activitiesRef = rootRef.child("activities");
-        ValueEventListener eventListener = new ValueEventListener() {
+        activitiesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 binding.tableLayout.removeAllViews();
                 if (!participantsUuids.isEmpty()) {
-                    binding.imgOrganiser.setImageResource(R.drawable.img_person);
-                    binding.nameOrganiser.setText(R.string.app_name); //TODO: get organiser's name
+                    FirebaseDatabase.getInstance().getReference().child("users").child(participantsUuids.get(0)).get().addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Log.e(TAG, "Error getting data", task.getException());
+                            binding.nameOrganiser.setText(R.string.app_name);
+                        } else {
+                            User organiser = task.getResult().getValue(User.class);
+                            if (organiser != null) {
+                                binding.nameOrganiser.setText(organiser.getName());
+                                byte[] bytes = Base64.decode(organiser.getImage(), Base64.DEFAULT);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                binding.imgOrganiser.setImageBitmap(bitmap);
+                            }
+                        }
+                    });
                     for (String participantUuid : participantsUuids) {
                         addParticipantView(participantUuid);
                     }
@@ -83,8 +96,7 @@ public class OverviewFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, error.getMessage());
             }
-        };
-        activitiesRef.addValueEventListener(eventListener);
+        });
     }
 
     private void addParticipantView(String participantUuid) {
@@ -96,7 +108,13 @@ public class OverviewFragment extends Fragment {
                 User participant = task.getResult().getValue(User.class);
                 if (participant != null) {
                     Log.d(TAG, participant.toString());
-                    ((CircleImageView) row.findViewById(R.id.img_participant)).setImageResource(R.drawable.img_person); //TODO: add person image
+                    if (participant.getImage() != null) {
+                        byte[] bytes = Base64.decode(participant.getImage(), Base64.DEFAULT);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        ((CircleImageView) row.findViewById(R.id.img_participant)).setImageBitmap(bitmap);
+                    } else {
+                        ((CircleImageView) row.findViewById(R.id.img_participant)).setImageResource(R.drawable.img_person);
+                    }
                     ((TextView) row.findViewById(R.id.name_participant)).setText(participant.getName());
                     binding.tableLayout.addView(row);
                 }

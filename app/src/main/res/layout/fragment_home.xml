@@ -7,15 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fadeScrollbars="false"
-        android:fillViewport="true"
-        android:orientation="vertical"
-        map:ignore="UselessParent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,6 +15,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -52,63 +44,60 @@
 
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/et_search_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="20dp"
-                    android:autofillHints=""
-                    android:background="@drawable/edit_text_border_search_bar"
-                    android:drawableStart="@drawable/img_search"
-                    android:gravity="center"
-                    android:hint="@string/type_a_location"
-                    android:imeOptions="actionGo"
-                    android:inputType="text"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/dark_grey" />
-
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/f_maps"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    map:liteMode="true" />
-
-                <ImageView
-                    android:id="@+id/transparent_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/f_maps"
-                    android:layout_alignTop="@+id/f_maps"
-                    android:layout_alignEnd="@+id/f_maps"
-                    android:layout_alignBottom="@+id/f_maps"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="-3dp"
-                    android:contentDescription="@string/fragment_container"
-                    android:src="@android:color/transparent" />
-
-            </RelativeLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_add_activity"
+            <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:fadeScrollbars="false"
+                android:fillViewport="true"
+                android:orientation="vertical"
+                android:scrollbars="none"
+                map:ignore="UselessParent">
 
-                android:layout_marginTop="20dp"
-                android:background="@drawable/btn_add_activity"
-                android:text="@string/add_an_activity"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <androidx.fragment.app.FragmentContainerView
+                            android:id="@+id/f_maps"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="500dp"
+                            map:liteMode="true" />
+
+                        <ImageView
+                            android:id="@+id/transparent_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignStart="@+id/f_maps"
+                            android:layout_alignTop="@+id/f_maps"
+                            android:layout_alignEnd="@+id/f_maps"
+                            android:layout_alignBottom="@+id/f_maps"
+                            android:layout_marginStart="0dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginEnd="0dp"
+                            android:layout_marginBottom="-3dp"
+                            android:contentDescription="@string/fragment_container"
+                            android:src="@android:color/transparent" />
+
+                    </RelativeLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_add_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/btn_add_activity"
+                        android:text="@string/add_an_activity"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/activities"
@@ -121,135 +110,141 @@
                 android:textStyle="bold" />
 
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TableRow
-                    android:id="@+id/activity1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/btn_activity"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="20dp">
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:contentDescription="@string/soccer_image"
-                        android:src="@drawable/img_soccer" />
-
-                    <TextView
-                        android:layout_width="0dp"
+                    <TableLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="7"
-                        android:gravity="center"
-                        android:text="@string/soccer"
-                        android:textColor="@color/black"
-                        android:textSize="17sp" />
+                        android:orientation="vertical">
 
-                </TableRow>
+                        <TableRow
+                            android:id="@+id/activity1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/btn_activity"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="20dp">
 
-                <TableRow
-                    android:id="@+id/activity2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="20dp">
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/black"
+                                android:contentDescription="@string/soccer_image"
+                                android:src="@drawable/img_soccer" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:contentDescription="@string/basket_image"
-                        android:src="@drawable/img_basket" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="7"
+                                android:gravity="center"
+                                android:text="@string/soccer"
+                                android:textColor="@color/black"
+                                android:textSize="17sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="7"
-                        android:gravity="center"
-                        android:text="@string/basketball"
-                        android:textColor="@color/black"
-                        android:textSize="17sp" />
+                        </TableRow>
 
-                </TableRow>
+                        <TableRow
+                            android:id="@+id/activity2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/btn_activity"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="20dp">
 
-                <TableRow
-                    android:id="@+id/activity3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="20dp">
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/black"
+                                android:contentDescription="@string/basket_image"
+                                android:src="@drawable/img_basket" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:contentDescription="@string/volley_image"
-                        android:src="@drawable/img_volley" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="7"
+                                android:gravity="center"
+                                android:text="@string/basketball"
+                                android:textColor="@color/black"
+                                android:textSize="17sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="7"
-                        android:gravity="center"
-                        android:text="@string/volleyball"
-                        android:textColor="@color/black"
-                        android:textSize="17sp" />
+                        </TableRow>
 
-                </TableRow>
+                        <TableRow
+                            android:id="@+id/activity3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/btn_activity"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="20dp">
 
-                <TableRow
-                    android:id="@+id/activity4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/btn_activity"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="20dp">
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/black"
+                                android:contentDescription="@string/volley_image"
+                                android:src="@drawable/img_volley" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:contentDescription="@string/handball_image"
-                        android:src="@drawable/img_handball" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="7"
+                                android:gravity="center"
+                                android:text="@string/volleyball"
+                                android:textColor="@color/black"
+                                android:textSize="17sp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="7"
-                        android:gravity="center"
-                        android:text="@string/handball"
-                        android:textColor="@color/black"
-                        android:textSize="17sp" />
+                        </TableRow>
 
-                </TableRow>
+                        <TableRow
+                            android:id="@+id/activity4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/btn_activity"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="20dp">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp" />
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/black"
+                                android:contentDescription="@string/handball_image"
+                                android:src="@drawable/img_handball" />
 
-            </TableLayout>
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="7"
+                                android:gravity="center"
+                                android:text="@string/handball"
+                                android:textColor="@color/black"
+                                android:textSize="17sp" />
+
+                        </TableRow>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp" />
+
+                    </TableLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+
+
 
         </LinearLayout>
 
-    </ScrollView>
 
 </FrameLayout>

@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -21,7 +19,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.example.socialsport.MyReceiver;
 import com.example.socialsport.R;
 import com.example.socialsport.entities.SportActivity;
 import com.example.socialsport.entities.User;
@@ -34,10 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,39 +57,10 @@ public class Utils {
 
     private static SportActivity nextActivity = new SportActivity();
 
-    public static void uploadImage(Context context, Bitmap bitmap, String uid) {
-        if (bitmap != null) {
-            // Code for showing progressDialog while uploading
-            ProgressDialog progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-
-            StorageReference ref = FirebaseStorage.getInstance().getReference().child("images/" + uid);
-
-            ref.putBytes(byteArray).addOnSuccessListener(taskSnapshot -> {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Image uploaded", Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(e -> {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Failed " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }).addOnProgressListener(taskSnapshot -> {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                progressDialog.setMessage("Uploaded " + (int) progress + "%");
-            });
+    public static void uploadImage(String image, String uid) {
+        if (image != null) {
+            FirebaseDatabase.getInstance().getReference().child(TableKeys.USERS).child(uid).child(TableKeys.USERS_IMAGE).setValue(image);
         }
-    }
-
-    public static Bitmap getUserImageFromDatabase(String uid) {
-        StorageReference imageRef = FirebaseStorage.getInstance().getReference().child("images/" + uid);
-        final Bitmap[] userImage = {null};
-        imageRef.getBytes(Long.MAX_VALUE)
-                .addOnSuccessListener(bytes -> userImage[0] = BitmapFactory.decodeByteArray(bytes, 0, bytes.length))
-                .addOnFailureListener(exception -> Log.e(TAG, exception.getMessage()));
-        return userImage[0];
     }
 
     public static void writeUserIntoDatabase(String email, String name, String age, String uid) {
@@ -105,7 +70,8 @@ public class Utils {
 
     public static User getUserFromDatabase(String uid) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        User user = new User(null, null, null, null);
+        User user = new User();
+
         myRef.child("users").child(uid).child("name").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
@@ -128,6 +94,18 @@ public class Utils {
                 user.setAge(Objects.requireNonNull(task.getResult().getValue()).toString());
             }
         });
+        myRef.child("users").child(uid).child("image").get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Error getting data", task.getException());
+            } else {
+                if (task.getResult().getValue() != null) {
+                    user.setImage(Objects.requireNonNull(task.getResult().getValue()).toString());
+                } else {
+                    Log.d(TAG, "No profile image for the user " + user);
+                }
+            }
+        });
+
         return user;
     }
 
@@ -159,16 +137,16 @@ public class Utils {
                     assert act != null;
                     Log.d(TAG, act.toString());
 
-                    String sport = act.getSport();
-                    String description = act.getDescription();
-                    String date = act.getDate();
-                    String time = act.getTime();
-                    String uuidOrganiser = act.getUuidOrganiser();
-                    String coords = act.getCoords();
-                    ArrayList<String> uuids = (ArrayList<String>) act.getUuids();
+                    SportActivity newActivity = new SportActivity();
 
-                    SportActivity newActivity = new SportActivity(sport, description, date, time, uuidOrganiser, coords);
-                    newActivity.setUuids(uuids);
+                    newActivity.setSport(act.getSport());
+                    newActivity.setDescription(act.getDescription());
+                    newActivity.setDate(act.getDate());
+                    newActivity.setTime(act.getTime());
+                    newActivity.setUuidOrganiser(act.getUuidOrganiser());
+                    newActivity.setCoords(act.getCoords());
+                    newActivity.setUuids(act.getUuids());
+
                     allActivities.add(newActivity);
 
                     //ajout mez
@@ -398,7 +376,7 @@ public class Utils {
         return bitmap;
     }
 
-    public static void toast(Context c,String a){
+    public static void toast(Context c, String a) {
         Toast.makeText(c, a, Toast.LENGTH_SHORT).show();
     }
 

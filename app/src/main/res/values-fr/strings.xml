@@ -26,6 +26,11 @@
     <string name="organiser">Organiser</string>
     <string name="message">Envoyer un message</string>
     <string name="participants">Participants</string>
+    <string name="enter_a_date">Entrer une date</string>
+    <string name="enter_a_time">Entrer une heure</string>
+    <string name="number_of_participants_required">Nombre de participants requis</string>
+    <string name="enter_a_number">Entrer un nombre</string>
+    <string name="more_details_about_your_activity">Plus de détails à propos de votre activité</string>
     <string name="upcoming_activities">Activités à venir</string>
     <string name="leave">Quitter</string>
     <string name="choose_the_location">Choisissez la position</string>

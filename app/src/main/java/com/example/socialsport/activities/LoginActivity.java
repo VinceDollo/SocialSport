@@ -16,13 +16,14 @@ import com.example.socialsport.utils.TableKeys;
 import com.example.socialsport.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 import io.paperdb.Paper;
 
 public class LoginActivity extends AppCompatActivity {
 
     private int remainingTries;
     private LogInActivityBinding binding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.btnLogIn.setOnClickListener(view -> {
-            if(isValidInformation()) {
+            if (Boolean.TRUE.equals(isValidInformation())) {
                 tryToLoginUser();
             }
         });
@@ -67,8 +68,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void tryToLoginUser() {
         loading(true);
-        String email = binding.etEmail.getText().toString();
-        String password = binding.etPassword.getText().toString();
+        String email = Objects.requireNonNull(binding.etEmail.getText()).toString();
+        String password = Objects.requireNonNull(binding.etPassword.getText()).toString();
 
         if (!email.isEmpty() && !password.isEmpty()) {
             if (binding.checkboxRememberMe.isChecked()) {
@@ -95,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                         binding.btnLogIn.setBackgroundColor(Color.DKGRAY);
                     }
                     loading(false);
-
                 }
             });
         } else {
@@ -105,28 +105,27 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void loading(Boolean isLoading){
-        if(isLoading){
+    private void loading(Boolean isLoading) {
+        if (Boolean.TRUE.equals(isLoading)) {
             binding.btnLogIn.setVisibility(View.INVISIBLE);
             binding.progressBar.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             binding.progressBar.setVisibility(View.INVISIBLE);
             binding.btnLogIn.setVisibility(View.VISIBLE);
-
         }
     }
 
     private Boolean isValidInformation() {
-        if(binding.etEmail.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(binding.etEmail.getText()).toString().trim().isEmpty()) {
             Utils.toast(LoginActivity.this, "Enter email");
             return false;
-        }else if(!Patterns.EMAIL_ADDRESS.matcher(binding.etEmail.getText().toString()).matches()){
-            Utils.toast( LoginActivity.this,"Enter valid email");
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.etEmail.getText().toString()).matches()) {
+            Utils.toast(LoginActivity.this, "Enter valid email");
             return false;
-        }else if(binding.etPassword.getText().toString().trim().isEmpty()){
-            Utils.toast(LoginActivity.this,"Enter password");
+        } else if (Objects.requireNonNull(binding.etPassword.getText()).toString().trim().isEmpty()) {
+            Utils.toast(LoginActivity.this, "Enter password");
             return false;
-        }else {
+        } else {
             return true;
         }
     }

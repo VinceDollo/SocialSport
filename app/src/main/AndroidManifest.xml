@@ -16,13 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SocialSport">
-        <uses-library
-            android:name="com.google.android.maps"
-            android:required="true" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDGVKD7PXJ_oXTIP6hs1tCdb654VG6e02Y" />
+
+        <uses-library
+            android:name="com.google.android.maps"
+            android:required="true" />
 
         <activity
             android:name=".activities.SplashActivity"
@@ -30,18 +31,17 @@
             tools:ignore="Instantiatable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activities.WelcomeActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.RegisterActivity" />
-        <activity
-            android:name=".activities.PrincipalPageActivity"
-            android:windowSoftInputMode="adjustPan|adjustResize" />
 
+        <activity android:name=".activities.PrincipalPageActivity"          android:windowSoftInputMode="adjustPan" />
         <service
-            android:name=".MyService"
+            android:name=".utils.MyService"
             android:exported="false">
             <intent-filter>
                 <action android:name="your.package.MyService" />
@@ -49,7 +49,7 @@
         </service>
 
         <receiver
-            android:name=".MyReceiver"
+            android:name=".utils.MyReceiver"
             android:enabled="true"
             android:exported="false"
             android:label="MyReceiver" />

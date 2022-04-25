@@ -1,9 +1,8 @@
 package com.example.socialsport.activities;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -12,6 +11,7 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.socialsport.R;
 import com.example.socialsport.entities.User;
 import com.example.socialsport.fragments.HomeFragment;
+import com.example.socialsport.fragments.LoadFragment;
 import com.example.socialsport.fragments.MessageFragment;
 import com.example.socialsport.fragments.PersonFragment;
 import com.example.socialsport.utils.Utils;
@@ -41,7 +41,6 @@ public class PrincipalPageActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_page_activity);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit();
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -49,15 +48,10 @@ public class PrincipalPageActivity extends FragmentActivity {
         updateMessages();
 
         if (currentUser != null) {
-            String uid = currentUser.getUid();
-            user = Utils.getUserFromDatabase(uid);
-            Bitmap userImage = Utils.getUserImageFromDatabase(uid);
+            user = Utils.getUserFromDatabase(currentUser.getUid());
 
-            if (userImage != null) {
-                user.setProfileImage(userImage);
-            }
         } else {
-            Toast.makeText(getApplicationContext(), "Current User == null", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Current user is null");
         }
 
         meowBottomNavigation = findViewById(R.id.bottom_app_bar);
@@ -85,7 +79,11 @@ public class PrincipalPageActivity extends FragmentActivity {
             return null;
         });
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new LoadFragment()).addToBackStack(null).commit();
         Utils.setActivitiesListenerFromDatabase(this); //Listen to activities managements
+
+        Handler handler = new Handler();
+        handler.postDelayed(() -> getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit(), 1000);
     }
 
     private void replace(Fragment fragment) {
@@ -94,7 +92,9 @@ public class PrincipalPageActivity extends FragmentActivity {
 
     public void updateMessages() {
         messagesMap = new HashMap<>();
-        FirebaseDatabase.getInstance().getReference().child("chat").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).get().addOnCompleteListener(task -> {
+        FirebaseDatabase.getInstance().getReference().child("chat")
+                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
+                .get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
@@ -110,13 +110,22 @@ public class PrincipalPageActivity extends FragmentActivity {
     }
 
     public void updateMessagesForContact(String contact) {
-        FirebaseDatabase.getInstance().getReference().child("chat").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(contact).get().addOnCompleteListener(task1 -> {
+        FirebaseDatabase.getInstance().getReference().child("chat")
+                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(contact)
+                .get().addOnCompleteListener(task1 -> {
             if (!task1.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task1.getException());
             } else {
                 for (DataSnapshot snapshot1 : task1.getResult().getChildren()) {
-                    Objects.requireNonNull(messagesMap.get(contact)).add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
-                    message.add(Objects.requireNonNull(snapshot1.child("message").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("date").getValue()) + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
+                    Objects.requireNonNull(messagesMap.get(contact))
+                            .add(Objects.requireNonNull(snapshot1.child("message").getValue())
+                                    + "//"
+                                    + Objects.requireNonNull(snapshot1.child("date").getValue())
+                                    + "//"
+                                    + Objects.requireNonNull(snapshot1.child("sender").getValue()));
+                    message.add(Objects.requireNonNull(snapshot1.child("message").getValue())
+                            + "//" + Objects.requireNonNull(snapshot1.child("date").getValue())
+                            + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
                 }
             }
         });

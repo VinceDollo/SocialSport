@@ -1,7 +1,10 @@
 package com.example.socialsport.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
+public class HomeFragment extends Fragment {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
@@ -57,18 +60,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         trhand = binding.activity4;
         tvact= binding.activities;
 
-        // Get the SupportMapFragment and request notification when the map is ready to be used.
-        SupportMapFragment mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.f_maps);
-        assert mMapFragment != null;
-        mMapFragment.getMapAsync(this);
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.f_maps, new MapsFragment()).addToBackStack(null).commit();
 
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(1, true);
 
         setListeners();
 
         User user = ((PrincipalPageActivity) requireActivity()).getUser();
-        if (user.getProfileImage() != null)
-            binding.civProfile.setImageBitmap(user.getProfileImage());
+
+        if (user.getImage() != null) {
+            Log.d("Home", user.getImage());
+            byte[] bytes = Base64.decode(user.getImage() , Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            binding.civProfile.setImageBitmap(bitmap);
+        }else {
+            Log.d("Home", "Image null for this user");
+        }
 
         return view;
     }

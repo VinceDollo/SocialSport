@@ -1,4 +1,4 @@
-package com.example.socialsport;
+package com.example.socialsport.utils;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;

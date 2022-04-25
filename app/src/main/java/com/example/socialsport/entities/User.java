@@ -1,28 +1,28 @@
 package com.example.socialsport.entities;
 
-import android.graphics.Bitmap;
+import androidx.annotation.NonNull;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String email;
     private String name;
     private String age;
-    private Bitmap profileImage;
+    private String image;
 
-    public User(){
+    public User() {
         email = "";
         name = "";
         age = "";
-        profileImage = null;
+        image = null;
     }
 
-    public User(String email, String name, String age, Bitmap bitmap){
+    public User(String email, String name, String age, String image) {
         this.email = email;
         this.name = name;
         this.age = age;
-        this.profileImage = bitmap;
-
-        new User(); //Code smell
+        this.image = image;
     }
 
     public String getEmail() {
@@ -49,11 +49,25 @@ public class User {
         this.age = age;
     }
 
-    public Bitmap getProfileImage() {
-        return profileImage;
+    public String getImage() {
+        return image;
     }
 
-    public void setProfileImage(Bitmap profileImage) {
-        this.profileImage = profileImage;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    @NonNull
+    public String toString() {
+        StringBuilder result = new StringBuilder("name : ");
+        result.append(getName()).append(" - email : ").append(getEmail())
+                .append(" - age : ").append(getAge())
+                .append(" - image : ");
+        if (getImage() != null) {
+            result.append(getImage());
+        } else {
+            result.append("null");
+        }
+        return result.toString();
     }
 }
