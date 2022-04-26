@@ -2,10 +2,8 @@ package com.example.socialsport.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.socialsport.R;
-import com.example.socialsport.activities.PrincipalPageActivity;
-import com.example.socialsport.entities.User;
-import com.example.socialsport.fragments.OverviewFragment;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,7 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -37,9 +30,9 @@ public class ListAdapter extends BaseAdapter {
 
     private static final String TAG = ListAdapter.class.getSimpleName();
 
-    private Context context;
-    private ArrayList<String> idConv;
-    private String currentUser;
+    private final Context context;
+    private final ArrayList<String> idConv;
+    private final String currentUser;
 
     public ListAdapter(Context context, List<String> idConv, String currentUser) {
         this.context = context;
@@ -82,8 +75,8 @@ public class ListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        String firstKey = (String) idConv.get(position);
-        Log.d("DEBUG123", idConv.toString());
+        String firstKey = idConv.get(position);
+        Log.d(TAG, idConv.toString());
 
         final String[] name = {""};
         final String[] image = {""};
@@ -95,7 +88,7 @@ public class ListAdapter extends BaseAdapter {
                     String data = snapshot.getValue(String.class);
                     if (data != null && !data.equals(currentUser)) {
                         FirebaseDatabase.getInstance().getReference().child("users").child(data).child("name").get().addOnCompleteListener(task -> {
-                            name[0] = task.getResult().getValue().toString();
+                            name[0] = Objects.requireNonNull(task.getResult().getValue()).toString();
                             viewHolder.txtName.setText(name[0]);
 
                         });
@@ -105,6 +98,8 @@ public class ListAdapter extends BaseAdapter {
                                 byte[] bytes = Base64.decode(image[0], Base64.DEFAULT);
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                 viewHolder.icon.setImageBitmap(bitmap);
+                            } else {
+                                viewHolder.icon.setImageResource(R.drawable.img_person);
                             }
                         });
                     }
@@ -133,11 +128,7 @@ public class ListAdapter extends BaseAdapter {
                     finalSender[0] = Objects.requireNonNull(snapshot.child("idSender").getValue()).toString();
 
                     Log.d(TAG, finalSender[0] + "||" + currentUser);
-                    if (finalSender[0].equals(currentUser)) {
-                        isSender[0] = true;
-                    } else {
-                        isSender[0] = false;
-                    }
+                    isSender[0] = finalSender[0].equals(currentUser);
                 }
                 if (isSender[0]) {
                     viewHolder.sender.setImageResource(R.drawable.img_message_send);
@@ -146,8 +137,6 @@ public class ListAdapter extends BaseAdapter {
                 }
                 viewHolder.txtMessage.setText(finalMessage[0]);
                 viewHolder.txtDate.setText(finalDate[0]);
-
-
             }
 
             @Override
@@ -155,29 +144,6 @@ public class ListAdapter extends BaseAdapter {
                 Log.e(TAG, error.getMessage());
             }
         });
-
-
-       /* ArrayList<String> array = nameMessage.get(firstKey);
-
-        assert array != null;
-        String[] array1 = array.get(array.size() - 1).split("//");
-        String msg = array1[0];
-        String[] array2 = array1[1].split(" ");
-        String date = array2[0];
-        String time = array2[1];
-        String sender = array1[2];
-
-        Log.d("SENDER", "" + sender);
-        if (sender.equals("true")) {
-            viewHolder.sender.setImageResource(R.drawable.img_message_send);
-        } else {
-            viewHolder.sender.setImageResource(R.drawable.img_message_received_2);
-        }*/
-        // viewHolder.txtName.setText(firstKey);
-        // viewHolder.txtMessage.setText(msg);
-        //  viewHolder.txtTime.setText(time);
-        //  viewHolder.txtDate.setText(date);
-        //   viewHolder.icon.setImageResource(images[position]);
 
         return convertView;
     }

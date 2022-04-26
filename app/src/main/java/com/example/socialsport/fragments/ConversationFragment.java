@@ -262,7 +262,8 @@ public class ConversationFragment extends Fragment {
                                 byte[] bytes = Base64.decode(image, Base64.DEFAULT);
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                 binding.image.setImageBitmap(bitmap);
-                            }
+                            } else
+                                binding.image.setImageResource(R.drawable.img_person);
                         });
 
                         displayMessagesInConversation();

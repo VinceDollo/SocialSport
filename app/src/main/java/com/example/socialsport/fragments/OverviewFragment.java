@@ -14,10 +14,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.socialsport.R;
-import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentOverviewActivityBinding;
 import com.example.socialsport.utils.Utils;
 import com.example.socialsport.entities.User;
@@ -41,7 +41,6 @@ public class OverviewFragment extends Fragment {
     private ArrayList<String> participantsUuids = new ArrayList<>();
     private FragmentOverviewActivityBinding binding;
     private User organiser;
-    private User user;
     private String uuidOrganiser;
 
     @Nullable
@@ -49,7 +48,6 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOverviewActivityBinding.inflate(inflater);
         View view = binding.getRoot();
-        user = ((PrincipalPageActivity) requireActivity()).getUser();
 
         setViewContent();
         setListener();
@@ -58,9 +56,9 @@ public class OverviewFragment extends Fragment {
     }
 
     private void setListener() {
-        binding.btnMessage.setOnClickListener(v->{
+        binding.btnMessage.setOnClickListener(v -> {
             ConversationFragment newF = new ConversationFragment();
-            if(organiser!=null){
+            if (organiser != null) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("organiser", organiser);
                 bundle.putString("uidOrganiser", uuidOrganiser);
@@ -94,12 +92,15 @@ public class OverviewFragment extends Fragment {
                         } else {
                             uuidOrganiser = participantsUuids.get(0);
                             organiser = task.getResult().getValue(User.class);
-                            if (organiser != null && organiser.getName()!=user.getName()) {
+                            if (organiser != null) {
                                 binding.nameOrganiser.setText(organiser.getName());
                                 byte[] bytes = Base64.decode(organiser.getImage(), Base64.DEFAULT);
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                 binding.imgOrganiser.setImageBitmap(bitmap);
-                            }else{
+                            }
+
+                            if (uuidOrganiser.equals(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())) {
+                                binding.btnMessage.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.btn_grey));
                                 binding.btnMessage.setEnabled(false);
                             }
                         }
