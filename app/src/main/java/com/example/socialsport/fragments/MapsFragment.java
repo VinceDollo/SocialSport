@@ -3,6 +3,7 @@ package com.example.socialsport.fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.socialsport.databinding.FragmentMapsBinding;
 import com.example.socialsport.utils.MyMap;
 import com.example.socialsport.R;
 import com.example.socialsport.entities.SportActivity;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 public class MapsFragment extends Fragment {
 
     private final OnMapReadyCallback callback;
+    private FragmentMapsBinding binding;
 
     public MapsFragment() {
         this.callback = googleMap -> {
@@ -53,8 +56,10 @@ public class MapsFragment extends Fragment {
                 }
                 return true;
             });
+
         };
     }
+
 
     public MapsFragment(OnMapReadyCallback callback) {
         this.callback = callback;
@@ -65,7 +70,9 @@ public class MapsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        binding = FragmentMapsBinding.inflate(inflater);
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override

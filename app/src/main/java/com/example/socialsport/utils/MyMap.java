@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -200,39 +201,37 @@ public class MyMap {
     }
 
     public void searchPlaceListener() {
-        // Create searching localisation method
-        EditText etLocalisation = view.findViewById(R.id.et_search_city);
-        etLocalisation.setOnKeyListener((v, keyCode, event) -> {
-            // If the event is a key-down event on the "enter" button
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                //Save the answer
-                String localisation = etLocalisation.getText().toString();
-                Geocoder gc = new Geocoder(activity.getApplicationContext());
-                try {
-                    List<Address> addresses = gc.getFromLocationName(localisation, 1);
-                    if (addresses.isEmpty())
-                        Toast.makeText(activity, "Error: the searched place doesn't exist", Toast.LENGTH_SHORT).show();
-                    else {
-                        double latitude = addresses.get(0).getLatitude();
-                        double longitude = addresses.get(0).getLongitude();
-                        LatLng placeToFind = new LatLng(latitude, longitude);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeToFind, 14));
+            EditText etLocalisation = view.findViewById(R.id.et_search_city);
+            // Create searching localisation method
+            etLocalisation.setOnKeyListener((v, keyCode, event) -> {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    String localisation = etLocalisation.getText().toString();
+                    Geocoder gc = new Geocoder(activity.getApplicationContext());
+                    try {
+                        List<Address> addresses = gc.getFromLocationName(localisation, 1);
+                        if (addresses.isEmpty())
+                            Toast.makeText(activity, "Error: the searched place doesn't exist", Toast.LENGTH_SHORT).show();
+                        else {
+                            double latitude = addresses.get(0).getLatitude();
+                            double longitude = addresses.get(0).getLongitude();
+                            LatLng placeToFind = new LatLng(latitude, longitude);
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeToFind, 14));
+                        }
+                    } catch (IOException e) {
+                        Log.d(TAG, e.toString());
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    Log.d(TAG, e.toString());
-                    e.printStackTrace();
+
+                    //Delete text from edit text
+                    etLocalisation.setText("");
+
+                    Utils.hideKeyboard(view.getContext(), view);
                 }
-
-                //Delete text from edit text
-                etLocalisation.setText("");
-
-                Utils.hideKeyboard(view.getContext(), view);
-
-                return true;
-            }
-            return false;
-        });
+                return false;
+            });
     }
+
 
     public void addActivityMarker(String sport) {
         MarkerOptions marker = new MarkerOptions();

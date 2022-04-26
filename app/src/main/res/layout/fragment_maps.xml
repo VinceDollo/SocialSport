@@ -21,7 +21,7 @@
             android:autofillHints=""
             android:background="@drawable/edit_text_border_search_bar"
             android:drawableStart="@drawable/img_search"
-            android:gravity="center"
+            android:drawablePadding="@dimen/_10sdp"
             android:hint="@string/type_a_location"
             android:imeOptions="actionGo"
             android:inputType="text"
