@@ -9,11 +9,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.socialsport.databinding.FragmentMessageBinding;
-import com.example.socialsport.entities.User;
-import com.example.socialsport.utils.ListAdapter;
 import com.example.socialsport.R;
 import com.example.socialsport.activities.PrincipalPageActivity;
+import com.example.socialsport.databinding.FragmentMessageBinding;
+import com.example.socialsport.utils.ListAdapter;
 
 
 public class MessageFragment extends Fragment {
@@ -35,11 +34,11 @@ public class MessageFragment extends Fragment {
         binding.lvChat.setAdapter(lAdapter);
 
         binding.lvChat.setOnItemClickListener((adapterView, view1, i, l) -> {
-            Object firstKey = ((PrincipalPageActivity) requireActivity()).getIdConv().get(i);
+            String firstKey = ((PrincipalPageActivity) requireActivity()).getIdConv().get(i);
 
             Bundle bundle = new Bundle();
-            bundle.putString("idConv", (String) firstKey);
-            Log.d("MessageFragment", firstKey.toString());
+            bundle.putString("idConv", firstKey);
+            Log.d("MessageFragment", firstKey);
             Fragment newF = new ConversationFragment();
             newF.setArguments(bundle);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();
