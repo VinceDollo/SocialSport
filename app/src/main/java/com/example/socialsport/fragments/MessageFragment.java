@@ -18,7 +18,7 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 public class MessageFragment extends Fragment {
 
     //TODO changer avec image de bdd
-    private final int[] images = {R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football,R.drawable.img_football};
+    private final int[] images = {R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football};
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -28,7 +28,7 @@ public class MessageFragment extends Fragment {
         View view = binding.getRoot();
         String uid = ((PrincipalPageActivity) requireActivity()).getUidUser();
 
-        ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(2,true);
+        ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(2, true);
 
         ((PrincipalPageActivity) requireActivity()).getIdconv();
 

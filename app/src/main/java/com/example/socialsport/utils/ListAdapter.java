@@ -91,15 +91,6 @@ public class ListAdapter extends BaseAdapter {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String data = snapshot.getValue(String.class);
                     if(!data.equals(currentUser)){
-                        /*
-                        User a = Utils.getUserFromDatabase(data);
-                        viewHolder.txtName.setText(a.getName());
-                        if(a.getImage()!=null){
-                            byte[] bytes = Base64.decode(a.getImage() , Base64.DEFAULT);
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            viewHolder.icon.setImageBitmap(bitmap);
-                        }*/
-
                         FirebaseDatabase.getInstance().getReference().child("users").child(data).child("name").get().addOnCompleteListener(task ->{
                             name[0] = task.getResult().getValue().toString();
                             viewHolder.txtName.setText(name[0]);
