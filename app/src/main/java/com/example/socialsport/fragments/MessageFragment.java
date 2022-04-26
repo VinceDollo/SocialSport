@@ -14,7 +14,6 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 import com.example.socialsport.databinding.FragmentMessageBinding;
 import com.example.socialsport.utils.ListAdapter;
 
-
 public class MessageFragment extends Fragment {
 
     @Override

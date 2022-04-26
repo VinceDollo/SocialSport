@@ -50,8 +50,7 @@ public class PrincipalPageActivity extends FragmentActivity {
         if (currentUser != null) {
             user = Utils.getUserFromDatabase(currentUser.getUid());
             addConvId(currentUser.getUid());
-            Log.d("TEST123", idConv.toString());
-
+            Log.d(TAG, idConv.toString());
         } else {
             Log.e(TAG, "Current user is null");
         }
@@ -109,11 +108,11 @@ public class PrincipalPageActivity extends FragmentActivity {
     }
 
 
-    private void addConvId(String uuid){
+    private void addConvId(String uuid) {
         FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("conversations").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String data = snapshot.getValue(String.class);
                     idConv.add(data);
                 }

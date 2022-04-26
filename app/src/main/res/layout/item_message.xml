@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="100dp">
@@ -26,14 +27,13 @@
             android:layout_weight="10"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            tools:ignore="NestedWeights">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_name1"
-                android:text="Title"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="20sp" />
@@ -42,7 +42,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_message"
-                android:text="Clique here to see conversation"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -54,7 +53,8 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:src="@drawable/img_message_received"
-            app:tint="@color/theme" />
+            app:tint="@color/theme"
+            android:contentDescription="@string/icon_is_sender" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -66,7 +66,6 @@
 
             <TextView
                 android:id="@+id/date"
-                android:text="10/09/2020"
                 android:layout_width="wrap_content"
                 android:textSize="12sp"
                 android:textColor="@color/black"
@@ -76,7 +75,6 @@
 
             <TextView
                 android:id="@+id/time"
-                android:text="16:54"
                 android:layout_width="wrap_content"
                 android:textSize="12sp"
                 android:textColor="@color/black"

@@ -2,9 +2,8 @@ package com.example.socialsport.entities;
 
 import androidx.annotation.NonNull;
 
-import java.util.Date;
-
 public class Message {
+
     private String message;
     private String date;
     private String idSender;
@@ -39,6 +38,7 @@ public class Message {
         this.idSender = idSender;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Message{" +
