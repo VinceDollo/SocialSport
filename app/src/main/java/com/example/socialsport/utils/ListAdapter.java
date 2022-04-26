@@ -105,6 +105,8 @@ public class ListAdapter extends BaseAdapter {
                                 byte[] bytes = Base64.decode(image[0], Base64.DEFAULT);
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                 viewHolder.icon.setImageBitmap(bitmap);
+                            }else {
+                                viewHolder.icon.setImageResource(R.drawable.img_person);
                             }
                         });
                     }
