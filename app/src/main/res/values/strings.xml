@@ -54,4 +54,5 @@
     <string name="menu_bar">Menu bar</string>
     <string name="route_to_activity">Route to activity</string>
     <string name="return_to_home_page">Return to home page</string>
+    <string name="icon_is_sender">Icon isSender</string>
 </resources>

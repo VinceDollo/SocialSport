@@ -49,5 +49,6 @@
     <string name="menu_bar">Bar de menu</string>
     <string name="route_to_activity">Itinéraire vers l\'activité</string>
     <string name="return_to_home_page">Retourner à la page principale</string>
+    <string name="icon_is_sender">Icon isSender</string>
 
 </resources>

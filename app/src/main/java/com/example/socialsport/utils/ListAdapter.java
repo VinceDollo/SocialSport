@@ -78,41 +78,14 @@ public class ListAdapter extends BaseAdapter {
         String firstKey = idConv.get(position);
         Log.d(TAG, idConv.toString());
 
-        final String[] name = {""};
-        final String[] image = {""};
+        loadInterlocutorInfo(viewHolder, firstKey);
 
-        FirebaseDatabase.getInstance().getReference().child("conversations").child(firstKey).child("participants").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String data = snapshot.getValue(String.class);
-                    if (data != null && !data.equals(currentUser)) {
-                        FirebaseDatabase.getInstance().getReference().child("users").child(data).child("name").get().addOnCompleteListener(task -> {
-                            name[0] = Objects.requireNonNull(task.getResult().getValue()).toString();
-                            viewHolder.txtName.setText(name[0]);
+        loadMessageInfo(viewHolder, firstKey);
 
-                        });
-                        FirebaseDatabase.getInstance().getReference().child("users").child(data).child("image").get().addOnCompleteListener(task -> {
-                            if (task.getResult().getValue() != null) {
-                                image[0] = task.getResult().getValue().toString();
-                                byte[] bytes = Base64.decode(image[0], Base64.DEFAULT);
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                                viewHolder.icon.setImageBitmap(bitmap);
-                            }else {
-                                viewHolder.icon.setImageResource(R.drawable.img_person);
-                            }
-                        });
-                    }
+        return convertView;
+    }
 
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, error.getMessage());
-            }
-        });
-
+    private void loadMessageInfo(ViewHolder viewHolder, String firstKey) {
         final String[] finalMessage = {""};
         final String[] finalDate = {""};
         final String[] finalSender = {""};
@@ -144,8 +117,42 @@ public class ListAdapter extends BaseAdapter {
                 Log.e(TAG, error.getMessage());
             }
         });
+    }
 
-        return convertView;
+    private void loadInterlocutorInfo(ViewHolder viewHolder, String firstKey) {
+        final String[] name = {""};
+        final String[] image = {""};
+
+        FirebaseDatabase.getInstance().getReference().child("conversations").child(firstKey).child("participants").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String data = snapshot.getValue(String.class);
+                    if (data != null && !data.equals(currentUser)) {
+                        FirebaseDatabase.getInstance().getReference().child("users").child(data).child("name").get().addOnCompleteListener(task -> {
+                            name[0] = Objects.requireNonNull(task.getResult().getValue()).toString();
+                            viewHolder.txtName.setText(name[0]);
+                        });
+                        FirebaseDatabase.getInstance().getReference().child("users").child(data).child("image").get().addOnCompleteListener(task -> {
+                            if (task.getResult().getValue() != null) {
+                                image[0] = task.getResult().getValue().toString();
+                                byte[] bytes = Base64.decode(image[0], Base64.DEFAULT);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                viewHolder.icon.setImageBitmap(bitmap);
+                            }else {
+                                viewHolder.icon.setImageResource(R.drawable.img_person);
+                            }
+                        });
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, error.getMessage());
+            }
+        });
     }
 
     private static class ViewHolder {

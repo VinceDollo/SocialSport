@@ -2,25 +2,15 @@ package com.example.socialsport.entities;
 
 import androidx.annotation.NonNull;
 
-import java.util.Date;
-
 public class Message {
-    private String message;
+    private final String messageContent;
     private String date;
-    private String idSender;
+    private final String idSender;
 
     public Message(String message, String date, String idSender) {
-        this.message = message;
+        this.messageContent = message;
         this.date = date;
         this.idSender = idSender;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public String getDate() {
@@ -31,18 +21,12 @@ public class Message {
         this.date = date;
     }
 
-    public String getIdSender() {
-        return idSender;
-    }
 
-    public void setIdSender(String idSender) {
-        this.idSender = idSender;
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return "Message{" +
-                "message='" + message + '\'' +
+                "message='" + messageContent + '\'' +
                 ", date='" + date + '\'' +
                 ", idSender='" + idSender + '\'' +
                 '}';
