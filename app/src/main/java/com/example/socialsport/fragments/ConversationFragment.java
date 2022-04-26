@@ -75,7 +75,7 @@ public class ConversationFragment extends Fragment {
                 handler.postDelayed(this::displayConvFromActivity, 200);
             } else {
                 //If you go through message fragment
-                idConv = bundle.getString("idConv"); //TODO: how do you get that ?
+                idConv = bundle.getString("idConv");
                 displayConvFromMessageFragment();
             }
         }
@@ -174,7 +174,7 @@ public class ConversationFragment extends Fragment {
 
         addConvInMessageFragment(idConv);
 
-        FirebaseDatabase.getInstance().getReference().child("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).child("conversations").setValue(((PrincipalPageActivity) requireActivity()).getIdconv());
+        FirebaseDatabase.getInstance().getReference().child("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).child("conversations").setValue(((PrincipalPageActivity) requireActivity()).getIdConv());
 
         ArrayList<String> listConv = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference().child("users").child(uuidOrganiser).child("conversations").addValueEventListener(new ValueEventListener() {
@@ -205,7 +205,7 @@ public class ConversationFragment extends Fragment {
 
     //Add conversation id in principal activity
     private void addConvInMessageFragment(String idConv) {
-        ((PrincipalPageActivity) requireActivity()).getIdconv().add(idConv);
+        ((PrincipalPageActivity) requireActivity()).getIdConv().add(idConv);
     }
 
     //Find conversation id in common if it exists
@@ -327,7 +327,7 @@ public class ConversationFragment extends Fragment {
                 binding.image.setImageBitmap(bitmap);
             }
 
-            if (idConv != "") {
+            if (!"".equals(idConv)) {
                 displayMessagesInConversation();
             }
         }

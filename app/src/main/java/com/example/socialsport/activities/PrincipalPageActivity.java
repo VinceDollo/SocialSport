@@ -24,9 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.List;
 
 public class PrincipalPageActivity extends FragmentActivity {
 
@@ -35,10 +33,8 @@ public class PrincipalPageActivity extends FragmentActivity {
     private MeowBottomNavigation meowBottomNavigation;
     private User user;
 
-    ArrayList<String> idconv = new ArrayList<>();
-    ArrayList<String> message = new ArrayList<>();
+    ArrayList<String> idConv = new ArrayList<>();
 
-    private HashMap<String, ArrayList<String>> messagesMap;
     private FirebaseUser currentUser;
 
     @Override
@@ -46,17 +42,15 @@ public class PrincipalPageActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_page_activity);
 
-        Log.d(TAG, idconv.toString());
+        Log.d(TAG, idConv.toString());
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        //updateMessages();
-
         if (currentUser != null) {
             user = Utils.getUserFromDatabase(currentUser.getUid());
             addConvId(currentUser.getUid());
-            Log.d("TEST123", idconv.toString());
+            Log.d("TEST123", idConv.toString());
 
         } else {
             Log.e(TAG, "Current user is null");
@@ -91,56 +85,15 @@ public class PrincipalPageActivity extends FragmentActivity {
         Utils.setActivitiesListenerFromDatabase(this); //Listen to activities managements
 
         Handler handler = new Handler();
-        handler.postDelayed(() -> getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit(), 1000);
+        handler.postDelayed(() -> getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeFragment()).addToBackStack(null).commit(), 1500);
     }
 
     private void replace(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).addToBackStack(null).commit();
     }
-/*
-    public void updateMessages() {
-        messagesMap = new HashMap<>();
-        FirebaseDatabase.getInstance().getReference().child("chat")
-                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
-                .get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
-            } else {
-                for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                    String contact = snapshot.getKey();
-                    messagesMap.put(contact, new ArrayList<>());
-                    name.add(contact);
-                    if (contact != null)
-                        updateMessagesForContact(contact);
-                }
-            }
-        });
-    }
-*/
-    public void updateMessagesForContact(String contact) {
-        FirebaseDatabase.getInstance().getReference().child("chat")
-                .child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(contact)
-                .get().addOnCompleteListener(task1 -> {
-            if (!task1.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task1.getException());
-            } else {
-                for (DataSnapshot snapshot1 : task1.getResult().getChildren()) {
-                    Objects.requireNonNull(messagesMap.get(contact))
-                            .add(Objects.requireNonNull(snapshot1.child("message").getValue())
-                                    + "//"
-                                    + Objects.requireNonNull(snapshot1.child("date").getValue())
-                                    + "//"
-                                    + Objects.requireNonNull(snapshot1.child("sender").getValue()));
-                    message.add(Objects.requireNonNull(snapshot1.child("message").getValue())
-                            + "//" + Objects.requireNonNull(snapshot1.child("date").getValue())
-                            + "//" + Objects.requireNonNull(snapshot1.child("sender").getValue()));
-                }
-            }
-        });
-    }
 
-    public ArrayList<String> getIdconv() {
-        return idconv;
+    public List<String> getIdConv() {
+        return idConv;
     }
 
     public MeowBottomNavigation getMeowBottomNavigation() {
@@ -162,15 +115,14 @@ public class PrincipalPageActivity extends FragmentActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String data = snapshot.getValue(String.class);
-                    idconv.add(data);
+                    idConv.add(data);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
-            };
-
+                Log.e(TAG, error.getMessage());
+            }
         });
     }
 

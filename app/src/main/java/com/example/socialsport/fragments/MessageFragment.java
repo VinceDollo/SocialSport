@@ -28,14 +28,14 @@ public class MessageFragment extends Fragment {
 
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(2, true);
 
-        ((PrincipalPageActivity) requireActivity()).getIdconv();
+        ((PrincipalPageActivity) requireActivity()).getIdConv();
 
-        ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getIdconv(), uid);
+        ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getIdConv(), uid);
 
         binding.lvChat.setAdapter(lAdapter);
 
         binding.lvChat.setOnItemClickListener((adapterView, view1, i, l) -> {
-            Object firstKey = ((PrincipalPageActivity) requireActivity()).getIdconv().get(i);
+            Object firstKey = ((PrincipalPageActivity) requireActivity()).getIdConv().get(i);
 
             Bundle bundle = new Bundle();
             bundle.putString("idConv", (String) firstKey);
