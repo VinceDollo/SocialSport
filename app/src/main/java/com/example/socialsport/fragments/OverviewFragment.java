@@ -123,7 +123,7 @@ public class OverviewFragment extends Fragment {
             if (!task.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task.getException());
             } else {
-                @SuppressLint("InflateParams") TableRow row = (TableRow) LayoutInflater.from(getActivity()).inflate(R.layout.table_row, null);
+                @SuppressLint("InflateParams") TableRow row = (TableRow) LayoutInflater.from(requireActivity()).inflate(R.layout.table_row, null);
                 User participant = task.getResult().getValue(User.class);
                 if (participant != null) {
                     Log.d(TAG, participant.toString());
