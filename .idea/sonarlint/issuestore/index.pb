@@ -23,7 +23,5 @@ j
 :app/src/main/java/com/example/socialsport/utils/MyMap.java,7/a/7af3d1329a88bbf094b748c033d99bc4ff28ff60
 w
 Gapp/src/main/java/com/example/socialsport/activities/LoginActivity.java,b/0/b010c27799cbce44caa5b877ceb08cda57227ae5
-l
-<app/src/main/java/com/example/socialsport/entities/User.java,5/2/52d4e7e7c4196e8a71fd88562366acb09e75b23a
 „
 Tapp/src/main/java/com/example/socialsport/fragments/DescriptionActivityFragment.java,7/c/7c972601cf4185e360ac87d0340d5f9c0f680cb0

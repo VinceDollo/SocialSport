@@ -42,7 +42,7 @@ public class OverviewFragment extends Fragment {
     private FragmentOverviewActivityBinding binding;
     private User organiser;
     private User user;
-    private String uuidOrga;
+    private String uuidOrganiser;
 
     @Nullable
     @Override
@@ -54,8 +54,6 @@ public class OverviewFragment extends Fragment {
         setViewContent();
         setListener();
 
-
-
         return view;
     }
 
@@ -65,7 +63,7 @@ public class OverviewFragment extends Fragment {
             if(organiser!=null){
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("organiser", organiser);
-                bundle.putString("uidorganiser", uuidOrga);
+                bundle.putString("uidOrganiser", uuidOrganiser);
                 newF.setArguments(bundle);
             }
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).commit();
@@ -94,7 +92,7 @@ public class OverviewFragment extends Fragment {
                             Log.e(TAG, "Error getting data", task.getException());
                             binding.nameOrganiser.setText(R.string.app_name);
                         } else {
-                            uuidOrga = participantsUuids.get(0);
+                            uuidOrganiser = participantsUuids.get(0);
                             organiser = task.getResult().getValue(User.class);
                             if (organiser != null && organiser.getName()!=user.getName()) {
                                 binding.nameOrganiser.setText(organiser.getName());

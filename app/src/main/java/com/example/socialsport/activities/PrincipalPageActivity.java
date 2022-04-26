@@ -46,6 +46,8 @@ public class PrincipalPageActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.principal_page_activity);
 
+        Log.d(TAG, idconv.toString());
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
@@ -155,12 +157,11 @@ public class PrincipalPageActivity extends FragmentActivity {
 
 
     private void addConvId(String uuid){
-        FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("conversation").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("users").child(uuid).child("conversations").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String data = snapshot.getValue(String.class);
-                    Log.d("TEST456", data);
                     idconv.add(data);
                 }
             }

@@ -1,6 +1,7 @@
 package com.example.socialsport.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,6 @@ import com.example.socialsport.activities.PrincipalPageActivity;
 
 public class MessageFragment extends Fragment {
 
-    //TODO changer avec image de bdd
-    private final int[] images = {R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football, R.drawable.img_football};
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -32,7 +30,7 @@ public class MessageFragment extends Fragment {
 
         ((PrincipalPageActivity) requireActivity()).getIdconv();
 
-        ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getIdconv(), images, uid);
+        ListAdapter lAdapter = new ListAdapter(getContext(), ((PrincipalPageActivity) requireActivity()).getIdconv(), uid);
 
         binding.lvChat.setAdapter(lAdapter);
 
@@ -41,6 +39,7 @@ public class MessageFragment extends Fragment {
 
             Bundle bundle = new Bundle();
             bundle.putString("idConv", (String) firstKey);
+            Log.d("MessageFragment", firstKey.toString());
             Fragment newF = new ConversationFragment();
             newF.setArguments(bundle);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayout, newF).addToBackStack(null).commit();

@@ -64,7 +64,7 @@ public class User implements Serializable {
                 .append(" - age : ").append(getAge())
                 .append(" - image : ");
         if (getImage() != null) {
-            result.append(getImage());
+            result.append(getImage().substring(0, 10)).append("[...]");
         } else {
             result.append("null");
         }

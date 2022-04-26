@@ -38,4 +38,13 @@ public class Message {
     public void setIdSender(String idSender) {
         this.idSender = idSender;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "message='" + message + '\'' +
+                ", date='" + date + '\'' +
+                ", idSender='" + idSender + '\'' +
+                '}';
+    }
 }

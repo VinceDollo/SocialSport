@@ -1,5 +1,6 @@
 package com.example.socialsport.fragments;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ public class ConversationFragment extends Fragment {
 
     private FragmentConversationBinding binding;
     private User organiser;
-    private String uuidOrga;
+    private String uuidOrganiser;
     private String idConv;
     private String currentUidUser;
     private SimpleDateFormat formatter;
@@ -59,22 +60,22 @@ public class ConversationFragment extends Fragment {
         ((PrincipalPageActivity) requireActivity()).getMeowBottomNavigation().show(2, true);
 
         currentUidUser = ((PrincipalPageActivity) requireActivity()).getUidUser();
-        formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
+        formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
         today = new Date();
 
-        //Recuperation des infos quand tu es sur la page de l'activité
+        //Get info from overview fragment
         Bundle bundle = getArguments();
         if (bundle != null) {
             organiser = (User) bundle.getSerializable("organiser");
-            uuidOrga = bundle.getString("uidorganiser");
+            uuidOrganiser = bundle.getString("uidOrganiser");
 
-            if (uuidOrga != null) {
-                retriveIdConv();//retrouver si une conv existe ou non
+            if (uuidOrganiser != null) {
+                findIdConvInCommon();
                 Handler handler = new Handler();
                 handler.postDelayed(this::displayConvFromActivity, 200);
             } else {
-                //Si jamais tu passses par le fragment message
-                idConv = bundle.getString("idConv");
+                //If you go through message fragment
+                idConv = bundle.getString("idConv"); //TODO: how do you get that ?
                 displayConvFromMessageFragment();
             }
         }
@@ -84,69 +85,24 @@ public class ConversationFragment extends Fragment {
         return view;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setListener() {
         binding.etMessage.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (binding.etMessage.getRight() - binding.etMessage.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                    if (!binding.etMessage.getText().toString().trim().isEmpty()) {
-                        if (idConv != "") {
-                            ArrayList<Message> listMessage = new ArrayList<>();
-                            FirebaseDatabase.getInstance().getReference().child("conversation").child(idConv).child("messages").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    listMessage.clear();
-                                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                                        Log.d("Coucou", snapshot1.toString());
-                                        String message = snapshot1.child("message").getValue(String.class);
-                                        String senderId = snapshot1.child("idSender").getValue(String.class);
-                                        String date = snapshot1.child("date").getValue(String.class);
-                                        Log.d("DEBUG000", "Message : " + message);
-                                        Log.d("DEBUG000", "Sender : " + senderId);
-                                        Log.d("DEBUG000", "date : " + date);
-
-                                        Message msg = new Message(message, date, senderId);
-                                        listMessage.add(msg);
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                            TextView textView = new TextView(getContext());
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(0, 0, 0, 20);
-                            textView.setText(binding.etMessage.getText().toString());
-                            textView.setTextSize(15);
-                            textView.setPadding(30, 20, 30, 20);
-                            params.gravity = Gravity.END;
-                            textView.setBackgroundResource(R.drawable.tv_send_message);
-                            textView.setTextColor(textView.getContext().getColor(R.color.white));
-                            textView.setLayoutParams(params);
-                            binding.llConversation.addView(textView);
-                            Message newM = new Message(binding.etMessage.getText().toString(), formatter.format(today), currentUidUser);
-                            binding.etMessage.setText("");
+                    String lastMessage = Objects.requireNonNull(binding.etMessage.getText()).toString();
+                    if (!lastMessage.trim().isEmpty()) {
+                        if (!"".equals(idConv)) {
+                            ArrayList<Message> messages = getMessagesList();
+                            addMessageView(lastMessage);
                             Handler handler = new Handler();
-                            handler.postDelayed(() -> addData2(listMessage, newM), 1000);
+                            handler.postDelayed(() -> addMessageInMessagesList(messages, new Message(lastMessage, formatter.format(today), currentUidUser)), 1000);
                         } else {
-                            TextView textView = new TextView(getContext());
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(0, 0, 0, 20);
-                            textView.setText(binding.etMessage.getText().toString());
-                            textView.setTextSize(15);
-                            textView.setPadding(30, 20, 30, 20);
-                            params.gravity = Gravity.END;
-                            textView.setBackgroundResource(R.drawable.tv_send_message);
-                            textView.setTextColor(textView.getContext().getColor(R.color.white));
-                            textView.setLayoutParams(params);
-                            binding.llConversation.addView(textView);
-                            ArrayList<String> a = new ArrayList<>();
-                            a.add(binding.etMessage.getText().toString());
-                            addConvForUser(binding.etMessage.getText().toString(), formatter.format(today), currentUidUser);
-                            binding.etMessage.setText("");
+                            addConvForUser(lastMessage, formatter.format(today), currentUidUser);
+                            addMessageView(lastMessage);
                         }
+                        binding.etMessage.setText("");
                     }
                     return true;
                 }
@@ -155,30 +111,73 @@ public class ConversationFragment extends Fragment {
         });
     }
 
+    //Add a new message in messages list
+    private void addMessageInMessagesList(ArrayList<Message> messages, Message message) {
+        messages.add(message);
+        Log.d(TAG, messages.toString());
+        FirebaseDatabase.getInstance().getReference().child("conversations").child(idConv).child("messages").setValue(messages);
+    }
 
-    //Permet d'ajouter la conv dans la bdd si elle n'existe pas
+    private ArrayList<Message> getMessagesList() {
+        ArrayList<Message> messages = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference().child("conversations").child(idConv).child("messages").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                messages.clear();
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    String message = snapshot1.child("message").getValue(String.class);
+                    String senderId = snapshot1.child("idSender").getValue(String.class);
+                    String date = snapshot1.child("date").getValue(String.class);
+
+                    Message msg = new Message(message, date, senderId);
+                    messages.add(msg);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, error.getMessage());
+            }
+        });
+        return messages;
+    }
+
+    private void addMessageView(String message) {
+        TextView textView = new TextView(getContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, 20);
+        textView.setText(message);
+        textView.setTextSize(15);
+        textView.setPadding(30, 20, 30, 20);
+        params.gravity = Gravity.END;
+        textView.setBackgroundResource(R.drawable.tv_send_message);
+        textView.setTextColor(textView.getContext().getColor(R.color.white));
+        textView.setLayoutParams(params);
+        binding.llConversation.addView(textView);
+    }
+
+    //Add conversation in database if it doesn't exist
     private void addConvForUser(String msg, String date, String sender) {
         Message message = new Message(msg, date, sender);
         ArrayList<Message> a = new ArrayList<>();
         a.add(message);
 
-        DatabaseReference conv = FirebaseDatabase.getInstance().getReference().child("conversation");
+        DatabaseReference conv = FirebaseDatabase.getInstance().getReference().child("conversations");
         idConv = conv.push().getKey();
         assert idConv != null;
         conv.child(idConv).child("messages").setValue(a);
         ArrayList<String> participant = new ArrayList<>();
 
         participant.add(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
-        participant.add(uuidOrga);
+        participant.add(uuidOrganiser);
         conv.child(idConv).child("participants").setValue(participant);
 
         addConvInMessageFragment(idConv);
-        Log.d("DEBUG000", ((PrincipalPageActivity) requireActivity()).getIdconv().toString());
 
-        FirebaseDatabase.getInstance().getReference().child("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).child("conversation").setValue(((PrincipalPageActivity) requireActivity()).getIdconv());
+        FirebaseDatabase.getInstance().getReference().child("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).child("conversations").setValue(((PrincipalPageActivity) requireActivity()).getIdconv());
 
         ArrayList<String> listConv = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference().child("users").child(uuidOrga).child("conversation").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("users").child(uuidOrganiser).child("conversations").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listConv.clear();
@@ -195,37 +194,29 @@ public class ConversationFragment extends Fragment {
         });
 
         Handler handler = new Handler();
-        handler.postDelayed(() -> addData(listConv), 1000);
+        handler.postDelayed(() -> addNewConversationInConversationsList(listConv), 1000);
     }
 
-    //Pour mettre a jour les données id conv de la bdd
-    private void addData(ArrayList<String> a) {
-        a.add(idConv);
-        FirebaseDatabase.getInstance().getReference().child("users").child(uuidOrga).child("conversation").setValue(a);
+    //Add a conversation id in users table
+    private void addNewConversationInConversationsList(ArrayList<String> conversationsList) {
+        conversationsList.add(idConv);
+        FirebaseDatabase.getInstance().getReference().child("users").child(uuidOrganiser).child("conversations").setValue(conversationsList);
     }
 
-    //Pour mettre a jour les données id conv de la bdd
-    private void addData2(ArrayList<Message> a, Message b) {
-        a.add(b);
-        FirebaseDatabase.getInstance().getReference().child("conversation").child(idConv).child("messages").setValue(a);
-    }
-
-    //Ajoute l'id de la conv dans principal page
+    //Add conversation id in principal activity
     private void addConvInMessageFragment(String idConv) {
         ((PrincipalPageActivity) requireActivity()).getIdconv().add(idConv);
     }
 
-    //Permet de retrouver l'id de la conv commune si elle existe
-    private void retriveIdConv() {
-        HashSet<String> idConvs = new HashSet<>();
+    //Find conversation id in common if it exists
+    private void findIdConvInCommon() {
+        HashSet<String> idConversations = new HashSet<>();
         final String[] realIdConv = {""};
-        FirebaseDatabase.getInstance().getReference().child("users").child(currentUidUser).child("conversation").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("users").child(currentUidUser).child("conversations").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                idConvs.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d("DEBUG000", snapshot.getValue(String.class));
-                    idConvs.add(snapshot.getValue(String.class));
+                    idConversations.add(snapshot.getValue(String.class));
                 }
             }
 
@@ -233,25 +224,18 @@ public class ConversationFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, error.getMessage());
             }
-
         });
 
-        FirebaseDatabase.getInstance().getReference().child("users").child(uuidOrga).child("conversation").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("users").child(uuidOrganiser).child("conversations").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                idConvs.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d("DEBUG000", "SET : " + idConvs);
-
-                    Log.d("DEBUG000", snapshot.getValue(String.class));
-                    if (!idConvs.add(Objects.requireNonNull(snapshot.getValue()).toString())) {
-                        Log.d("DEBUG000", "FALSE  " + snapshot.getValue().toString());
-                        realIdConv[0] = snapshot.getValue().toString();
+                    if (!idConversations.add(Objects.requireNonNull(snapshot.getValue()).toString())) {
+                        realIdConv[0] = snapshot.getValue(String.class);
                     } else {
-                        idConvs.add(snapshot.getValue(String.class));
+                        idConversations.add(snapshot.getValue(String.class));
                     }
                 }
-                Log.d("DEBUG000", "SET : " + idConvs);
             }
 
             @Override
@@ -259,20 +243,19 @@ public class ConversationFragment extends Fragment {
                 Log.e(TAG, error.getMessage());
             }
         });
+
         Handler handler = new Handler();
         handler.postDelayed(() -> idConv = realIdConv[0], 100);
     }
 
     private void displayConvFromMessageFragment() {
-        FirebaseDatabase.getInstance().getReference().child("conversation").child(idConv).child("participants").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("conversations").child(idConv).child("participants").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String data = snapshot.getValue(String.class);
                     if (data != null && !data.equals(currentUidUser)) {
-                        FirebaseDatabase.getInstance().getReference().child("users").child(data).child("name").get().addOnCompleteListener(task -> {
-                            binding.name.setText(Objects.requireNonNull(task.getResult().getValue()).toString());
-                        });
+                        FirebaseDatabase.getInstance().getReference().child("users").child(data).child("name").get().addOnCompleteListener(task -> binding.name.setText(Objects.requireNonNull(task.getResult().getValue()).toString()));
                         FirebaseDatabase.getInstance().getReference().child("users").child(data).child("image").get().addOnCompleteListener(task -> {
                             if (task.getResult().getValue() != null) {
                                 String image = task.getResult().getValue().toString();
@@ -282,46 +265,48 @@ public class ConversationFragment extends Fragment {
                             }
                         });
 
-                        FirebaseDatabase.getInstance().getReference().child("conversation").child(idConv).child("messages").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                binding.llConversation.removeAllViews();
-                                for (DataSnapshot a : snapshot.getChildren()) {
-                                    Log.d("DEBUG456 : ", Objects.requireNonNull(a.getValue()).toString());
-
-                                    String message = Objects.requireNonNull(a.child("message").getValue()).toString();
-                                    String sender = Objects.requireNonNull(a.child("idSender").getValue()).toString();
-                                    String date = a.child("date").getValue().toString();
-
-                                    Log.d("DEBUG456", message);
-                                    TextView textView = new TextView(view.getContext());
-                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                                    params.setMargins(0, 0, 0, 20);
-                                    textView.setText(message);
-                                    textView.setTextSize(15);
-                                    textView.setPadding(30, 20, 30, 20);
-                                    if (sender.equals(currentUidUser)) {
-                                        params.gravity = Gravity.END;
-                                        textView.setBackgroundResource(R.drawable.tv_send_message);
-                                        textView.setTextColor(textView.getContext().getColor(R.color.white));
-                                        textView.setLayoutParams(params);
-                                    } else {
-                                        params.gravity = Gravity.START;
-                                        textView.setTextColor(textView.getContext().getColor(R.color.black));
-                                        textView.setBackgroundResource(R.drawable.tv_received_message);
-                                    }
-                                    textView.setLayoutParams(params);
-                                    binding.llConversation.addView(textView);
-                                    Utils.hideKeyboard(view.getContext(), view);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Log.e(TAG, error.getMessage());
-                            }
-                        });
+                        displayMessagesInConversation();
                     }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, error.getMessage());
+            }
+        });
+    }
+
+    private void displayMessagesInConversation() {
+        FirebaseDatabase.getInstance().getReference().child("conversations").child(idConv).child("messages").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                binding.llConversation.removeAllViews();
+                for (DataSnapshot a : snapshot.getChildren()) {
+
+                    String message = Objects.requireNonNull(a.child("message").getValue()).toString();
+                    String sender = Objects.requireNonNull(a.child("idSender").getValue()).toString();
+
+                    TextView textView = new TextView(view.getContext());
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, 0, 0, 20);
+                    textView.setText(message);
+                    textView.setTextSize(15);
+                    textView.setPadding(30, 20, 30, 20);
+
+                    if (sender.equals(currentUidUser)) {
+                        params.gravity = Gravity.END;
+                        textView.setBackgroundResource(R.drawable.tv_send_message);
+                        textView.setTextColor(textView.getContext().getColor(R.color.white));
+                        textView.setLayoutParams(params);
+                    } else {
+                        params.gravity = Gravity.START;
+                        textView.setTextColor(textView.getContext().getColor(R.color.black));
+                        textView.setBackgroundResource(R.drawable.tv_received_message);
+                    }
+                    textView.setLayoutParams(params);
+                    binding.llConversation.addView(textView);
+                    Utils.hideKeyboard(view.getContext(), view);
                 }
             }
 
@@ -333,8 +318,8 @@ public class ConversationFragment extends Fragment {
     }
 
     private void displayConvFromActivity() {
-        //Cas ou l'on passe par l'activité
-        if (organiser != null && uuidOrga != null) {
+        //If you come through the activity
+        if (organiser != null) {
             binding.name.setText(organiser.getName());
             if (organiser.getImage() != null) {
                 byte[] bytes = Base64.decode(organiser.getImage(), Base64.DEFAULT);
@@ -342,29 +327,8 @@ public class ConversationFragment extends Fragment {
                 binding.image.setImageBitmap(bitmap);
             }
 
-            if (!"".equals(idConv)) {
-                FirebaseDatabase.getInstance().getReference().child("conversation").child(idConv).child("messages").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        binding.llConversation.removeAllViews();
-                        for (DataSnapshot a : snapshot.getChildren()) {
-                            Log.d("DEBUG456", Objects.requireNonNull(a.getValue()).toString());
-                            TextView textView = new TextView(getContext());
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(0, 0, 0, 20);
-                            textView.setText(a.getValue().toString());
-                            textView.setTextSize(15);
-                            textView.setPadding(30, 20, 30, 20);
-                            textView.setLayoutParams(params);
-                            binding.llConversation.addView(textView);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e(TAG, error.getMessage());
-                    }
-                });
+            if (idConv != "") {
+                displayMessagesInConversation();
             }
         }
     }
